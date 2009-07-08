@@ -28,15 +28,10 @@ leg.o : leg.c
 leg.c : leg.leg
 #	./leg -o $@ $<
 
-test examples : .FORCE
-	$(SHELL) -ec '(cd examples;  $(MAKE))'
-
 clean : .FORCE
 	rm -f *~ *.o *.leg.[cd]
-	$(SHELL) -ec '(cd examples;  $(MAKE) $@)'
 
 spotless : clean .FORCE
 	rm -f leg
-	$(SHELL) -ec '(cd examples;  $(MAKE) $@)'
 
 .FORCE :
