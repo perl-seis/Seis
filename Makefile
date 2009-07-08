@@ -4,34 +4,34 @@ OFLAGS = -O3 -DNDEBUG
 
 OBJS = tree.o compile.o
 
-all : leg
+all : greg
 
-leg : leg.o $(OBJS)
-	$(CC) $(CFLAGS) -o $@-new leg.o $(OBJS)
+greg : greg.o $(OBJS)
+	$(CC) $(CFLAGS) -o $@-new greg.o $(OBJS)
 	mv $@-new $@
 
 ROOT	=
 PREFIX	= /usr/local
 BINDIR	= $(ROOT)$(PREFIX)/bin
 
-install : $(BINDIR)/leg
+install : $(BINDIR)/greg
 
 $(BINDIR)/% : %
 	cp -p $< $@
 	strip $@
 
 uninstall : .FORCE
-	rm -f $(BINDIR)/leg
+	rm -f $(BINDIR)/greg
 
-leg.o : leg.c
+greg.o : greg.c
 
-leg.c : leg.leg
-#	./leg -o $@ $<
+greg.c : greg.g
+#	./greg -o $@ $<
 
 clean : .FORCE
-	rm -f *~ *.o *.leg.[cd]
+	rm -f *~ *.o *.greg.[cd]
 
 spotless : clean .FORCE
-	rm -f leg
+	rm -f greg
 
 .FORCE :
