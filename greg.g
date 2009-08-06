@@ -185,7 +185,7 @@ void makeTrailer(char *text)
 
 static void version(char *name)
 {
-  printf("%s version %d.%d.%d\n", name, PEG_MAJOR, PEG_MINOR, PEG_LEVEL);
+  printf("%s version %d.%d.%d\n", name, GREG_MAJOR, GREG_MINOR, GREG_LEVEL);
 }
 
 static void usage(char *name)

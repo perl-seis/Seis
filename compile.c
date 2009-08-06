@@ -35,6 +35,47 @@ static void charClassClear(unsigned char bits[], int c)	{ bits[c >> 3] &= ~(1 <<
 
 typedef void (*setter)(unsigned char bits[], int c);
 
+static int readChar(unsigned char **cp)
+{
+  unsigned char *cclass = *cp;
+  int c= *cclass++, i = 0;
+  if ('\\' == c && *cclass)
+	{
+    c= *cclass++;
+    if (c >= '0' && c <= '9')
+      {
+        unsigned char oct= 0;
+        for (i= 2; i >= 0; i--) {
+          if (!(c >= '0' && c <= '9')) {
+            cclass--;
+            break;
+          }
+          oct= (oct * 8) + (c - '0');
+          c= *cclass++;
+        }
+        c= oct;
+        goto done;
+      }
+
+    switch (c)
+      {
+      case 'a':  c= '\a'; break;	/* bel */
+      case 'b':  c= '\b'; break;	/* bs */
+      case 'e':  c= '\e'; break;	/* esc */
+      case 'f':  c= '\f'; break;	/* ff */
+      case 'n':  c= '\n'; break;	/* nl */
+      case 'r':  c= '\r'; break;	/* cr */
+      case 't':  c= '\t'; break;	/* ht */
+      case 'v':  c= '\v'; break;	/* vt */
+      default:		break;
+      }
+	}
+
+done:
+  *cp = cclass;
+  return c;
+}
+
 static char *makeCharClass(unsigned char *cclass)
 {
   unsigned char	 bits[32];
@@ -54,32 +95,18 @@ static char *makeCharClass(unsigned char *cclass)
       memset(bits, 0, 32);
       set= charClassSet;
     }
-  while ((c= *cclass++))
+  while (0 != (c= readChar(&cclass)))
     {
       if ('-' == c && *cclass && prev >= 0)
 	{
-	  for (c= *cclass++;  prev <= c;  ++prev)
+	  for (c= readChar(&cclass); prev <= c; ++prev)
 	    set(bits, prev);
 	  prev= -1;
 	}
-      else if ('\\' == c && *cclass)
-	{
-	  switch (c= *cclass++)
-	    {
-	    case 'a':  c= '\a'; break;	/* bel */
-	    case 'b':  c= '\b'; break;	/* bs */
-	    case 'e':  c= '\e'; break;	/* esc */
-	    case 'f':  c= '\f'; break;	/* ff */
-	    case 'n':  c= '\n'; break;	/* nl */
-	    case 'r':  c= '\r'; break;	/* cr */
-	    case 't':  c= '\t'; break;	/* ht */
-	    case 'v':  c= '\v'; break;	/* vt */
-	    default:		break;
-	    }
-	  set(bits, prev= c);
-	}
       else
-	set(bits, prev= c);
+  {
+    set(bits, prev= c);
+  }
     }
 
   ptr= string;

@@ -26,7 +26,7 @@ uninstall : .FORCE
 greg.o : greg.c
 
 greg.c : greg.g
-#	./greg -o $@ $<
+	./greg -o $@ $<
 
 clean : .FORCE
 	rm -f *~ *.o *.greg.[cd]
