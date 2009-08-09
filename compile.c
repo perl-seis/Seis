@@ -21,8 +21,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "version.h"
-#include "tree.h"
+#include "greg.h"
 
 static int yyl(void)
 {

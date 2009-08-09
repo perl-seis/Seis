@@ -21,7 +21,7 @@
 #include <string.h>
 #include <assert.h>
 
-#include "tree.h"
+#include "greg.h"
 
 Node *actions= 0;
 Node *rules= 0;

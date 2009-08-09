@@ -5,8 +5,7 @@
 #include <string.h>
 #define YYRULECOUNT 36
 
-# include "tree.h"
-# include "version.h"
+# include "greg.h"
 
 # include <stdio.h>
 # include <stdlib.h>
