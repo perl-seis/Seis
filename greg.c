@@ -136,7 +136,7 @@ YY_LOCAL(int) yymatchDot(void)
 YY_LOCAL(int) yymatchChar(int c)
 {
   if (yypos >= yylimit && !yyrefill()) return 0;
-  if (yybuf[yypos] == c)
+  if ((unsigned char)yybuf[yypos] == c)
     {
       ++yypos;
       yyprintf((stderr, "  ok   yymatchChar(%c) @ %s\n", c, yybuf+yypos));
@@ -167,7 +167,7 @@ YY_LOCAL(int) yymatchClass(unsigned char *bits)
 {
   int c;
   if (yypos >= yylimit && !yyrefill()) return 0;
-  c= yybuf[yypos];
+  c= (unsigned char)yybuf[yypos];
   if (bits[c >> 3] & (1 << (c & 7)))
     {
       ++yypos;
