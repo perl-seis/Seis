@@ -393,12 +393,18 @@ static char *preamble= "\
 #ifndef YYSTYPE\n\
 #define YYSTYPE	int\n\
 #endif\n\
+#ifndef YY_XTYPE\n\
+#define YY_XTYPE void *\n\
+#endif\n\
+#ifndef YY_XVAR\n\
+#define YY_XVAR yydata\n\
+#endif\n\
 \n\
 #ifndef YY_PART\n\
 #define yydata G->data\n\
 #define yy G->ss\n\
 \n\
-typedef void (*yyaction)(struct _GREG *G, char *yytext, int yyleng);\n\
+typedef void (*yyaction)(struct _GREG *G, char *yytext, int yyleng, YY_XTYPE YY_XVAR);\n\
 typedef struct _yythunk { int begin, end;  yyaction  action;  struct _yythunk *next; } yythunk;\n\
 \n\
 typedef struct _GREG {\n\
@@ -417,12 +423,13 @@ typedef struct _GREG {\n\
   YYSTYPE *val;\n\
   YYSTYPE *vals;\n\
   int valslen;\n\
-  void *data;\n\
+  YY_XTYPE data;\n\
 } GREG;\n\
 \n\
 YY_LOCAL(int) yyrefill(GREG *G)\n\
 {\n\
   int yyn;\n\
+  YY_XTYPE YY_XVAR = (YY_XTYPE)G->data;\n\
   while (G->buflen - G->pos < 512)\n\
     {\n\
       G->buflen *= 2;\n\
@@ -525,7 +532,7 @@ YY_LOCAL(void) yyDone(GREG *G)\n\
       yythunk *thunk= &G->thunks[pos];\n\
       int yyleng= thunk->end ? yyText(G, thunk->begin, thunk->end) : thunk->begin;\n\
       yyprintf((stderr, \"DO [%d] %p %s\\n\", pos, thunk->action, G->text));\n\
-      thunk->action(G, G->text, yyleng);\n\
+      thunk->action(G, G->text, yyleng, G->data);\n\
     }\n\
   G->thunkpos= 0;\n\
 }\n\
@@ -556,9 +563,9 @@ YY_LOCAL(int) yyAccept(GREG *G, int tp0)\n\
   return 1;\n\
 }\n\
 \n\
-YY_LOCAL(void) yyPush(GREG *G, char *text, int count)	{ G->val += count; }\n\
-YY_LOCAL(void) yyPop(GREG *G, char *text, int count)	{ G->val -= count; }\n\
-YY_LOCAL(void) yySet(GREG *G, char *text, int count)	{ G->val[count]= G->ss; }\n\
+YY_LOCAL(void) yyPush(GREG *G, char *text, int count, YY_XTYPE YY_XVAR)	{ G->val += count; }\n\
+YY_LOCAL(void) yyPop(GREG *G, char *text, int count, YY_XTYPE YY_XVAR)	{ G->val -= count; }\n\
+YY_LOCAL(void) yySet(GREG *G, char *text, int count, YY_XTYPE YY_XVAR)	{ G->val[count]= G->ss; }\n\
 \n\
 #endif /* YY_PART */\n\
 \n\
@@ -614,7 +621,7 @@ YY_PARSE(int) YY_NAME(parse)(GREG *G)\n\
   return YY_NAME(parse_from)(G, yy_%s);\n\
 }\n\
 \n\
-YY_PARSE(GREG *) YY_NAME(parse_new)(void *data)\n\
+YY_PARSE(GREG *) YY_NAME(parse_new)(YY_XTYPE data)\n\
 {\n\
   GREG *G = (GREG *)YY_CALLOC(1, sizeof(GREG), G->data);\n\
   G->data = data;\n\
@@ -711,7 +718,7 @@ void Rule_compile_c(Node *node)
   fprintf(output, "\n");
   for (n= actions;  n;  n= n->action.list)
     {
-      fprintf(output, "YY_ACTION(void) yy%s(GREG *G, char *yytext, int yyleng)\n{\n", n->action.name);
+      fprintf(output, "YY_ACTION(void) yy%s(GREG *G, char *yytext, int yyleng, YY_XTYPE YY_XVAR)\n{\n", n->action.name);
       defineVariables(n->action.rule->rule.variables);
       fprintf(output, "  yyprintf((stderr, \"do yy%s\\n\"));\n", n->action.name);
       fprintf(output, "  %s;\n", n->action.text);
