@@ -344,10 +344,13 @@ static char *header= "\
 
 static char *preamble= "\
 #ifndef YY_ALLOC\n\
-#define YY_ALLOC malloc\n\
+#define YY_ALLOC(N, D) malloc(N)\n\
+#endif\n\
+#ifndef YY_CALLOC\n\
+#define YY_CALLOC(N, S, D) calloc(N, S)\n\
 #endif\n\
 #ifndef YY_REALLOC\n\
-#define YY_REALLOC realloc\n\
+#define YY_REALLOC(B, N, D) realloc(B, N)\n\
 #endif\n\
 #ifndef YY_FREE\n\
 #define YY_FREE free\n\
@@ -423,7 +426,7 @@ YY_LOCAL(int) yyrefill(GREG *G)\n\
   while (G->buflen - G->pos < 512)\n\
     {\n\
       G->buflen *= 2;\n\
-      G->buf= YY_REALLOC(G->buf, G->buflen);\n\
+      G->buf= YY_REALLOC(G->buf, G->buflen, G->data);\n\
     }\n\
   YY_INPUT((G->buf + G->pos), yyn, (G->buflen - G->pos));\n\
   if (!yyn) return 0;\n\
@@ -488,7 +491,7 @@ YY_LOCAL(void) yyDo(GREG *G, yyaction action, int begin, int end)\n\
   while (G->thunkpos >= G->thunkslen)\n\
     {\n\
       G->thunkslen *= 2;\n\
-      G->thunks= YY_REALLOC(G->thunks, sizeof(yythunk) * G->thunkslen);\n\
+      G->thunks= YY_REALLOC(G->thunks, sizeof(yythunk) * G->thunkslen, G->data);\n\
     }\n\
   G->thunks[G->thunkpos].begin=  begin;\n\
   G->thunks[G->thunkpos].end=    end;\n\
@@ -506,7 +509,7 @@ YY_LOCAL(int) yyText(GREG *G, int begin, int end)\n\
       while (G->textlen < (yyleng - 1))\n\
 	{\n\
 	  G->textlen *= 2;\n\
-	  G->text= YY_REALLOC(G->text, G->textlen);\n\
+	  G->text= YY_REALLOC(G->text, G->textlen, G->data);\n\
 	}\n\
       memcpy(G->text, G->buf + begin, yyleng);\n\
     }\n\
@@ -575,13 +578,13 @@ YY_PARSE(int) YY_NAME(parse_from)(GREG *G, yyrule yystart)\n\
   if (!G->buflen)\n\
     {\n\
       G->buflen= 1024;\n\
-      G->buf= YY_ALLOC(G->buflen);\n\
+      G->buf= YY_ALLOC(G->buflen, G->data);\n\
       G->textlen= 1024;\n\
-      G->text= YY_ALLOC(G->textlen);\n\
+      G->text= YY_ALLOC(G->textlen, G->data);\n\
       G->thunkslen= 32;\n\
-      G->thunks= YY_ALLOC(sizeof(yythunk) * G->thunkslen);\n\
+      G->thunks= YY_ALLOC(sizeof(yythunk) * G->thunkslen, G->data);\n\
       G->valslen= 32;\n\
-      G->vals= YY_ALLOC(sizeof(YYSTYPE) * G->valslen);\n\
+      G->vals= YY_ALLOC(sizeof(YYSTYPE) * G->valslen, G->data);\n\
       G->begin= G->end= G->pos= G->limit= G->thunkpos= 0;\n\
     }\n\
   G->begin= G->end= G->pos;\n\
@@ -613,7 +616,7 @@ YY_PARSE(int) YY_NAME(parse)(GREG *G)\n\
 \n\
 YY_PARSE(GREG *) YY_NAME(parse_new)(void *data)\n\
 {\n\
-  GREG *G = (GREG *)YY_ALLOC(sizeof(GREG));\n\
+  GREG *G = (GREG *)YY_CALLOC(1, sizeof(GREG), G->data);\n\
   G->data = data;\n\
   return G;\n\
 }\n\
