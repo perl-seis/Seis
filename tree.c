@@ -258,7 +258,7 @@ static void dumpStack(void)
   Node **p;
   for (p= stack + 1;  p <= stackPointer;  ++p)
     {
-      fprintf(stderr, "### %d\t", p - stack);
+      fprintf(stderr, "### %ld\t", p - stack);
       Node_print(*p);
       fprintf(stderr, "\n");
     }
