@@ -340,6 +340,7 @@ static char *header= "\
 #include <stdio.h>\n\
 #include <stdlib.h>\n\
 #include <string.h>\n\
+struct _GREG;\n\
 ";
 
 static char *preamble= "\
@@ -397,7 +398,6 @@ static char *preamble= "\
 #define yydata G->data\n\
 #define yy G->ss\n\
 \n\
-struct _GREG;\n\
 typedef void (*yyaction)(struct _GREG *G, char *yytext, int yyleng);\n\
 typedef struct _yythunk { int begin, end;  yyaction  action;  struct _yythunk *next; } yythunk;\n\
 \n\

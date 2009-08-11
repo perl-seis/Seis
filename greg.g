@@ -46,7 +46,7 @@
   void makeHeader(char *text);
   void makeTrailer(char *text);
 
-  void yyerror(char *message);
+  void yyerror(struct _GREG *, char *message);
 
 # define YY_INPUT(buf, result, max)		\
   {						\
@@ -144,20 +144,20 @@ end-of-file=	!.
 
 %%
 
-void yyerror(char *message)
+void yyerror(struct _GREG *G, char *message)
 {
   fprintf(stderr, "%s:%d: %s", fileName, lineNumber, message);
-  if (yytext[0]) fprintf(stderr, " near token '%s'", yytext);
-  if (yypos < yylimit || !feof(input))
+  if (G->text[0]) fprintf(stderr, " near token '%s'", G->text);
+  if (G->pos < G->limit || !feof(input))
     {
-      yybuf[yylimit]= '\0';
+      G->buf[G->limit]= '\0';
       fprintf(stderr, " before text \"");
-      while (yypos < yylimit)
+      while (G->pos < G->limit)
 	{
-	  if ('\n' == yybuf[yypos] || '\r' == yybuf[yypos]) break;
-	  fputc(yybuf[yypos++], stderr);
+	  if ('\n' == G->buf[G->pos] || '\r' == G->buf[G->pos]) break;
+	  fputc(G->buf[G->pos++], stderr);
 	}
-      if (yypos == yylimit)
+      if (G->pos == G->limit)
 	{
 	  int c;
 	  while (EOF != (c= fgetc(input)) && '\n' != c && '\r' != c)
@@ -203,6 +203,7 @@ static void usage(char *name)
 
 int main(int argc, char **argv)
 {
+  GREG *G;
   Node *n;
   int   c;
 
@@ -243,6 +244,7 @@ int main(int argc, char **argv)
   argc -= optind;
   argv += optind;
 
+  G = yyparse_new(NULL);
   if (argc)
     {
       for (;  argc;  --argc, ++argv)
@@ -262,15 +264,16 @@ int main(int argc, char **argv)
 	      fileName= *argv;
 	    }
 	  lineNumber= 1;
-	  if (!yyparse())
-	    yyerror("syntax error");
+	  if (!yyparse(G))
+	    yyerror(G, "syntax error");
 	  if (input != stdin)
 	    fclose(input);
 	}
     }
   else
-    if (!yyparse())
-      yyerror("syntax error");
+    if (!yyparse(G))
+      yyerror(G, "syntax error");
+  yyparse_free(G);
 
   if (verboseFlag)
     for (n= rules;  n;  n= n->any.next)
