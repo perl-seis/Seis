@@ -397,7 +397,7 @@ static char *preamble= "\
 #define YY_XTYPE void *\n\
 #endif\n\
 #ifndef YY_XVAR\n\
-#define YY_XVAR yydata\n\
+#define YY_XVAR yyxvar\n\
 #endif\n\
 \n\
 #ifndef YY_PART\n\
