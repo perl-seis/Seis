@@ -400,6 +400,10 @@ static char *preamble= "\
 #define YY_XVAR yyxvar\n\
 #endif\n\
 \n\
+#ifndef PARSE_STACK_SIZE\n\
+#define PARSE_STACK_SIZE 128\n\
+#endif\n\
+\n\
 #ifndef YY_PART\n\
 #define yydata G->data\n\
 #define yy G->ss\n\
@@ -588,9 +592,9 @@ YY_PARSE(int) YY_NAME(parse_from)(GREG *G, yyrule yystart)\n\
       G->buf= YY_ALLOC(G->buflen, G->data);\n\
       G->textlen= 1024;\n\
       G->text= YY_ALLOC(G->textlen, G->data);\n\
-      G->thunkslen= 32;\n\
+      G->thunkslen= PARSE_STACK_SIZE;\n\
       G->thunks= YY_ALLOC(sizeof(yythunk) * G->thunkslen, G->data);\n\
-      G->valslen= 32;\n\
+      G->valslen= PARSE_STACK_SIZE;\n\
       G->vals= YY_ALLOC(sizeof(YYSTYPE) * G->valslen, G->data);\n\
       G->begin= G->end= G->pos= G->limit= G->thunkpos= 0;\n\
     }\n\
