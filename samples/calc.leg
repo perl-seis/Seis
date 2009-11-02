@@ -40,7 +40,8 @@ EOL     = '\n' | '\r\n' | '\r' | ';'
 
 int main()
 {
-  while (yyparse());
+  GREG g;
+  while (yyparse(&g));
 
   return 0;
 }
