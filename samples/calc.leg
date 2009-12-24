@@ -41,6 +41,7 @@ EOL     = '\n' | '\r\n' | '\r' | ';'
 int main()
 {
   GREG g;
+  memset(&g, 0, sizeof(GREG));
   while (yyparse(&g));
 
   return 0;
