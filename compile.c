@@ -415,6 +415,7 @@ typedef struct _yythunk { int begin, end;  yyaction  action;  struct _yythunk *n
 typedef struct _GREG {\n\
   char *buf;\n\
   int buflen;\n\
+  int	offset;\n\
   int	pos;\n\
   int	limit;\n\
   char *text;\n\
@@ -548,6 +549,7 @@ YY_LOCAL(void) yyCommit(GREG *G)\n\
     {\n\
       memmove(G->buf, G->buf + G->pos, G->limit);\n\
     }\n\
+  G->offset += G->pos;\n\
   G->begin -= G->pos;\n\
   G->end -= G->pos;\n\
   G->pos= G->thunkpos= 0;\n\
@@ -599,6 +601,7 @@ YY_PARSE(int) YY_NAME(parse_from)(GREG *G, yyrule yystart)\n\
       G->vals= YY_ALLOC(sizeof(YYSTYPE) * G->valslen, G->data);\n\
       G->begin= G->end= G->pos= G->limit= G->thunkpos= 0;\n\
     }\n\
+  G->pos = 0;\n\
   G->begin= G->end= G->pos;\n\
   G->thunkpos= 0;\n\
   G->val= G->vals;\n\
