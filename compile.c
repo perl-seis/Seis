@@ -29,8 +29,8 @@ static int yyl(void)
   return ++prev;
 }
 
-static void charClassSet  (unsigned char bits[], int c)	{ bits[c >> 3] |=  (1 << (c & 7)); }
-static void charClassClear(unsigned char bits[], int c)	{ bits[c >> 3] &= ~(1 << (c & 7)); }
+static void charClassSet  (unsigned char bits[], int c) { bits[c >> 3] |=  (1 << (c & 7)); }
+static void charClassClear(unsigned char bits[], int c) { bits[c >> 3] &= ~(1 << (c & 7)); }
 
 typedef void (*setter)(unsigned char bits[], int c);
 
@@ -39,7 +39,7 @@ static int readChar(unsigned char **cp)
   unsigned char *cclass = *cp;
   int c= *cclass++, i = 0;
   if ('\\' == c && *cclass)
-	{
+        {
     c= *cclass++;
     if (c >= '0' && c <= '9')
       {
@@ -57,17 +57,17 @@ static int readChar(unsigned char **cp)
 
     switch (c)
       {
-      case 'a':  c= '\a'; break;	/* bel */
-      case 'b':  c= '\b'; break;	/* bs */
-      case 'e':  c= '\e'; break;	/* esc */
-      case 'f':  c= '\f'; break;	/* ff */
-      case 'n':  c= '\n'; break;	/* nl */
-      case 'r':  c= '\r'; break;	/* cr */
-      case 't':  c= '\t'; break;	/* ht */
-      case 'v':  c= '\v'; break;	/* vt */
-      default:		break;
+      case 'a':  c= '\a'; break;        /* bel */
+      case 'b':  c= '\b'; break;        /* bs */
+      case 'e':  c= '\e'; break;        /* esc */
+      case 'f':  c= '\f'; break;        /* ff */
+      case 'n':  c= '\n'; break;        /* nl */
+      case 'r':  c= '\r'; break;        /* cr */
+      case 't':  c= '\t'; break;        /* ht */
+      case 'v':  c= '\v'; break;        /* vt */
+      default:          break;
       }
-	}
+        }
 
 done:
   *cp = cclass;
@@ -76,11 +76,11 @@ done:
 
 static char *makeCharClass(unsigned char *cclass)
 {
-  unsigned char	 bits[32];
-  setter	 set;
-  int		 c, prev= -1;
-  static char	 string[256];
-  char		*ptr;
+  unsigned char  bits[32];
+  setter         set;
+  int            c, prev= -1;
+  static char    string[256];
+  char          *ptr;
 
   if ('^' == *cclass)
     {
@@ -96,11 +96,11 @@ static char *makeCharClass(unsigned char *cclass)
   while (0 != (c= readChar(&cclass)))
     {
       if ('-' == c && *cclass && prev >= 0)
-	{
-	  for (c= readChar(&cclass); prev <= c; ++prev)
-	    set(bits, prev);
-	  prev= -1;
-	}
+        {
+          for (c= readChar(&cclass); prev <= c; ++prev)
+            set(bits, prev);
+          prev= -1;
+        }
       else
   {
     set(bits, prev= c);
@@ -114,12 +114,12 @@ static char *makeCharClass(unsigned char *cclass)
   return string;
 }
 
-static void begin(void)		{ fprintf(output, "\n  {"); }
-static void end(void)		{ fprintf(output, "\n  }"); }
-static void label(int n)	{ fprintf(output, "\n  l%d:;\t", n); }
-static void jump(int n)		{ fprintf(output, "  goto l%d;", n); }
-static void save(int n)		{ fprintf(output, "  int yypos%d= G->pos, yythunkpos%d= G->thunkpos;", n, n); }
-static void restore(int n)	{ fprintf(output,     "  G->pos= yypos%d; G->thunkpos= yythunkpos%d;", n, n); }
+static void begin(void)         { fprintf(output, "\n  {"); }
+static void end(void)           { fprintf(output, "\n  }"); }
+static void label(int n)        { fprintf(output, "\n  l%d:;\t", n); }
+static void jump(int n)         { fprintf(output, "  goto l%d;", n); }
+static void save(int n)         { fprintf(output, "  int yypos%d= G->pos, yythunkpos%d= G->thunkpos;", n, n); }
+static void restore(int n)      { fprintf(output,     "  G->pos= yypos%d; G->thunkpos= yythunkpos%d;", n, n); }
 
 static void Node_compile_c_ko(Node *node, int ko)
 {
@@ -138,17 +138,17 @@ static void Node_compile_c_ko(Node *node, int ko)
     case Name:
       fprintf(output, "  if (!yy_%s(G)) goto l%d;", node->name.rule->rule.name, ko);
       if (node->name.variable)
-	fprintf(output, "  yyDo(G, yySet, %d, 0);", node->name.variable->variable.offset);
+        fprintf(output, "  yyDo(G, yySet, %d, 0);", node->name.variable->variable.offset);
       break;
 
     case Character:
     case String:
       {
-	int len= strlen(node->string.value);
-	if (1 == len || (2 == len && '\\' == node->string.value[0]))
-	  fprintf(output, "  if (!yymatchChar(G, '%s')) goto l%d;", node->string.value, ko);
-	else
-	  fprintf(output, "  if (!yymatchString(G, \"%s\")) goto l%d;", node->string.value, ko);
+        int len= strlen(node->string.value);
+        if (1 == len || (2 == len && '\\' == node->string.value[0]))
+          fprintf(output, "  if (!yymatchChar(G, '%s')) goto l%d;", node->string.value, ko);
+        else
+          fprintf(output, "  if (!yymatchString(G, \"%s\")) goto l%d;", node->string.value, ko);
       }
       break;
 
@@ -166,94 +166,94 @@ static void Node_compile_c_ko(Node *node, int ko)
 
     case Alternate:
       {
-	int ok= yyl();
-	begin();
-	save(ok);
-	for (node= node->alternate.first;  node;  node= node->alternate.next)
-	  if (node->alternate.next)
-	    {
-	      int next= yyl();
-	      Node_compile_c_ko(node, next);
-	      jump(ok);
-	      label(next);
-	      restore(ok);
-	    }
-	  else
-	    Node_compile_c_ko(node, ko);
-	end();
-	label(ok);
+        int ok= yyl();
+        begin();
+        save(ok);
+        for (node= node->alternate.first;  node;  node= node->alternate.next)
+          if (node->alternate.next)
+            {
+              int next= yyl();
+              Node_compile_c_ko(node, next);
+              jump(ok);
+              label(next);
+              restore(ok);
+            }
+          else
+            Node_compile_c_ko(node, ko);
+        end();
+        label(ok);
       }
       break;
 
     case Sequence:
       for (node= node->sequence.first;  node;  node= node->sequence.next)
-	Node_compile_c_ko(node, ko);
+        Node_compile_c_ko(node, ko);
       break;
 
     case PeekFor:
       {
-	int ok= yyl();
-	begin();
-	save(ok);
-	Node_compile_c_ko(node->peekFor.element, ko);
-	restore(ok);
-	end();
+        int ok= yyl();
+        begin();
+        save(ok);
+        Node_compile_c_ko(node->peekFor.element, ko);
+        restore(ok);
+        end();
       }
       break;
 
     case PeekNot:
       {
-	int ok= yyl();
-	begin();
-	save(ok);
-	Node_compile_c_ko(node->peekFor.element, ok);
-	jump(ko);
-	label(ok);
-	restore(ok);
-	end();
+        int ok= yyl();
+        begin();
+        save(ok);
+        Node_compile_c_ko(node->peekFor.element, ok);
+        jump(ko);
+        label(ok);
+        restore(ok);
+        end();
       }
       break;
 
     case Query:
       {
-	int qko= yyl(), qok= yyl();
-	begin();
-	save(qko);
-	Node_compile_c_ko(node->query.element, qko);
-	jump(qok);
-	label(qko);
-	restore(qko);
-	end();
-	label(qok);
+        int qko= yyl(), qok= yyl();
+        begin();
+        save(qko);
+        Node_compile_c_ko(node->query.element, qko);
+        jump(qok);
+        label(qko);
+        restore(qko);
+        end();
+        label(qok);
       }
       break;
 
     case Star:
       {
-	int again= yyl(), out= yyl();
-	label(again);
-	begin();
-	save(out);
-	Node_compile_c_ko(node->star.element, out);
-	jump(again);
-	label(out);
-	restore(out);
-	end();
+        int again= yyl(), out= yyl();
+        label(again);
+        begin();
+        save(out);
+        Node_compile_c_ko(node->star.element, out);
+        jump(again);
+        label(out);
+        restore(out);
+        end();
       }
       break;
 
     case Plus:
       {
-	int again= yyl(), out= yyl();
-	Node_compile_c_ko(node->plus.element, ko);
-	label(again);
-	begin();
-	save(out);
-	Node_compile_c_ko(node->plus.element, out);
-	jump(again);
-	label(out);
-	restore(out);
-	end();
+        int again= yyl(), out= yyl();
+        Node_compile_c_ko(node->plus.element, ko);
+        label(again);
+        begin();
+        save(out);
+        Node_compile_c_ko(node->plus.element, out);
+        jump(again);
+        label(out);
+        restore(out);
+        end();
       }
       break;
 
@@ -308,27 +308,27 @@ static void Rule_compile_c2(Node *node)
       int ko= yyl(), safe;
 
       if ((!(RuleUsed & node->rule.flags)) && (node != start))
-	fprintf(stderr, "rule '%s' defined but not used\n", node->rule.name);
+        fprintf(stderr, "rule '%s' defined but not used\n", node->rule.name);
 
       safe= ((Query == node->rule.expression->type) || (Star == node->rule.expression->type));
 
       fprintf(output, "\nYY_RULE(int) yy_%s(GREG *G)\n{", node->rule.name);
       if (!safe) save(0);
       if (node->rule.variables)
-	fprintf(output, "  yyDo(G, yyPush, %d, 0);", countVariables(node->rule.variables));
+        fprintf(output, "  yyDo(G, yyPush, %d, 0);", countVariables(node->rule.variables));
       fprintf(output, "\n  yyprintf((stderr, \"%%s\\n\", \"%s\"));", node->rule.name);
       Node_compile_c_ko(node->rule.expression, ko);
       fprintf(output, "\n  yyprintf((stderr, \"  ok   %%s @ %%s\\n\", \"%s\", G->buf+G->pos));", node->rule.name);
       if (node->rule.variables)
-	fprintf(output, "  yyDo(G, yyPop, %d, 0);", countVariables(node->rule.variables));
+        fprintf(output, "  yyDo(G, yyPop, %d, 0);", countVariables(node->rule.variables));
       fprintf(output, "\n  return 1;");
       if (!safe)
-	{
-	  label(ko);
-	  restore(0);
-	  fprintf(output, "\n  yyprintf((stderr, \"  fail %%s @ %%s\\n\", \"%s\", G->buf+G->pos));", node->rule.name);
-	  fprintf(output, "\n  return 0;");
-	}
+        {
+          label(ko);
+          restore(0);
+          fprintf(output, "\n  yyprintf((stderr, \"  fail %%s @ %%s\\n\", \"%s\", G->buf+G->pos));", node->rule.name);
+          fprintf(output, "\n  return 0;");
+        }
       fprintf(output, "\n}");
     }
 
@@ -357,41 +357,41 @@ static char *preamble= "\
 #define YY_FREE free\n\
 #endif\n\
 #ifndef YY_LOCAL\n\
-#define YY_LOCAL(T)	static T\n\
+#define YY_LOCAL(T)     static T\n\
 #endif\n\
 #ifndef YY_ACTION\n\
-#define YY_ACTION(T)	static T\n\
+#define YY_ACTION(T)    static T\n\
 #endif\n\
 #ifndef YY_RULE\n\
-#define YY_RULE(T)	static T\n\
+#define YY_RULE(T)      static T\n\
 #endif\n\
 #ifndef YY_PARSE\n\
-#define YY_PARSE(T)	T\n\
+#define YY_PARSE(T)     T\n\
 #endif\n\
 #ifndef YY_NAME\n\
 #define YY_NAME(N) yy##N\n\
 #endif\n\
 #ifndef YY_INPUT\n\
-#define YY_INPUT(buf, result, max_size)			\\\n\
-  {							\\\n\
-    int yyc= getchar();					\\\n\
-    result= (EOF == yyc) ? 0 : (*(buf)= yyc, 1);	\\\n\
-    yyprintf((stderr, \"<%c>\", yyc));			\\\n\
+#define YY_INPUT(buf, result, max_size)                 \\\n\
+  {                                                     \\\n\
+    int yyc= getchar();                                 \\\n\
+    result= (EOF == yyc) ? 0 : (*(buf)= yyc, 1);        \\\n\
+    yyprintf((stderr, \"<%c>\", yyc));                  \\\n\
   }\n\
 #endif\n\
 #ifndef YY_BEGIN\n\
-#define YY_BEGIN	( G->begin= G->pos, 1)\n\
+#define YY_BEGIN        ( G->begin= G->pos, 1)\n\
 #endif\n\
 #ifndef YY_END\n\
-#define YY_END		( G->end= G->pos, 1)\n\
+#define YY_END          ( G->end= G->pos, 1)\n\
 #endif\n\
 #ifdef YY_DEBUG\n\
-# define yyprintf(args)	fprintf args\n\
+# define yyprintf(args) fprintf args\n\
 #else\n\
 # define yyprintf(args)\n\
 #endif\n\
 #ifndef YYSTYPE\n\
-#define YYSTYPE	int\n\
+#define YYSTYPE int\n\
 #endif\n\
 #ifndef YY_XTYPE\n\
 #define YY_XTYPE void *\n\
@@ -415,15 +415,15 @@ typedef struct _yythunk { int begin, end;  yyaction  action;  struct _yythunk *n
 typedef struct _GREG {\n\
   char *buf;\n\
   int buflen;\n\
-  int	offset;\n\
-  int	pos;\n\
-  int	limit;\n\
+  int   offset;\n\
+  int   pos;\n\
+  int   limit;\n\
   char *text;\n\
-  int	textlen;\n\
-  int	begin;\n\
-  int	end;\n\
+  int   textlen;\n\
+  int   begin;\n\
+  int   end;\n\
   yythunk *thunks;\n\
-  int	thunkslen;\n\
+  int   thunkslen;\n\
   int thunkpos;\n\
   YYSTYPE ss;\n\
   YYSTYPE *val;\n\
@@ -520,10 +520,10 @@ YY_LOCAL(int) yyText(GREG *G, int begin, int end)\n\
   else\n\
     {\n\
       while (G->textlen < (yyleng - 1))\n\
-	{\n\
-	  G->textlen *= 2;\n\
-	  G->text= YY_REALLOC(G->text, G->textlen, G->data);\n\
-	}\n\
+        {\n\
+          G->textlen *= 2;\n\
+          G->text= YY_REALLOC(G->text, G->textlen, G->data);\n\
+        }\n\
       memcpy(G->text, G->buf + begin, yyleng);\n\
     }\n\
   G->text[yyleng]= '\\0';\n\
@@ -570,13 +570,13 @@ YY_LOCAL(int) yyAccept(GREG *G, int tp0)\n\
   return 1;\n\
 }\n\
 \n\
-YY_LOCAL(void) yyPush(GREG *G, char *text, int count, yythunk *thunk, YY_XTYPE YY_XVAR)	{ G->val += count; }\n\
-YY_LOCAL(void) yyPop(GREG *G, char *text, int count, yythunk *thunk, YY_XTYPE YY_XVAR)	{ G->val -= count; }\n\
-YY_LOCAL(void) yySet(GREG *G, char *text, int count, yythunk *thunk, YY_XTYPE YY_XVAR)	{ G->val[count]= G->ss; }\n\
+YY_LOCAL(void) yyPush(GREG *G, char *text, int count, yythunk *thunk, YY_XTYPE YY_XVAR) { G->val += count; }\n\
+YY_LOCAL(void) yyPop(GREG *G, char *text, int count, yythunk *thunk, YY_XTYPE YY_XVAR)  { G->val -= count; }\n\
+YY_LOCAL(void) yySet(GREG *G, char *text, int count, yythunk *thunk, YY_XTYPE YY_XVAR)  { G->val[count]= G->ss; }\n\
 \n\
 #endif /* YY_PART */\n\
 \n\
-#define	YYACCEPT	yyAccept(G, yythunkpos0)\n\
+#define YYACCEPT        yyAccept(G, yythunkpos0)\n\
 \n\
 ";
 
@@ -660,50 +660,50 @@ int consumesInput(Node *node)
     {
     case Rule:
       {
-	int result= 0;
-	if (RuleReached & node->rule.flags)
-	  fprintf(stderr, "possible infinite left recursion in rule '%s'\n", node->rule.name);
-	else
-	  {
-	    node->rule.flags |= RuleReached;
-	    result= consumesInput(node->rule.expression);
-	    node->rule.flags &= ~RuleReached;
-	  }
-	return result;
+        int result= 0;
+        if (RuleReached & node->rule.flags)
+          fprintf(stderr, "possible infinite left recursion in rule '%s'\n", node->rule.name);
+        else
+          {
+            node->rule.flags |= RuleReached;
+            result= consumesInput(node->rule.expression);
+            node->rule.flags &= ~RuleReached;
+          }
+        return result;
       }
       break;
 
-    case Dot:		return 1;
-    case Name:		return consumesInput(node->name.rule);
+    case Dot:           return 1;
+    case Name:          return consumesInput(node->name.rule);
     case Character:
-    case String:	return strlen(node->string.value) > 0;
-    case Class:		return 1;
-    case Action:	return 0;
-    case Predicate:	return 0;
+    case String:        return strlen(node->string.value) > 0;
+    case Class:         return 1;
+    case Action:        return 0;
+    case Predicate:     return 0;
 
     case Alternate:
       {
-	Node *n;
-	for (n= node->alternate.first;  n;  n= n->alternate.next)
-	  if (!consumesInput(n))
-	    return 0;
+        Node *n;
+        for (n= node->alternate.first;  n;  n= n->alternate.next)
+          if (!consumesInput(n))
+            return 0;
       }
       return 1;
 
     case Sequence:
       {
-	Node *n;
-	for (n= node->alternate.first;  n;  n= n->alternate.next)
-	  if (consumesInput(n))
-	    return 1;
+        Node *n;
+        for (n= node->alternate.first;  n;  n= n->alternate.next)
+          if (consumesInput(n))
+            return 1;
       }
       return 0;
 
-    case PeekFor:	return 0;
-    case PeekNot:	return 0;
-    case Query:		return 0;
-    case Star:		return 0;
-    case Plus:		return consumesInput(node->plus.element);
+    case PeekFor:       return 0;
+    case PeekNot:       return 0;
+    case Query:         return 0;
+    case Star:          return 0;
+    case Plus:          return consumesInput(node->plus.element);
 
     default:
       fprintf(stderr, "\nconsumesInput: illegal node type %d\n", node->type);
