@@ -122,7 +122,7 @@ static void save(int n)         { fprintf(output, "  int yypos%d= G->pos, yythun
 static void restore(int n)      { fprintf(output,     "  G->pos= yypos%d; G->thunkpos= yythunkpos%d;", n, n); }
 
 static void callErrBlock(Node * node) {
-    fprintf(output, " { YY_XTYPE YY_XVAR = (YY_XTYPE) G->data; %s; }", ((struct Any*) node)->errblock);
+    fprintf(output, " { YY_XTYPE YY_XVAR = (YY_XTYPE) G->data; int yyindex = G->offset + G->pos; %s; }", ((struct Any*) node)->errblock);
 }
 
 static void Node_compile_c_ko(Node *node, int ko)
