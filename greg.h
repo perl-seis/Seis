@@ -20,7 +20,7 @@
 
 #define GREG_MAJOR      0
 #define GREG_MINOR      4
-#define GREG_LEVEL      0
+#define GREG_LEVEL      1
 
 enum { Unknown= 0, Rule, Variable, Name, Dot, Character, String, Class, Action, Predicate, Alternate, Sequence, PeekFor, PeekNot, Query, Star, Plus };
 
@@ -31,23 +31,23 @@ enum {
 
 typedef union Node Node;
 
-struct Rule      { int type;  Node *next;   char *name;  Node *variables;  Node *expression;  int id;  int flags;       };
-struct Variable  { int type;  Node *next;   char *name;  Node *value;  int offset;                                      };
-struct Name      { int type;  Node *next;   Node *rule;  Node *variable;                                                };
-struct Dot       { int type;  Node *next;                                                                               };
-struct Character { int type;  Node *next;   char *value;                                                                };
-struct String    { int type;  Node *next;   char *value;                                                                };
-struct Class     { int type;  Node *next;   unsigned char *value;                                                       };
-struct Action    { int type;  Node *next;   char *text;   Node *list;  char *name;  Node *rule;                         };
-struct Predicate { int type;  Node *next;   char *text;                                                                 };
-struct Alternate { int type;  Node *next;   Node *first;  Node *last;                                                   };
-struct Sequence  { int type;  Node *next;   Node *first;  Node *last;                                                   };
-struct PeekFor   { int type;  Node *next;   Node *element;                                                              };
-struct PeekNot   { int type;  Node *next;   Node *element;                                                              };
-struct Query     { int type;  Node *next;   Node *element;                                                              };
-struct Star      { int type;  Node *next;   Node *element;                                                              };
-struct Plus      { int type;  Node *next;   Node *element;                                                              };
-struct Any       { int type;  Node *next;                                                                               };
+struct Rule      { int type;  Node *next;   char *errblock;  char *name;  Node *variables;  Node *expression;  int id;  int flags;       };
+struct Variable  { int type;  Node *next;   char *errblock;  char *name;  Node *value;  int offset;                                      };
+struct Name      { int type;  Node *next;   char *errblock;  Node *rule;  Node *variable;                                                };
+struct Dot       { int type;  Node *next;   char *errblock;                                                                              };
+struct Character { int type;  Node *next;   char *errblock;  char *value;                                                                };
+struct String    { int type;  Node *next;   char *errblock;  char *value;                                                                };
+struct Class     { int type;  Node *next;   char *errblock;  unsigned char *value;                                                       };
+struct Action    { int type;  Node *next;   char *errblock;  char *text;   Node *list;  char *name;  Node *rule;                         };
+struct Predicate { int type;  Node *next;   char *errblock;  char *text;                                                                 };
+struct Alternate { int type;  Node *next;   char *errblock;  Node *first;  Node *last;                                                   };
+struct Sequence  { int type;  Node *next;   char *errblock;  Node *first;  Node *last;                                                   };
+struct PeekFor   { int type;  Node *next;   char *errblock;  Node *element;                                                              };
+struct PeekNot   { int type;  Node *next;   char *errblock;  Node *element;                                                              };
+struct Query     { int type;  Node *next;   char *errblock;  Node *element;                                                              };
+struct Star      { int type;  Node *next;   char *errblock;  Node *element;                                                              };
+struct Plus      { int type;  Node *next;   char *errblock;  Node *element;                                                              };
+struct Any       { int type;  Node *next;   char *errblock;                                                                              };
 
 union Node
 {

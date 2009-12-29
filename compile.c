@@ -121,6 +121,10 @@ static void jump(int n)         { fprintf(output, "  goto l%d;", n); }
 static void save(int n)         { fprintf(output, "  int yypos%d= G->pos, yythunkpos%d= G->thunkpos;", n, n); }
 static void restore(int n)      { fprintf(output,     "  G->pos= yypos%d; G->thunkpos= yythunkpos%d;", n, n); }
 
+static void callErrBlock(Node * node) {
+    fprintf(output, " { YY_XTYPE YY_XVAR = (YY_XTYPE) G->data; %s; }", ((struct Any*) node)->errblock);
+}
+
 static void Node_compile_c_ko(Node *node, int ko)
 {
   assert(node);
@@ -136,9 +140,15 @@ static void Node_compile_c_ko(Node *node, int ko)
       break;
 
     case Name:
-      fprintf(output, "  if (!yy_%s(G)) goto l%d;", node->name.rule->rule.name, ko);
-      if (node->name.variable)
-        fprintf(output, "  yyDo(G, yySet, %d, 0);", node->name.variable->variable.offset);
+      {
+        fprintf(output, "  if (!yy_%s(G)) {", node->name.rule->rule.name);
+        if(((struct Any*) node)->errblock) {
+            callErrBlock(node);
+        }
+        fprintf(output, " goto l%d; }", ko);
+        if (node->name.variable)
+          fprintf(output, "  yyDo(G, yySet, %d, 0);", node->name.variable->variable.offset);
+      }
       break;
 
     case Character:
@@ -435,7 +445,7 @@ typedef struct _GREG {\n\
 YY_LOCAL(int) yyrefill(GREG *G)\n\
 {\n\
   int yyn;\n\
-  YY_XTYPE YY_XVAR = (YY_XTYPE)G->data;\n\
+  YY_XTYPE YY_XVAR = (YY_XTYPE) G->data;\n\
   while (G->buflen - G->pos < 512)\n\
     {\n\
       G->buflen *= 2;\n\
