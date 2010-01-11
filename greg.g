@@ -84,11 +84,12 @@ prefix=		AND action				{ push(makePredicate(yytext)); }
 |		    suffix
 
 suffix=		primary (QUESTION			{ push(makeQuery(pop())); }
-			     | STAR			{ push(makeStar (pop())); }
-			     | PLUS			{ push(makePlus (pop())); }
-			   )?
+                        | STAR			        { push(makeStar (pop())); }
+			| PLUS			        { push(makePlus (pop())); }
+			)?
 
-primary=	identifier				{ push(makeVariable(yytext)); }
+primary=	(
+                identifier				{ push(makeVariable(yytext)); }
 			COLON identifier !EQUAL		{ Node *name= makeName(findRule(yytext));  name->name.variable= pop();  push(name); }
 |		identifier !EQUAL			{ push(makeName(findRule(yytext))); }
 |		OPEN expression CLOSE
@@ -98,6 +99,7 @@ primary=	identifier				{ push(makeVariable(yytext)); }
 |		action					{ push(makeAction(yytext)); }
 |		BEGIN					{ push(makePredicate("YY_BEGIN")); }
 |		END					{ push(makePredicate("YY_END")); }
+                ) (errblock { Node *node = pop(); ((struct Any *) node)->errblock = strdup(yytext); push(node); })?
 
 # Lexical syntax
 
@@ -115,6 +117,8 @@ char=		'\\' [abefnrtv'"\[\]\\]
 |		'\\' [0-7][0-7]?
 |		!'\\' .
 
+
+errblock=       '~{' < braces* > '}' -
 action=		'{' < braces* > '}' -
 
 braces=		'{' (!'}' .)* '}'
