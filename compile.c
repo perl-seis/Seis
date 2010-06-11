@@ -414,6 +414,10 @@ static char *preamble= "\
 #define YY_STACK_SIZE 128\n\
 #endif\n\
 \n\
+#ifndef YY_BUFFER_START_SIZE\n\
+#define YY_BUFFER_START_SIZE 1024\n\
+#endif\n\
+\n\
 #ifndef YY_PART\n\
 #define yydata G->data\n\
 #define yy G->ss\n\
@@ -601,9 +605,9 @@ YY_PARSE(int) YY_NAME(parse_from)(GREG *G, yyrule yystart)\n\
   int yyok;\n\
   if (!G->buflen)\n\
     {\n\
-      G->buflen= 1024;\n\
+      G->buflen= YY_BUFFER_START_SIZE;\n\
       G->buf= YY_ALLOC(G->buflen, G->data);\n\
-      G->textlen= 1024;\n\
+      G->textlen= YY_BUFFER_START_SIZE;\n\
       G->text= YY_ALLOC(G->textlen, G->data);\n\
       G->thunkslen= YY_STACK_SIZE;\n\
       G->thunks= YY_ALLOC(sizeof(yythunk) * G->thunkslen, G->data);\n\
