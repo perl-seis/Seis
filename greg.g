@@ -48,7 +48,7 @@
 
   void yyerror(struct _GREG *, char *message);
 
-# define YY_INPUT(buf, result, max)		\
+# define YY_INPUT(buf, result, max, D)		\
   {						\
     int c= getc(input);				\
     if ('\n' == c || '\r' == c) ++lineNumber;	\

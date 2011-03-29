@@ -382,7 +382,7 @@ static char *preamble= "\
 #define YY_NAME(N) yy##N\n\
 #endif\n\
 #ifndef YY_INPUT\n\
-#define YY_INPUT(buf, result, max_size)                 \\\n\
+#define YY_INPUT(buf, result, max_size, D)              \\\n\
   {                                                     \\\n\
     int yyc= getchar();                                 \\\n\
     result= (EOF == yyc) ? 0 : (*(buf)= yyc, 1);        \\\n\
@@ -449,13 +449,12 @@ typedef struct _GREG {\n\
 YY_LOCAL(int) yyrefill(GREG *G)\n\
 {\n\
   int yyn;\n\
-  YY_XTYPE YY_XVAR = (YY_XTYPE) G->data;\n\
   while (G->buflen - G->pos < 512)\n\
     {\n\
       G->buflen *= 2;\n\
       G->buf= (char*)YY_REALLOC(G->buf, G->buflen, G->data);\n\
     }\n\
-  YY_INPUT((G->buf + G->pos), yyn, (G->buflen - G->pos));\n\
+  YY_INPUT((G->buf + G->pos), yyn, (G->buflen - G->pos), G->data);\n\
   if (!yyn) return 0;\n\
   G->limit += yyn;\n\
   return 1;\n\
@@ -643,6 +642,17 @@ YY_PARSE(int) YY_NAME(parse)(GREG *G)\n\
   return YY_NAME(parse_from)(G, yy_%s);\n\
 }\n\
 \n\
+YY_PARSE(void) YY_NAME(init)(GREG *G)\n\
+{\n\
+    memset(G, 0, sizeof(GREG));\n\
+}\n\
+YY_PARSE(void) YY_NAME(deinit)(GREG *G)\n\
+{\n\
+    if (G->buf) YY_FREE(G->buf);\n\
+    if (G->text) YY_FREE(G->text);\n\
+    if (G->thunks) YY_FREE(G->thunks);\n\
+    if (G->vals) YY_FREE(G->vals);\n\
+}\n\
 YY_PARSE(GREG *) YY_NAME(parse_new)(YY_XTYPE data)\n\
 {\n\
   GREG *G = (GREG *)YY_CALLOC(1, sizeof(GREG), G->data);\n\
@@ -652,6 +662,7 @@ YY_PARSE(GREG *) YY_NAME(parse_new)(YY_XTYPE data)\n\
 \n\
 YY_PARSE(void) YY_NAME(parse_free)(GREG *G)\n\
 {\n\
+  YY_NAME(deinit)(G);\n\
   YY_FREE(G);\n\
 }\n\
 \n\
