@@ -1,6 +1,7 @@
 CFLAGS = -g -Wall $(OFLAGS) $(XFLAGS)
 OFLAGS = -O3 -DNDEBUG
 #OFLAGS = -pg
+#TOOL=valgrind -q
 
 OBJS = tree.o compile.o
 
@@ -40,7 +41,7 @@ samples/calc.c: samples/calc.leg greg
 samples/calc: samples/calc.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-test: samples/calc greg-testing
+test: samples/calc
 	echo '21 * 2 + 0' | ./samples/calc | grep 42
 
 run: greg.g greg
