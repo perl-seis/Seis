@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "pvip.h"
 
 PVIPString *PVIP_string_new() {
@@ -60,9 +61,7 @@ void PVIP_string_say(PVIPString *str) {
     fwrite("\n", 1, 1, stdout);
 }
 
-PVIP_BOOL PVIP_string_vprintf(PVIPString *str, const char*format, va_list va) {
-    va_list va;
-    va_start(va, n);
+PVIP_BOOL PVIP_string_vprintf(PVIPString *str, const char*format, va_list ap) {
     int size = vsnprintf(str->buf + str->len, str->buflen - str->len, format, ap);
     if (size > str->buflen - str->len) {
         str->buflen += size + 1;
