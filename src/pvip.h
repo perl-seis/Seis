@@ -8,6 +8,11 @@
 extern "C" {
 #endif
 
+#define PVIP_FALSE 0
+#define PVIP_TRUE  1
+
+typedef int PVIP_BOOL;
+
 typedef enum {
     PVIP_NODE_UNDEF,
     PVIP_NODE_RANGE,
@@ -220,11 +225,12 @@ void PVIP_node_dump_sexp(PVIPNode * node);
 /* string */
 PVIPString *PVIP_string_new();
 void PVIP_string_destroy(PVIPString *str);
-void PVIP_string_concat(PVIPString *str, const char *src, size_t len);
-void PVIP_string_concat_int(PVIPString *str, int64_t n);
-void PVIP_string_concat_number(PVIPString *str, double n);
-void PVIP_string_concat_char(PVIPString *str, char n);
+PVIP_BOOL PVIP_string_concat(PVIPString *str, const char *src, size_t len);
+PVIP_BOOL PVIP_string_concat_int(PVIPString *str, int64_t n);
+PVIP_BOOL PVIP_string_concat_number(PVIPString *str, double n);
+PVIP_BOOL PVIP_string_concat_char(PVIPString *str, char n);
 void PVIP_string_say(PVIPString *str);
+PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, va_list ap);
 
 /* parser */
 PVIPNode * PVIP_parse_string(const char *string, int len, int debug, PVIPString **error);
