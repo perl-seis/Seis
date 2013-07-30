@@ -40,3 +40,4 @@ warn $res->as_string unless $res->is_success;
 $ua->post("$hf_base/fail", [number => $fail, datetime => $datetime]);
 # $ua->post("$hf_base/percentage", [number => $percentage, datetime => $datetime]);
 $ua->post("$hf_base/elapsed", [number => int($elapsed*1000), datetime => $datetime]);
+$ua->post("$hf_base/total", [number => $ok+$fail, datetime => $datetime]);
