@@ -1,0 +1,3 @@
+[submodule "3rd/greg"]
+	path = 3rd/greg
+	url = git://github.com/nddrylliog/greg.git

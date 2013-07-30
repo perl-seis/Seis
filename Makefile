@@ -1,4 +1,5 @@
 CFLAGS=-Wall -DYY_DEBUG=1 -g
+CC=cc
 
 all: pvip
 
@@ -20,8 +21,11 @@ src/pvip_node.o: src/pvip.h
 src/gen.node.c: build/node.pl src/pvip.h
 	perl build/node.pl
 
-src/gen.pvip.y.c: src/pvip.y src/pvip.h src/gen.node.c
-	../greg/greg -o src/gen.pvip.y.c src/pvip.y
+3rd/greg/greg:
+	cd 3rd/greg/ && $(CC) -g -o greg greg.c compile.c tree.c
+
+src/gen.pvip.y.c: src/pvip.y src/pvip.h src/gen.node.c 3rd/greg/greg
+	./3rd/greg/greg -o src/gen.pvip.y.c src/pvip.y
 
 clean:
 	rm -f src/*.o src/gen.* pvip libpvip.a

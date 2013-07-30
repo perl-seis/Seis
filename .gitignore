@@ -1,1 +1,4 @@
 /src/gen.node.c
+/src/gen.pvip.y.c
+/libpvip.a
+/pvip
