@@ -1,5 +1,5 @@
-PVIP
-====
+PVIP - Perl6 parser library
+===========================
 
 This is a Perl6 parser library written in C.
 
@@ -11,11 +11,28 @@ Only standard C99 library is required.
 Build dependencies
 ------------------
 
-greg is needed.
+C99 compiler only, maybe.
 
+Project goal
+------------
 
-Current Roast status
---------------------
+Build perfect perl6 parser library for writing perl6 interpreter.
+
+Interface stability
+-------------------
+
+It's unstable for now. We will change any interfaces without notice.
+
+Project status of pvip
+----------------------
+
+pvip was tested with roast, the Perl6 testing suite.
+Here is the current status of coverage. This project was started at Mid. 2013.
+And it supports 30+% of roast.
+
+You can see the current project status by the [HRForecast](http://hf.64p.org/list/perl6/pvip).
+
+<iframe src="http://hf.64p.org/ifr_complex/perl6/pvip/burndown?t=m" width="425" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 
     2013-07-14 09:40 - OK:  44, FAIL: 828 (  5.04%)
     2013-07-14 09:59 - OK:  50, FAIL: 822 (  5.73%)
@@ -87,4 +104,10 @@ Current Roast status
     2013-07-25 11:14 - OK: 259, FAIL: 611 ( 29.77%) in 10.463899 sec
     2013-07-25 11:19 - OK: 263, FAIL: 607 ( 30.23%) in 14.052636 sec
     2013-07-28 19:31 - OK: 270, FAIL: 609 ( 30.72%) in 15.547074 sec
--
+
+Contribution
+------------
+
+Any patches may accept with review. Please send us patches by github p-r.
+This project stands on bazar model. I give collabo priv if you want :)
+
