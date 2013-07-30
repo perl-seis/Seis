@@ -60,7 +60,9 @@ void PVIP_string_say(PVIPString *str) {
     fwrite("\n", 1, 1, stdout);
 }
 
-PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, va_list ap) {
+PVIP_BOOL PVIP_string_vprintf(PVIPString *str, const char*format, va_list va) {
+    va_list va;
+    va_start(va, n);
     int size = vsnprintf(str->buf + str->len, str->buflen - str->len, format, ap);
     if (size > str->buflen - str->len) {
         str->buflen += size + 1;
@@ -74,3 +76,10 @@ PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, va_list ap) {
     return PVIP_TRUE;
 }
 
+PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, ...) {
+    va_list va;
+    va_start(va, format);
+    PVIP_BOOL retval = PVIP_string_vprintf(str, format, va);
+    va_end(va);
+    return retval;
+}

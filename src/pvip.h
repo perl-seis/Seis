@@ -230,7 +230,8 @@ PVIP_BOOL PVIP_string_concat_int(PVIPString *str, int64_t n);
 PVIP_BOOL PVIP_string_concat_number(PVIPString *str, double n);
 PVIP_BOOL PVIP_string_concat_char(PVIPString *str, char n);
 void PVIP_string_say(PVIPString *str);
-PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, va_list ap);
+PVIP_BOOL PVIP_string_vprintf(PVIPString *str, const char*format, va_list ap);
+PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, ...);
 
 /* parser */
 PVIPNode * PVIP_parse_string(const char *string, int len, int debug, PVIPString **error);
