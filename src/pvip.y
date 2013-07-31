@@ -388,8 +388,7 @@ funcall =
 
 #  L  Named unary       temp let
 named_unary_expr =
-    'abs' ws+ a:junctive_or_expr { $$ = PVIP_node_new_children1(PVIP_NODE_ABS, a); }
-    | 'my' ws+ a:junctive_or_expr { $$ = PVIP_node_new_children1(PVIP_NODE_MY, a); }
+    'my' ws+ a:junctive_or_expr { $$ = PVIP_node_new_children1(PVIP_NODE_MY, a); }
     | 'our' ws+ a:junctive_or_expr { $$ = PVIP_node_new_children1(PVIP_NODE_OUR, a); }
     | !reserved i:ident ws+ a:bare_args { $$ = PVIP_node_new_children2(PVIP_NODE_FUNCALL, i, a); }
     | junctive_or_expr
