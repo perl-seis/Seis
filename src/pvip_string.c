@@ -82,3 +82,16 @@ PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, ...) {
     va_end(va);
     return retval;
 }
+
+const char *PVIP_string_c_str(PVIPString *str) {
+    if (str->buflen == str->len) {
+        str->buflen++;
+        str->buf    = realloc(str->buf, str->buflen);
+        if (!str->buf) {
+            return NULL;
+        }
+    }
+    str->buf[str->len+1-1] = '\0';
+    return str->buf;
+}
+
