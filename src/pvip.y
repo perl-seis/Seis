@@ -824,6 +824,7 @@ dq_string_start='"' { $$ = PVIP_node_new_string(PVIP_NODE_STRING, "", 0); }
 dq_string = s:dq_string_start { s = PVIP_node_new_string(PVIP_NODE_STRING, "", 0); } (
         "\n" { G->data.line_number++; s=PVIP_node_append_string(s, "\n", 1); }
         | "{" e:expr "}" { s=PVIP_node_append_string_node(s, e); }
+        | "{}" { s=PVIP_node_append_string(s, "", 0); }
         | < [^"{\\\n$]+ > { s=PVIP_node_append_string(s, yytext, yyleng); }
         | v:variable { s=PVIP_node_append_string_node(s, v); }
         | esc 'a' { s=PVIP_node_append_string(s, "\a", 1); }
@@ -834,6 +835,7 @@ dq_string = s:dq_string_start { s = PVIP_node_new_string(PVIP_NODE_STRING, "", 0
         | esc '"' { s=PVIP_node_append_string(s, "\"", 1); }
         | esc '$' { s=PVIP_node_append_string(s, "\"", 1); }
         | esc '0' { s=PVIP_node_append_string(s, "\0", 1); }
+        | esc '{' { s=PVIP_node_append_string(s, "{", 1); /* } */ }
         | esc 'c[' < [^\]]+ > ']' { s=PVIP_node_append_string_node(s, PVIP_node_new_string(PVIP_NODE_UNICODE_CHAR, yytext, yyleng)); }
         | ( esc 'x' (
                   '0'? < ( [a-fA-F0-9] [a-fA-F0-9] ) >

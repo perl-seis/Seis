@@ -12,3 +12,15 @@ __END__
 "aa{3+2}"
 --- expected
 (statements (string_concat (string "aa") (add (int 3) (int 2))))
+
+===
+--- code
+"\{"
+--- expected
+(statements (string "{"))
+
+===
+--- code
+"{}"
+--- expected
+(statements (string ""))
