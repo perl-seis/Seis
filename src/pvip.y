@@ -823,7 +823,8 @@ dq_string_start='"' { $$ = PVIP_node_new_string(PVIP_NODE_STRING, "", 0); }
 
 dq_string = s:dq_string_start { s = PVIP_node_new_string(PVIP_NODE_STRING, "", 0); } (
         "\n" { G->data.line_number++; s=PVIP_node_append_string(s, "\n", 1); }
-        | < [^"\\\n$]+ > { s=PVIP_node_append_string(s, yytext, yyleng); }
+        | "{" e:expr "}" { s=PVIP_node_append_string_node(s, e); }
+        | < [^"{\\\n$]+ > { s=PVIP_node_append_string(s, yytext, yyleng); }
         | v:variable { s=PVIP_node_append_string_node(s, v); }
         | esc 'a' { s=PVIP_node_append_string(s, "\a", 1); }
         | esc 'b' { s=PVIP_node_append_string(s, "\b", 1); }
