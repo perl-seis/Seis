@@ -569,6 +569,13 @@ term =
     | '(' - ')' { $$ = PVIP_node_new_children(PVIP_NODE_LIST); }
     | language
     | ':' < [a-z]+ > { $$ = PVIP_node_new_children2(PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(PVIP_NODE_TRUE)); }
+    | ':' v:variable {
+        $$ = PVIP_node_new_children2(
+            PVIP_NODE_PAIR,
+            PVIP_node_new_string(PVIP_NODE_STRING, v->pv->buf, v->pv->len),
+            v
+        );
+    }
     | funcref
     | < '$~' [A-Za-z] [A-Za-z0-9]* > { $$ = PVIP_node_new_string(PVIP_NODE_SLANGS, yytext, yyleng); }
 
