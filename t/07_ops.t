@@ -104,3 +104,9 @@ say |@arr
 7 | 9
 --- expected
 (statements (junctive_or (int 7) (int 9)))
+
+===
+--- code
+!!$n
+--- expected
+(statements (not (not (variable "$n"))))
