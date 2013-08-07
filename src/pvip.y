@@ -819,7 +819,7 @@ dq_string_start='"' { $$ = PVIP_node_new_string(PVIP_NODE_STRING, "", 0); }
 
 dq_string = s:dq_string_start { s = PVIP_node_new_string(PVIP_NODE_STRING, "", 0); } (
         "\n" { G->data.line_number++; s=PVIP_node_append_string(s, "\n", 1); }
-        | "{" e:expr "}" { s=PVIP_node_append_string_node(s, e); }
+        | "{" - e:expr - "}" { s=PVIP_node_append_string_node(s, e); }
         | "{}" { s=PVIP_node_append_string(s, "", 0); }
         | < [^"{\\\n$]+ > { s=PVIP_node_append_string(s, yytext, yyleng); }
         | v:variable { s=PVIP_node_append_string_node(s, v); }
