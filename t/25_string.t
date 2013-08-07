@@ -24,3 +24,9 @@ __END__
 "{}"
 --- expected
 (statements (string ""))
+
+===
+--- code
+"{ }"
+--- expected
+(statements (string ""))
