@@ -164,6 +164,9 @@ typedef enum {
     PVIP_NODE_STUB, /* ... */
     PVIP_NODE_EXPORTABLE, /* is exportable */
     PVIP_NODE_PARAM,
+    PVIP_NODE_BITWISE_OR,  /* ~| */
+    PVIP_NODE_BITWISE_AND, /* ~& */
+    PVIP_NODE_BITWISE_XOR, /* ~^ */
 } PVIP_node_type_t;
 
 typedef enum {

@@ -334,41 +334,24 @@ tight_and = f1:chaining_infix_expr (
     )* { $$ = f1; }
 
 #  C  Chaining infix    != == < <= > >= eq ne lt le gt ge ~~ === eqv !eqv (<) (elem)
-chaining_infix_expr = f1:methodcall_expr { $$ = PVIP_node_new_children1(PVIP_NODE_CHAIN, f1); f1=$$; } (
-          - '==='  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_VALUE_IDENTITY,          f2); PVIP_node_push_child(f1, tmp); }
-        | - '==' !'=' - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_EQ,          f2); PVIP_node_push_child(f1, tmp); }
-        | - '!='  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_NE,          f2); PVIP_node_push_child(f1, tmp); }
-        | - '<'   - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_LT,          f2); PVIP_node_push_child(f1, tmp); }
-        | - '<='  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_LE,          f2); PVIP_node_push_child(f1, tmp); }
-        | - '>'   - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_GT,          f2); PVIP_node_push_child(f1, tmp); }
-        | - '>='  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_GE,          f2); PVIP_node_push_child(f1, tmp); }
-        | - '~~'  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_SMART_MATCH, f2); PVIP_node_push_child(f1, tmp); }
-        | - '!~~' - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_NOT_SMART_MATCH, f2); PVIP_node_push_child(f1, tmp); }
-        | - 'eqv' - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_EQV,         f2); PVIP_node_push_child(f1, tmp); }
-        | - 'eq'  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STREQ,       f2); PVIP_node_push_child(f1, tmp); }
-        | - 'ne'  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRNE,       f2); PVIP_node_push_child(f1, tmp); }
-        | - 'gt'  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRGT,       f2); PVIP_node_push_child(f1, tmp); }
-        | - 'ge'  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRGE,       f2); PVIP_node_push_child(f1, tmp); }
-        | - 'lt'  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRLT,       f2); PVIP_node_push_child(f1, tmp); }
-        | - 'le'  - f2:methodcall_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRLE,       f2); PVIP_node_push_child(f1, tmp); }
+chaining_infix_expr = f1:structural_infix_expr { $$ = PVIP_node_new_children1(PVIP_NODE_CHAIN, f1); f1=$$; } (
+          - '==='  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_VALUE_IDENTITY,          f2); PVIP_node_push_child(f1, tmp); }
+        | - '==' !'=' - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_EQ,          f2); PVIP_node_push_child(f1, tmp); }
+        | - '!='  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_NE,          f2); PVIP_node_push_child(f1, tmp); }
+        | - '<'   - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_LT,          f2); PVIP_node_push_child(f1, tmp); }
+        | - '<='  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_LE,          f2); PVIP_node_push_child(f1, tmp); }
+        | - '>'   - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_GT,          f2); PVIP_node_push_child(f1, tmp); }
+        | - '>='  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_GE,          f2); PVIP_node_push_child(f1, tmp); }
+        | - '~~'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_SMART_MATCH, f2); PVIP_node_push_child(f1, tmp); }
+        | - '!~~' - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_NOT_SMART_MATCH, f2); PVIP_node_push_child(f1, tmp); }
+        | - 'eqv' - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_EQV,         f2); PVIP_node_push_child(f1, tmp); }
+        | - 'eq'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STREQ,       f2); PVIP_node_push_child(f1, tmp); }
+        | - 'ne'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRNE,       f2); PVIP_node_push_child(f1, tmp); }
+        | - 'gt'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRGT,       f2); PVIP_node_push_child(f1, tmp); }
+        | - 'ge'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRGE,       f2); PVIP_node_push_child(f1, tmp); }
+        | - 'lt'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRLT,       f2); PVIP_node_push_child(f1, tmp); }
+        | - 'le'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRLE,       f2); PVIP_node_push_child(f1, tmp); }
     )* { if (f1->children.size==1) { $$=f1->children.nodes[0]; } else { $$=f1; } }
-
-methodcall_expr =
-    a1:structural_infix_expr { a3=NULL; } (
-        (
-            '.' a2:ident
-            (
-                a3:paren_args
-            )?
-        ) {
-            if (a3) {
-                $$=PVIP_node_new_children3(PVIP_NODE_METHODCALL, a1, a2, a3);
-            } else {
-                $$=PVIP_node_new_children2(PVIP_NODE_METHODCALL, a1, a2);
-            }
-            a1=$$;
-        }
-    )* { $$=a1; }
 
 structural_infix_expr =
     a1:named_unary_expr (
@@ -444,6 +427,18 @@ additive_expr =
           }
         | - '~'  !'~' - r2:multiplicative_expr {
             $$ = PVIP_node_new_children2(PVIP_NODE_STRING_CONCAT, l, r2);
+            l = $$;
+          }
+        | - '~|' ![<>=] - r1:multiplicative_expr {
+            $$ = PVIP_node_new_children2(PVIP_NODE_BITWISE_OR, l, r1);
+            l = $$;
+          }
+        | - '~&' ![<>=] - r1:multiplicative_expr {
+            $$ = PVIP_node_new_children2(PVIP_NODE_BITWISE_AND, l, r1);
+            l = $$;
+          }
+        | - '~^' ![<>=] - r1:multiplicative_expr {
+            $$ = PVIP_node_new_children2(PVIP_NODE_BITWISE_XOR, l, r1);
             l = $$;
           }
     )* {
@@ -535,6 +530,7 @@ method_postfix_expr =
                     f1=$$;
                 }
             )
+            | '.' f2:ident { $$=PVIP_node_new_children2(PVIP_NODE_METHODCALL, f1, f2); f1=$$; }
             | '.' f2:string f3:paren_args {
                 /* Rakudo says "Quoted method name requires parenthesized arguments" */
                 $$ = PVIP_node_new_children3(PVIP_NODE_METHODCALL, f1, f2, f3);
