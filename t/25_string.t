@@ -11,7 +11,7 @@ __END__
 --- code
 "aa{3+2}"
 --- expected
-(statements (string_concat (string "aa") (add (int 3) (int 2))))
+(statements (string_concat (string "aa") (statements (add (int 3) (int 2)))))
 
 ===
 --- code
@@ -30,3 +30,9 @@ __END__
 "{ }"
 --- expected
 (statements (string ""))
+
+===
+--- code
+"{use v5;}"
+--- expected
+(statements (string_concat (string "") (statements (use (ident "v5")))))
