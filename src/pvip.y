@@ -578,7 +578,7 @@ term =
     }
     | funcref
     | < '$~' [A-Za-z] [A-Za-z0-9]* > { $$ = PVIP_node_new_string(PVIP_NODE_SLANGS, yytext, yyleng); }
-    | '*' { $$ = PVIP_node_new_children(PVIP_NODE_WHATEVER); }
+    | '*' ![*=] { $$ = PVIP_node_new_children(PVIP_NODE_WHATEVER); }
 
 enum =
     'enum' ws+ q:qw { $$ = PVIP_node_new_children2(PVIP_NODE_ENUM, PVIP_node_new_children(PVIP_NODE_NOP), q); }

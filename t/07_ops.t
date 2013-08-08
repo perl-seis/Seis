@@ -110,3 +110,9 @@ say |@arr
 !!$n
 --- expected
 (statements (not (not (variable "$n"))))
+
+===
+--- code
+$a **= 2;
+--- expected
+(statements (inplace_pow (variable "$a") (int 2)))
