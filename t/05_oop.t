@@ -30,7 +30,7 @@ class NotComplex is Cool { }
 --- code
 multi method foo() { }
 --- expected
-(statements (multi (method (ident "foo") (args) (statements))))
+(statements (multi (method (ident "foo") (nop) (statements))))
 
 ===
 --- code

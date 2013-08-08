@@ -170,7 +170,7 @@ multi_method_stmt =
     | method_stmt
 
 method_stmt =
-    'method' ws - i:ident - p:paren_args - b:block { $$ = PVIP_node_new_children3(PVIP_NODE_METHOD, i, p, b); }
+    { p=NULL; } 'method' ws - i:ident - '(' - p:params? - ')' - b:block { $$ = PVIP_node_new_children3(PVIP_NODE_METHOD, i, MAYBE(p), b); }
 
 normal_stmt = return_stmt | last_stmt | next_stmt | expr
 
@@ -717,8 +717,16 @@ params =
 
 # Str $x=""
 param =
-    { i=NULL; d=NULL; } ( i:ident ws+ )? v:term ( - d:param_defaults )? {
+    { i=NULL; d=NULL; }
+    (
+        ( i:ident ws+ )?
+        v:term
+        ( - d:param_defaults )?
+    ) {
         $$ = PVIP_node_new_children3(PVIP_NODE_PARAM, MAYBE(i), v, MAYBE(d));
+    }
+    | '*' v:array_var {
+        $$ = PVIP_node_new_children1(PVIP_NODE_PARAM, PVIP_node_new_children1(PVIP_NODE_VARGS, v));
     }
 
 param_defaults =

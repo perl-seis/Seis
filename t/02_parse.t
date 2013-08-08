@@ -389,7 +389,7 @@ class Foo { 1 }
 --- code
 class { method bar() { } }
 --- expected
-(statements (class (nop) (nop) (statements (method (ident "bar") (args) (statements)))))
+(statements (class (nop) (nop) (statements (method (ident "bar") (nop) (statements)))))
 
 ===
 --- code
