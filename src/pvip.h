@@ -216,6 +216,7 @@ void PVIP_node_destroy(PVIPNode *node);
 PVIPNode* PVIP_node_append_string(PVIPNode *node, const char* str, size_t len);
 PVIPNode* PVIP_node_append_string_from_hex(PVIPNode * node, const char *str, size_t len);
 PVIPNode* PVIP_node_append_string_from_oct(PVIPNode * node, const char *str, size_t len);
+PVIPNode* PVIP_node_append_string_from_dec(PVIPNode * node, const char *str, size_t len);
 PVIPNode* PVIP_node_append_string_node(PVIPNode*node, PVIPNode*stuff);
 
 void PVIP_node_change_type(PVIPNode *node, PVIP_node_type_t type);

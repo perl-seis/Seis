@@ -848,6 +848,8 @@ dq_string = s:dq_string_start { s = PVIP_node_new_string(PVIP_NODE_STRING, "", 0
         | esc '0' { s=PVIP_node_append_string(s, "\0", 1); }
         | esc '{' { s=PVIP_node_append_string(s, "{", 1); /* } */ }
         | esc 'c[' < [^\]]+ > ']' { s=PVIP_node_append_string_node(s, PVIP_node_new_string(PVIP_NODE_UNICODE_CHAR, yytext, yyleng)); }
+        # \c10
+        | esc 'c' < [0-9] [0-9] > { s=PVIP_node_append_string_from_dec(s, yytext, yyleng); }
         | ( esc 'x' (
                   '0'? < ( [a-fA-F0-9] [a-fA-F0-9] ) >
             | '[' '0'? < ( [a-fA-F0-9] [a-fA-F0-9] ) > ']' )

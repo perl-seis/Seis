@@ -78,6 +78,18 @@ PVIPNode* PVIP_node_append_string_from_hex(PVIPNode *node, const char* str, size
     return PVIP_node_append_string(node, &c, 1);
 }
 
+PVIPNode* PVIP_node_append_string_from_dec(PVIPNode *node, const char* str, size_t len) {
+    assert(PVIP_node_category(node->type) == PVIP_CATEGORY_STRING);
+    assert(len==2);
+
+    char buf[3];
+    buf[0] = str[0];
+    buf[1] = str[1];
+    buf[2] = '\0';
+    char c = strtol(buf, NULL, 10);
+    return PVIP_node_append_string(node, &c, 1);
+}
+
 PVIPNode* PVIP_node_append_string_from_oct(PVIPNode *node, const char* str, size_t len) {
     assert(PVIP_node_category(node->type) == PVIP_CATEGORY_STRING);
     assert(len==2);

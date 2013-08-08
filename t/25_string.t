@@ -36,3 +36,21 @@ __END__
 "{use v5;}"
 --- expected
 (statements (string_concat (string "") (statements (use (ident "v5")))))
+
+===
+--- code
+"\c[LINE FEED (LF)]"
+--- expected
+(statements (string_concat (string "") (unicode_char "LINE FEED (LF)")))
+
+===
+--- code
+'\c[LINE FEED (LF)]'
+--- expected
+(statements (string "\\c[LINE FEED (LF)]"))
+
+===
+--- code
+"\c10"
+--- expected
+(statements (string "\n"))
