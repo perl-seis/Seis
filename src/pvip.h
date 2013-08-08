@@ -168,6 +168,7 @@ typedef enum {
     PVIP_NODE_BITWISE_AND, /* ~& */
     PVIP_NODE_BITWISE_XOR, /* ~^ */
     PVIP_NODE_VARGS, /* sub foo (*@a) { } */
+    PVIP_NODE_WHATEVER, /* * */
 } PVIP_node_type_t;
 
 typedef enum {

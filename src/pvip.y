@@ -578,6 +578,7 @@ term =
     }
     | funcref
     | < '$~' [A-Za-z] [A-Za-z0-9]* > { $$ = PVIP_node_new_string(PVIP_NODE_SLANGS, yytext, yyleng); }
+    | '*' { $$ = PVIP_node_new_children(PVIP_NODE_WHATEVER); }
 
 enum =
     'enum' ws+ q:qw { $$ = PVIP_node_new_children2(PVIP_NODE_ENUM, PVIP_node_new_children(PVIP_NODE_NOP), q); }
@@ -717,16 +718,16 @@ params =
 
 # Str $x=""
 param =
-    { i=NULL; d=NULL; }
+    '*' v:array_var {
+        $$ = PVIP_node_new_children1(PVIP_NODE_PARAM, PVIP_node_new_children1(PVIP_NODE_VARGS, v));
+    }
+    | { i=NULL; d=NULL; }
     (
         ( i:ident ws+ )?
         v:term
         ( - d:param_defaults )?
     ) {
         $$ = PVIP_node_new_children3(PVIP_NODE_PARAM, MAYBE(i), v, MAYBE(d));
-    }
-    | '*' v:array_var {
-        $$ = PVIP_node_new_children1(PVIP_NODE_PARAM, PVIP_node_new_children1(PVIP_NODE_VARGS, v));
     }
 
 param_defaults =
