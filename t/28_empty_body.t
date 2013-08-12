@@ -10,6 +10,12 @@ while 1 { }
 
 ===
 --- code
+for 1 { }
+--- expected
+(statements (for (int 1) (statements)))
+
+===
+--- code
 while @a.pop -> $n { }
 --- expected
 (statements (while (methodcall (variable "@a") (ident "pop")) (lambda (params (param (nop) (variable "$n") (nop))) (statements))))

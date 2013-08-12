@@ -212,7 +212,7 @@ while_stmt = 'while' - cond:expr - (
         )
 
 for_stmt =
-    'for' - src:expr - '{' - body:statementlist - '}' { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
+    'for' - src:expr - body:block { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
     | 'for' - src:expr - body:lambda { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
 
 unless_stmt = 
