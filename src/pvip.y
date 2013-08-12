@@ -118,11 +118,11 @@ statementlist =
 # TODO
 statement =
         - (
-              use_stmt
+              while_stmt
+            | use_stmt
             | enum_stmt
             | if_stmt
             | for_stmt
-            | while_stmt
             | unless_stmt
             | module_stmt
             | multi_method_stmt
@@ -201,20 +201,20 @@ pkg_name = < [a-zA-Z] [a-zA-Z0-9]* ( '::' [a-zA-Z0-9]+ )* > {
 
 die_stmt = 'die' ws e:expr eat_terminator { $$ = PVIP_node_new_children1(PVIP_NODE_DIE, e); }
 
-while_stmt = 'while' ws+ cond:expr - '{' - body:statementlist - '}' {
-            $$ = PVIP_node_new_children2(PVIP_NODE_WHILE, cond, body);
+while_stmt = { body=NULL; } 'while' - cond:expr - '{' - body:statementlist? - '}' {
+            $$ = PVIP_node_new_children2(PVIP_NODE_WHILE, cond, MAYBE(body));
         }
 
 for_stmt =
     'for' - src:expr - '{' - body:statementlist - '}' { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
     | 'for' - src:expr - body:lambda { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
 
-unless_stmt = 'unless' - cond:expr - '{' - body:statementlist - '}' {
-            $$ = PVIP_node_new_children2(PVIP_NODE_UNLESS, cond, body);
+unless_stmt =  { body=NULL; } 'unless' - cond:expr - '{' - body:statementlist? - '}' {
+            $$ = PVIP_node_new_children2(PVIP_NODE_UNLESS, cond, MAYBE(body));
         }
 
-if_stmt = 'if' - if_cond:expr - '{' - if_body:statementlist - '}' {
-            $$ = PVIP_node_new_children2(PVIP_NODE_IF, if_cond, if_body);
+if_stmt = { if_body=NULL; } 'if' - if_cond:expr - '{' - if_body:statementlist? - '}' {
+            $$ = PVIP_node_new_children2(PVIP_NODE_IF, if_cond, MAYBE(if_body));
             if_cond=$$;
         }
         (
@@ -615,7 +615,7 @@ twvars =
 language =
     ':lang<' < [a-zA-Z0-9]+ > '>' { $$ = PVIP_node_new_string(PVIP_NODE_LANG, yytext, yyleng); }
 
-reserved = ( 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' ) ![-A-Za-z0-9]
+reserved = ( 'if' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children1(PVIP_NODE_ROLE, b); }
