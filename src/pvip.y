@@ -113,6 +113,7 @@ statementlist =
             }
         )* eat_terminator?
     )
+    | ws+ { $$=NOP(); }
 
 # TODO
 statement =

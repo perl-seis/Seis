@@ -198,6 +198,17 @@ typedef struct _PVIPNode {
     };
 } PVIPNode;
 
+/* parser related public apis */
+PVIPNode * PVIP_parse_string(const char *string, int len, int debug, PVIPString **error);
+PVIPNode * PVIP_parse_fp(FILE *fp, int debug, PVIPString **error);
+
+
+/* node related public apis */
+void PVIP_node_destroy(PVIPNode *node);
+const char* PVIP_node_name(PVIP_node_type_t t);
+PVIP_category_t PVIP_node_category(PVIP_node_type_t type);
+void PVIP_node_as_sexp(PVIPNode * node, PVIPString *buf);
+
 /* node */
 PVIPNode* PVIP_node_new_children(PVIP_node_type_t type);
 PVIPNode* PVIP_node_new_children1(PVIP_node_type_t type, PVIPNode* n1);
@@ -208,11 +219,8 @@ PVIPNode* PVIP_node_new_int(PVIP_node_type_t type, int64_t n);
 PVIPNode* PVIP_node_new_intf(PVIP_node_type_t type, const char *str, size_t len, int base);
 PVIPNode* PVIP_node_new_string(PVIP_node_type_t type, const char* str, size_t len);
 PVIPNode* PVIP_node_new_number(PVIP_node_type_t type, const char *str, size_t len);
-const char* PVIP_node_name(PVIP_node_type_t t);
 
 void PVIP_node_push_child(PVIPNode* node, PVIPNode* child);
-
-void PVIP_node_destroy(PVIPNode *node);
 
 PVIPNode* PVIP_node_append_string(PVIPNode *node, const char* str, size_t len);
 PVIPNode* PVIP_node_append_string_from_hex(PVIPNode * node, const char *str, size_t len);
@@ -222,9 +230,6 @@ PVIPNode* PVIP_node_append_string_node(PVIPNode*node, PVIPNode*stuff);
 
 void PVIP_node_change_type(PVIPNode *node, PVIP_node_type_t type);
 
-PVIP_category_t PVIP_node_category(PVIP_node_type_t type);
-
-void PVIP_node_as_sexp(PVIPNode * node, PVIPString *buf);
 void PVIP_node_dump_sexp(PVIPNode * node);
 
 
@@ -239,10 +244,6 @@ void PVIP_string_say(PVIPString *str);
 PVIP_BOOL PVIP_string_vprintf(PVIPString *str, const char*format, va_list ap);
 PVIP_BOOL PVIP_string_printf(PVIPString *str, const char*format, ...);
 const char * PVIP_string_c_str(PVIPString *str);
-
-/* parser */
-PVIPNode * PVIP_parse_string(const char *string, int len, int debug, PVIPString **error);
-PVIPNode * PVIP_parse_fp(FILE *fp, int debug, PVIPString **error);
 
 #ifdef __cplusplus
 };
