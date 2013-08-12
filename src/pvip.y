@@ -611,6 +611,7 @@ twvars =
     | '$*CWD' { $$ = PVIP_node_new_children(PVIP_NODE_TW_CWD); }
     | '$*EXECUTABLE_NAME' { $$ = PVIP_node_new_children(PVIP_NODE_TW_EXECUTABLE_NAME); }
     | '&?ROUTINE' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ROUTINE); }
+    | '%*ENV' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ENV); }
 
 language =
     ':lang<' < [a-zA-Z0-9]+ > '>' { $$ = PVIP_node_new_string(PVIP_NODE_LANG, yytext, yyleng); }
