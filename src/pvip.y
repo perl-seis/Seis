@@ -617,7 +617,7 @@ twvars =
 language =
     ':lang<' < [a-zA-Z0-9]+ > '>' { $$ = PVIP_node_new_string(PVIP_NODE_LANG, yytext, yyleng); }
 
-reserved = ( 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' ) ![-A-Za-z0-9]
+reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children1(PVIP_NODE_ROLE, b); }
