@@ -758,7 +758,7 @@ block =
 
 # XXX optimizable
 array =
-    '[' e:expr ']' {
+    '[' - e:expr - ']' {
         if (PVIP_node_category(e->type) == PVIP_CATEGORY_CHILDREN) {
             PVIP_node_change_type(e, PVIP_NODE_ARRAY);
             $$=e;
