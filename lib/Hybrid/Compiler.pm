@@ -97,10 +97,19 @@ sub do_compile {
             join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
         );
     } elsif ($node->type == PVIP_NODE_ATPOS) {
-        sprintf('(%s)[(%s)]',
-            $self->do_compile($v->[0]),
-            $self->do_compile($v->[1]),
-        );
+        if ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A@/) {
+            # @a[0]
+            sprintf('(%s)[(%s)]',
+                $self->do_compile($v->[0]),
+                $self->do_compile($v->[1]),
+            );
+        } else {
+            # $a[0]
+            sprintf('(%s)->[(%s)]',
+                $self->do_compile($v->[0]),
+                $self->do_compile($v->[1]),
+            );
+        }
     } elsif ($node->type == PVIP_NODE_METHODCALL) {
         sprintf('(%s)->%s',
             $self->do_compile($v->[0]),
@@ -116,7 +125,9 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_ELSE) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_ELSE is not implemented")
     } elsif ($node->type == PVIP_NODE_WHILE) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_WHILE is not implemented")
+        sprintf("while (%s) { %s }",
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]));
     } elsif ($node->type == PVIP_NODE_DIE) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_DIE is not implemented")
     } elsif ($node->type == PVIP_NODE_ELSIF) {
