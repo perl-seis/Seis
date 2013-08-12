@@ -108,3 +108,9 @@ $*CWD
 $*EXECUTABLE_NAME
 --- expected
 (statements (tw_executable_name))
+
+===
+--- code
+%*ENV
+--- expected
+(statements (tw_env))
