@@ -210,7 +210,12 @@ for_stmt =
     'for' - src:expr - '{' - body:statementlist - '}' { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
     | 'for' - src:expr - body:lambda { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
 
-unless_stmt =  { body=NULL; } 'unless' - cond:expr - '{' - body:statementlist? - '}' {
+unless_stmt = 
+        { body=NULL; } 'unless' - cond:expr - '{' - body:statementlist? - '}' {
+            $$ = PVIP_node_new_children2(PVIP_NODE_UNLESS, cond, MAYBE(body));
+        }
+        # workaround for `unless Mu { }`
+        | { body=NULL; } 'unless' - cond:ident - '{' - body:statementlist? - '}' {
             $$ = PVIP_node_new_children2(PVIP_NODE_UNLESS, cond, MAYBE(body));
         }
 
@@ -688,6 +693,7 @@ qw_item = < [^ >\n]+ > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyl
 # TODO optimize
 funcdef =
     'my' ws - f:funcdef { $$ = PVIP_node_new_children1(PVIP_NODE_MY, f); }
+    | 'our' ws - f:funcdef { $$ = PVIP_node_new_children1(PVIP_NODE_OUR, f); }
     | 'sub' { p=NULL; e=NULL; } ws+ i:ident - '(' - p:params? - ')' - e:is_exportable? - b:block {
         if (!p) {
             p = PVIP_node_new_children(PVIP_NODE_PARAMS);
