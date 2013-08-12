@@ -202,9 +202,14 @@ pkg_name = < [a-zA-Z] [a-zA-Z0-9]* ( '::' [a-zA-Z0-9]+ )* > {
 
 die_stmt = 'die' ws e:expr eat_terminator { $$ = PVIP_node_new_children1(PVIP_NODE_DIE, e); }
 
-while_stmt = { body=NULL; } 'while' - cond:expr - '{' - body:statementlist? - '}' {
-            $$ = PVIP_node_new_children2(PVIP_NODE_WHILE, cond, MAYBE(body));
-        }
+while_stmt = 'while' - cond:expr - (
+            b:block {
+                $$ = PVIP_node_new_children2(PVIP_NODE_WHILE, cond, b);
+            }
+            | l:lambda {
+                $$ = PVIP_node_new_children2(PVIP_NODE_WHILE, cond, l);
+            }
+        )
 
 for_stmt =
     'for' - src:expr - '{' - body:statementlist - '}' { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, src, body); }
