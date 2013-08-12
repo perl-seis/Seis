@@ -148,6 +148,7 @@ normal_or_postfix_stmt =
           ( ' '+ 'if' - cond_if:expr - eat_terminator ) { $$ = PVIP_node_new_children2(PVIP_NODE_IF, cond_if, n); }
         | ( ' '+ 'unless' - cond_unless:expr - eat_terminator ) { $$ = PVIP_node_new_children2(PVIP_NODE_UNLESS, cond_unless, n); }
         | ( ' '+ 'for' - cond_for:expr - eat_terminator ) { $$ = PVIP_node_new_children2(PVIP_NODE_FOR, cond_for, n); }
+        | ( ' '+ 'while' - cond_for:expr - eat_terminator ) { $$ = PVIP_node_new_children2(PVIP_NODE_WHILE, cond_for, n); }
         | ( - eat_terminator ) { $$=n; }
     )
 
@@ -366,7 +367,7 @@ funcall =
     !reserved i:ident - a:paren_args {
         $$ = PVIP_node_new_children2(PVIP_NODE_FUNCALL, i, a);
     }
-    | !reserved i:ident ws+ a:bare_args {
+    | !reserved i:ident ws+ !'{' a:bare_args {
         $$ = PVIP_node_new_children2(PVIP_NODE_FUNCALL, i, a);
     }
 
