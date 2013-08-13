@@ -712,16 +712,18 @@ funcdef =
 is_exportable = 'is' ws+ 'exportable' { $$ = PVIP_node_new_children(PVIP_NODE_EXPORTABLE); }
 
 lambda =
-    '->' - ( !'{' p:params )? - b:block {
+    {p=NULL; } '->' - ( !'{' p:params )? - b:block {
         if (!p) {
             p = PVIP_node_new_children(PVIP_NODE_PARAMS);
         }
         $$ = PVIP_node_new_children2(PVIP_NODE_LAMBDA, p, b);
     }
     | b:block { $$ = PVIP_node_new_children1(PVIP_NODE_LAMBDA, b); }
-    | 'sub' ws+ b:block {
-        PVIPNode* pp = PVIP_node_new_children(PVIP_NODE_PARAMS);
-        $$ = PVIP_node_new_children4(PVIP_NODE_FUNC, PVIP_node_new_children(PVIP_NODE_NOP), pp, NOP(), b);
+    | {p=NULL; } 'sub' ws+ (!'{' p:params)? - b:block {
+        if (!p) {
+            p = PVIP_node_new_children(PVIP_NODE_PARAMS);
+        }
+        $$ = PVIP_node_new_children4(PVIP_NODE_FUNC, PVIP_node_new_children(PVIP_NODE_NOP), p, NOP(), b);
     }
 
 params =
