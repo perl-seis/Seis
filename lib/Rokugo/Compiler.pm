@@ -292,7 +292,10 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_UNARY_MINUS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_MINUS is not implemented")
     } elsif ($node->type == PVIP_NODE_IT_METHODCALL) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_IT_METHODCALL is not implemented")
+        sprintf('$_->%s(%s)',
+            $self->do_compile($v->[0]),
+            defined($v->[1]) ? $self->do_compile($v->[1]) : '',
+        );
     } elsif ($node->type == PVIP_NODE_LAST) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_LAST is not implemented")
     } elsif ($node->type == PVIP_NODE_NEXT) {
