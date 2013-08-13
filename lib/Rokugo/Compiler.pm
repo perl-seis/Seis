@@ -18,6 +18,7 @@ our $HEADER = <<'...';
 use strict;
 use 5.010_001;
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash';
+use List::Util qw(min max);
 
 #line '-' 1
 ...
@@ -48,7 +49,13 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_RANGE) {
         $self->do_compile($v->[0]) . '..' . $self->do_compile($v->[1]);
     } elsif ($node->type == PVIP_NODE_REDUCE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_REDUCE is not implemented")
+        my $body;
+        if ($v->[0]->value =~ /[a-z]/) {
+            $body = sprintf '$rokugo_reduce_ret = %s($rokugo_reduce_ret, $rokugo_reduce_stuff)', $v->[0]->value;
+        } else {
+            $body = sprintf '$rokugo_reduce_ret %s= $rokugo_reduce_stuff', $v->[0]->value;
+        }
+        sprintf('do { my @rokugo_reduce_ary = %s; my $rokugo_reduce_ret = shift @rokugo_reduce_ary; for my $rokugo_reduce_stuff (@rokugo_reduce_ary) { %s } $rokugo_reduce_ret; }', $self->do_compile($v->[1]), $body);
     } elsif ($node->type == PVIP_NODE_INT) {
         $node->value;
     } elsif ($node->type == PVIP_NODE_NUMBER) {
@@ -93,7 +100,9 @@ sub do_compile {
             join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
         );
     } elsif ($node->type == PVIP_NODE_OUR) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_OUR is not implemented")
+        sprintf('our (%s)',
+            join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
+        );
     } elsif ($node->type == PVIP_NODE_BIND) {
         sprintf('(%s)=(%s)',
             $self->do_compile($v->[0]),
@@ -154,7 +163,7 @@ sub do_compile {
         # (params (param (nop) (variable "$n") (nop)))
         join(";", map { $self->do_compile($_) } @$v ) . ";undef;"
     } elsif ($node->type == PVIP_NODE_RETURN) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_RETURN is not implemented")
+        'return (' . join(',', map { "($_)" } map {$self->do_compile($_)} @$v) . ')';
     } elsif ($node->type == PVIP_NODE_ELSE) {
         'else { ' . $self->do_compile($v->[0]) . '}';
     } elsif ($node->type == PVIP_NODE_WHILE) {
