@@ -1,0 +1,55 @@
+#!perl
+use strict;
+use warnings;
+use Caroline;
+use Hybrid;
+use Getopt::Long;
+use Data::Dumper;
+
+my $p = Getopt::Long::Parser->new(
+    config => [qw(posix_default no_ignore_case auto_help)]
+);
+$p->getoptions(
+    'e=s'       => \my $eval,
+);
+
+if (defined $eval) {
+    my $compiler = Hybrid::Compiler->new();
+    my $compiled = $compiler->compile($eval);
+    eval $compiled;
+    die $@ if $@;
+} elsif (@ARGV) {
+    my $fname= shift @ARGV;
+    my $compiler = Hybrid::Compiler->new();
+    my $compiled = $compiler->compile(slurp $fname);
+    eval $compiled;
+    die $@ if $@;
+} else {
+    my $caroline = Caroline->new();
+    while (defined(my $line = $caroline->readline('hybrid> '))) {
+        if ($line =~ /\S/) {
+            $caroline->history_add($line);
+            my $compiler = Hybrid::Compiler->new();
+            my $compiled = eval {
+                $compiler->compile($line);
+            };
+            if ($@) {
+                print STDERR $@ . "\n";
+                next;
+            }
+            my $ret = eval $compiled;
+            if ($@) {
+                print STDERR $@ . "\n";
+            } else {
+                warn Dumper($ret);
+            }
+        }
+    }
+}
+
+sub slurp {
+    my $fname = shift;
+    open my $fh, '<', $fname
+        or Carp::croak("Can't open '$fname' for reading: '$!'");
+    scalar(do { local $/; <$fh> })
+}
