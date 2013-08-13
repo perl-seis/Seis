@@ -28,7 +28,6 @@ use List::Util qw(min max);
 use Rokugo::MetaClass;
 use Rokugo::Class;
 
-#line '-' 1
 ...
 
 sub new {
@@ -37,11 +36,17 @@ sub new {
 }
 
 sub compile {
-    my ($self, $src) = @_;
+    my ($self, $src, $filename) = @_;
+    $filename //= '-e';
+    local $self->{filename} = $filename;
     my $parser = Perl6::PVIP->new();
     my $node = $parser->parse_string($src)
         or Rokugo::Exception::ParsingError->throw($parser->errstr);
-    return $HEADER . $self->do_compile($node);
+    return join('',
+        $HEADER,
+        qq{#line 1 "$filename"\n},
+        $self->do_compile($node)
+    );
 }
 
 sub do_compile {
@@ -53,7 +58,11 @@ sub do_compile {
     my $type = $node->type;
 
     if ($type == PVIP_NODE_STATEMENTS) {
-        return join(";\n", map { $self->do_compile($_) } @$v);
+        my @ret;
+        for (my $i=0; $i<@$v; $i++) {
+            push @ret, $self->do_compile($v->[$i], $i==@$v-1 ? G_SCALAR : G_VOID);
+        }
+        return join(";\n", @ret);
     } elsif ($type == PVIP_NODE_UNDEF) {
         undef;
     } elsif ($type == PVIP_NODE_RANGE) {
@@ -307,6 +316,7 @@ sub do_compile {
         # (class (ident "Foo8") (list (is (ident "Foo7"))) (statements))
         state $ANON_CLASS = 0;
         my $pkg = $v->[0]->type == PVIP_NODE_NOP ? "Rokugo::_AnonClass" . $ANON_CLASS++ : $self->do_compile($v->[0]);
+        my $retval = $gimme == G_VOID ? '' : "Rokugo::Class->new(name => '$pkg')";
         sprintf(q!do {
             package %s;
             BEGIN {
@@ -315,8 +325,8 @@ sub do_compile {
                 %s;
             }
             %s;
-            Rokugo::Class->new(name => "%s");
-        }!, $pkg, join(";\n", map { $self->do_compile($_) } @{$v->[1]->value}), $self->do_compile($v->[2]), $pkg);
+            %s
+        }!, $pkg, join(";\n", map { $self->do_compile($_) } @{$v->[1]->value}), $self->do_compile($v->[2]), $retval);
     } elsif ($type == PVIP_NODE_METHOD) {
         # (method (ident "bar") (nop) (statements))
         # TODO: support arguments
