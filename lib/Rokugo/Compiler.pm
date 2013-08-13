@@ -201,18 +201,6 @@ sub do_compile {
         );
     } elsif ($node->type == PVIP_NODE_NOP) {
         return "();";
-    } elsif ($node->type == PVIP_NODE_STREQ) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STREQ is not implemented")
-    } elsif ($node->type == PVIP_NODE_STRNE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STRNE is not implemented")
-    } elsif ($node->type == PVIP_NODE_STRGT) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STRGT is not implemented")
-    } elsif ($node->type == PVIP_NODE_STRGE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STRGE is not implemented")
-    } elsif ($node->type == PVIP_NODE_STRLT) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STRLT is not implemented")
-    } elsif ($node->type == PVIP_NODE_STRLE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STRLE is not implemented")
     } elsif ($node->type == PVIP_NODE_POW) {
         sprintf('(%s)**(%s)',
             $self->do_compile($v->[0]),
@@ -351,6 +339,18 @@ sub do_compile {
                     $lhs = sprintf("(%s)>=(%s)", $lhs, $self->do_compile($rhs->value->[0]));
                 } elsif ($rhs->type == PVIP_NODE_LE) {
                     $lhs = sprintf("(%s)<=(%s)", $lhs, $self->do_compile($rhs->value->[0]));
+                } elsif ($rhs->type == PVIP_NODE_STREQ) {
+                    $lhs = sprintf("(%s)eq(%s)", $lhs, $self->do_compile($rhs->value->[0]));
+                } elsif ($rhs->type == PVIP_NODE_STRNE) {
+                    $lhs = sprintf("(%s)ne(%s)", $lhs, $self->do_compile($rhs->value->[0]));
+                } elsif ($rhs->type == PVIP_NODE_STRGT) {
+                    $lhs = sprintf("(%s)gt(%s)", $lhs, $self->do_compile($rhs->value->[0]));
+                } elsif ($rhs->type == PVIP_NODE_STRGE) {
+                    $lhs = sprintf("(%s)ge(%s)", $lhs, $self->do_compile($rhs->value->[0]));
+                } elsif ($rhs->type == PVIP_NODE_STRLT) {
+                    $lhs = sprintf("(%s)lt(%s)", $lhs, $self->do_compile($rhs->value->[0]));
+                } elsif ($rhs->type == PVIP_NODE_STRLE) {
+                    $lhs = sprintf("(%s)le(%s)", $lhs, $self->do_compile($rhs->value->[0]));
                 } else {
                     Rokugo::Exception::NotImplemented->throw(sprintf "PVIP_NODE_%s is not implemented in chaning", uc($rhs->name))
                 }
@@ -511,7 +511,15 @@ sub do_compile {
     }
 }
 
-
+sub binop {
+    my ($self, $op, $v) = @_;
+    sprintf('(%s)%s(%s)',
+        $self->do_compile($v->[0]),
+        $op,
+        $v,
+        $self->do_compile($v->[1]),
+    );
+}
 
 1;
 

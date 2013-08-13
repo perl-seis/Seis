@@ -89,6 +89,10 @@ my @result = (
     'my $n=0; unless 0 { $n=9; } $n' => 9,
     'my $n=0; unless 1 { $n=9; } $n' => 0,
     '[{a => 1, b => 2}.keys]' => ['a', 'b'],
+    '"a" eq "b"' => false,
+    '"a" eq "a"' => true,
+    '"a" ne "b"' => true,
+    '"a" ne "a"' => false,
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 
