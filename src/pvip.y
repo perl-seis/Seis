@@ -92,7 +92,7 @@ static char PVIP_input(char *buf, YY_XTYPE D) {
 
 %}
 
-comp_init = BOM? e:statementlist end-of-file {
+comp_init = BOM? e:statementlist - end-of-file {
     $$ = (G->data.root = e);
 }
     | BOM? end-of-file { $$ = (G->data.root = PVIP_node_new_children(PVIP_NODE_NOP)); }
