@@ -27,6 +27,10 @@ Hybrid - It's new $module
 
 Hybrid is ...
 
+=head1 TODO
+
+Renamed to Rokugo
+
 =head1 LICENSE
 
 Copyright (C) tokuhirom.

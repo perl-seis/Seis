@@ -39,7 +39,7 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_UNDEF) {
         undef;
     } elsif ($node->type == PVIP_NODE_RANGE) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_RANGE is not implemented")
+        $self->do_compile($v->[0]) . '..' . $self->do_compile($v->[1]);
     } elsif ($node->type == PVIP_NODE_REDUCE) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_REDUCE is not implemented")
     } elsif ($node->type == PVIP_NODE_INT) {
@@ -106,7 +106,10 @@ sub do_compile {
             join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
         );
     } elsif ($node->type == PVIP_NODE_ATPOS) {
-        if ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A@/) {
+        if (
+            ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A@/)
+            || $v->[0]->type == PVIP_NODE_RANGE
+        ) {
             # @a[0]
             sprintf('(%s)[(%s)]',
                 $self->do_compile($v->[0]),

@@ -77,6 +77,7 @@ my @result = (
     'class Foo4 { method bar() { 3 } }; Foo4.new.bar' => 3,
     'class Foo5 { method bar($n) { $n*3 } }; Foo5.new.bar(4)' => 12,
     'sub x($n) { $n*2 }; x(3)' => 6,
+    '(1..3)[2]' => 3,
 );
 
 for (my $i=0; $i<@result; $i+=2) {
