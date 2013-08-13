@@ -21,7 +21,7 @@ if (defined $eval) {
 } elsif (@ARGV) {
     my $fname= shift @ARGV;
     my $compiler = Hybrid::Compiler->new();
-    my $compiled = $compiler->compile(slurp $fname);
+    my $compiled = $compiler->compile(slurp($fname));
     eval $compiled;
     die $@ if $@;
 } else {
@@ -53,3 +53,4 @@ sub slurp {
         or Carp::croak("Can't open '$fname' for reading: '$!'");
     scalar(do { local $/; <$fh> })
 }
+
