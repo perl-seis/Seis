@@ -93,6 +93,9 @@ my @result = (
     '"a" eq "a"' => true,
     '"a" ne "b"' => true,
     '"a" ne "a"' => false,
+    'my $i=4; $i+=4; $i' => 8,
+    'my $i=4; $i-=2; $i' => 2,
+    '"x" x 3' => 'xxx',
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 
