@@ -208,7 +208,9 @@ sub do_compile {
         }
         $ret;
     } elsif ($type == PVIP_NODE_NOT) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_NOT is not implemented")
+        sprintf('!(%s)',
+            $self->do_compile($v->[0])
+        );
     } elsif ($type == PVIP_NODE_CONDITIONAL) {
         sprintf('(%s)?(%s):(%s)',
             $self->do_compile($v->[0]),

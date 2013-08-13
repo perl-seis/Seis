@@ -111,6 +111,7 @@ my @result = (
     '[(class { }).^methods]' => [],
     '[(class { method foo() { } }).^methods]' => ['foo'],
     'my $i=0; for 1..10 { $i+=$_; last if $_==5}; $i' => 15,
+    '!1' => false,
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 
