@@ -71,6 +71,12 @@ my @result = (
     'my $i=3; while $i-- { }; $i' => -1,
     'my $a =[ 5,9,6,3]; $a[2]' => 6,
     'use Time::Piece; 1' => 1,
+    'class Foo1 { }; 1' => 1,
+    'class Foo2 { method bar() { } }; 1' => 1,
+    'class Foo3 { method bar() { 3 } }; Foo3.bar' => 3,
+    'class Foo4 { method bar() { 3 } }; Foo4.new.bar' => 3,
+    'class Foo5 { method bar($n) { $n*3 } }; Foo5.new.bar(4)' => 12,
+    'sub x($n) { $n*2 }; x(3)' => 6,
 );
 
 for (my $i=0; $i<@result; $i+=2) {
@@ -83,7 +89,8 @@ for (my $i=0; $i<@result; $i+=2) {
     note 'compiled: ' .  $compiled;
     my $result = eval $compiled;
     ok !$@ or diag $@;
-    is_deeply($result, $expected);
+    is_deeply($result, $expected) or eval { diag(Perl6::PVIP->new->parse_string($code)->as_sexp) };
+    warn $@ if $@;
 }
 
 done_testing;

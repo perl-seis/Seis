@@ -6,6 +6,7 @@ use 5.010_001;
 
 use Perl6::PVIP 0.01;
 use Carp ();
+use Hybrid::Object;
 
 our $HEADER = <<'...';
 use strict;
@@ -57,10 +58,17 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_IDENT) {
         $v;
     } elsif ($node->type == PVIP_NODE_FUNCALL) {
-        sprintf('(%s)->(%s)',
-            $self->do_compile($v->[0]),
-            $self->do_compile($v->[1]),
-        );
+        if ($v->[0]->type == PVIP_NODE_IDENT) {
+            sprintf('%s(%s)',
+                $self->do_compile($v->[0]),
+                $self->do_compile($v->[1]),
+            );
+        } else {
+            sprintf('(%s)->(%s)',
+                $self->do_compile($v->[0]),
+                $self->do_compile($v->[1]),
+            );
+        }
     } elsif ($node->type == PVIP_NODE_ARGS) {
         join(",", map { $self->do_compile($_) } @$v);
     } elsif ($node->type == PVIP_NODE_STRING) {
@@ -111,15 +119,23 @@ sub do_compile {
             );
         }
     } elsif ($node->type == PVIP_NODE_METHODCALL) {
-        sprintf('(%s)->%s',
+        sprintf('(%s)->%s(%s)',
             $self->do_compile($v->[0]),
             $self->do_compile($v->[1]),
+            defined($v->[2]) ? $self->do_compile($v->[2]) : '',
         );
     } elsif ($node->type == PVIP_NODE_FUNC) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_FUNC is not implemented")
+        warn $node->as_sexp;
+        my $ret = 'sub ';
+        $ret .= $self->do_compile($v->[0]);
+        $ret .= " {\n";
+        $ret .= $self->do_compile($v->[1]);
+        $ret .= $self->do_compile($v->[3]);
+        $ret .= "}\n";
+        $ret;
     } elsif ($node->type == PVIP_NODE_PARAMS) {
         # (params (param (nop) (variable "$n") (nop)))
-        join(";", map { $self->do_compile($_) } @$v )
+        join(";", map { $self->do_compile($_) } @$v ) . ";undef;"
     } elsif ($node->type == PVIP_NODE_RETURN) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_RETURN is not implemented")
     } elsif ($node->type == PVIP_NODE_ELSE) {
@@ -247,9 +263,20 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_MODULE) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_MODULE is not implemented")
     } elsif ($node->type == PVIP_NODE_CLASS) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_CLASS is not implemented")
+        # TODO support inheritance
+        '{package ' . $self->do_compile($v->[0]) . '; BEGIN { our @ISA; unshift @ISA, "Hybrid::Object"; }' . $self->do_compile($v->[2]) . ';}';
     } elsif ($node->type == PVIP_NODE_METHOD) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_METHOD is not implemented")
+        # (method (ident "bar") (nop) (statements))
+        # TODO: support arguments
+        # (method (ident "bar") (params (param (nop) (variable "$n") (nop))) (statements (mul (variable "$n") (int 3))))
+        join('',
+            'sub ' . $self->do_compile($v->[0]) . ' {',
+            'my $self=shift;',
+            (map { 'my ' . $self->do_compile($_->value->[1]) . ' = shift;' } @{$v->[1]->value}),
+            'undef;',
+            $self->do_compile($v->[2]),
+            ';}'
+        );
     } elsif ($node->type == PVIP_NODE_UNARY_PLUS) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_UNARY_PLUS is not implemented")
     } elsif ($node->type == PVIP_NODE_UNARY_MINUS) {
