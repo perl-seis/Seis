@@ -161,11 +161,15 @@ last_stmt = 'last' { $$ = PVIP_node_new_children(PVIP_NODE_LAST); }
 next_stmt = 'next' { $$ = PVIP_node_new_children(PVIP_NODE_NEXT); }
 
 has_stmt =
-    'has' { $$ = PVIP_node_new_children(PVIP_NODE_HAS); }
-    ws+ '$' (
-          '.' <[a-z]+> { PVIP_node_push_child($$, PVIP_node_new_string(PVIP_NODE_PRIVATE_ATTRIBUTE, yytext, yyleng)); }
-        | '!' <[a-z]+> { PVIP_node_push_child($$, PVIP_node_new_string(PVIP_NODE_PUBLIC_ATTRIBUTE, yytext, yyleng)); }
-    ) eat_terminator
+    'has' ws+ v:attr_vars eat_terminator {
+        $$ = PVIP_node_new_children1(PVIP_NODE_HAS, v);
+    }
+
+attr_vars =
+    '$' (
+          '.' <[a-z]+> { $$=PVIP_node_new_string(PVIP_NODE_PRIVATE_ATTRIBUTE, yytext, yyleng); }
+        | '!' <[a-z]+> { $$=PVIP_node_new_string(PVIP_NODE_PUBLIC_ATTRIBUTE, yytext, yyleng); }
+    )
 
 multi_method_stmt =
     'multi' ws - m:method_stmt { $$ = PVIP_node_new_children1(PVIP_NODE_MULTI, m); }
@@ -590,10 +594,7 @@ term =
     | funcref
     | < '$~' [A-Za-z] [A-Za-z0-9]* > { $$ = PVIP_node_new_string(PVIP_NODE_SLANGS, yytext, yyleng); }
     | '*' ![*=] { $$ = PVIP_node_new_children(PVIP_NODE_WHATEVER); }
-    | '$' (
-          '.' <[a-zA-Z_] [A-Za-z0-9_]*> { $$ = PVIP_node_new_string(PVIP_NODE_PRIVATE_ATTRIBUTE, yytext, yyleng); }
-          | '!' <[a-zA-Z_] [A-Za-z0-9_]*> { $$ = PVIP_node_new_string(PVIP_NODE_PUBLIC_ATTRIBUTE, yytext, yyleng); }
-    )
+    | attr_vars
 
 enum =
     'enum' ws+ q:qw { $$ = PVIP_node_new_children2(PVIP_NODE_ENUM, PVIP_node_new_children(PVIP_NODE_NOP), q); }
