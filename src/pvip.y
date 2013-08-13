@@ -747,7 +747,7 @@ param_defaults =
     '=' - e:expr { $$=e; }
 
 block =
-    ('{' - s:statementlist - '}') {
+    ('{' - s:statementlist - '}' !'.') {
         if (s->children.nodes[0]->type == PVIP_NODE_PAIR) {
             PVIP_node_change_type(s, PVIP_NODE_HASH);
             $$=s;
