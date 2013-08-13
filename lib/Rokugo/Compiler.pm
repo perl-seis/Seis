@@ -12,11 +12,12 @@ use Rokugo::Int;
 use Rokugo::Real;
 use Rokugo::Exceptions;
 use Rokugo::Str;
+use Rokugo::Hash;
 
 our $HEADER = <<'...';
 use strict;
 use 5.010_001;
-use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str';
+use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash';
 
 #line '-' 1
 ...
@@ -77,7 +78,7 @@ sub do_compile {
             );
         }
     } elsif ($node->type == PVIP_NODE_ARGS) {
-        join(",", map { $self->do_compile($_) } @$v);
+        join(",", map { "scalar($_)" } map { $self->do_compile($_) } @$v);
     } elsif ($node->type == PVIP_NODE_STRING) {
         '"' . $v . '"'
     } elsif ($node->type == PVIP_NODE_MOD) {
@@ -220,9 +221,9 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_CLARGS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_CLARGS is not implemented")
     } elsif ($node->type == PVIP_NODE_HASH) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_HASH is not implemented")
+        '{' . join(',', map { $self->do_compile($_) } @$v) . '}';
     } elsif ($node->type == PVIP_NODE_PAIR) {
-        sprintf('(%s)=>(%s)',
+        sprintf('(%s)=>scalar(%s)',
             $self->do_compile($v->[0]),
             $self->do_compile($v->[1]),
         );
