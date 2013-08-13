@@ -291,15 +291,20 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_MODULE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_MODULE is not implemented")
     } elsif ($type == PVIP_NODE_CLASS) {
-        # TODO support inheritance
+        # (class (ident "Foo7") (nop) (statements (method (ident "bar") (nop) (statements (int 5963)))))
+        # (class (ident "Foo8") (list (is (ident "Foo7"))) (statements))
         state $ANON_CLASS = 0;
         my $pkg = $v->[0]->type == PVIP_NODE_NOP ? "Rokugo::_AnonClass" . $ANON_CLASS++ : $self->do_compile($v->[0]);
         sprintf(q!do {
             package %s;
-            BEGIN { our @ISA; unshift @ISA, "Rokugo::Object"; }
+            BEGIN {
+                our @ISA;
+                unshift @ISA, "Rokugo::Object";
+                %s;
+            }
             %s;
             Rokugo::Class->new(name => "%s");
-        }!, $pkg, $self->do_compile($v->[2]), $pkg);
+        }!, $pkg, join(";\n", map { $self->do_compile($_) } @{$v->[1]->value}), $self->do_compile($v->[2]), $pkg);
     } elsif ($type == PVIP_NODE_METHOD) {
         # (method (ident "bar") (nop) (statements))
         # TODO: support arguments
@@ -515,7 +520,8 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_ROLE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_ROLE is not implemented")
     } elsif ($type == PVIP_NODE_IS) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_IS is not implemented")
+        # (is (ident "Foo7"))
+        sprintf q!push @ISA, '%s'!, $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_DOES) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_DOES is not implemented")
     } elsif ($type == PVIP_NODE_JUNCTIVE_AND) {
