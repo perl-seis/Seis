@@ -114,3 +114,9 @@ $*EXECUTABLE_NAME
 %*ENV
 --- expected
 (statements (tw_env))
+
+===
+--- code
+@$v
+--- expected
+(statements (array_deref (variable "$v")))
