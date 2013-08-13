@@ -1,4 +1,4 @@
-package Hybrid;
+package Rokugo;
 use strict;
 use warnings;
 
@@ -6,9 +6,9 @@ use 5.010001;
 
 our $VERSION = "0.01";
 
-use Hybrid::Exceptions;
-use Hybrid::Compiler;
-use Hybrid::Array;
+use Rokugo::Exceptions;
+use Rokugo::Compiler;
+use Rokugo::Array;
 
 1;
 __END__
@@ -17,15 +17,15 @@ __END__
 
 =head1 NAME
 
-Hybrid - It's new $module
+Rokugo - It's new $module
 
 =head1 SYNOPSIS
 
-    use Hybrid;
+    use Rokugo;
 
 =head1 DESCRIPTION
 
-Hybrid is ...
+Rokugo is ...
 
 =head1 TODO
 

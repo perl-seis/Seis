@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
-use Hybrid;
+use Rokugo;
 
 sub true()  { !!1 }
 sub false() { !!0 }
@@ -95,7 +95,7 @@ for (my $i=0; $i<@result; $i+=2) {
     my $code     = $result[$i];
     my $expected = $result[$i+1];
 
-    my $compiler = Hybrid::Compiler->new();
+    my $compiler = Rokugo::Compiler->new();
     my $compiled = $compiler->compile($code);
     note 'code: ' . $code;
     note 'compiled: ' .  $compiled;

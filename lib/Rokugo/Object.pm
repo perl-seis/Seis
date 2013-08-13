@@ -1,4 +1,4 @@
-package Hybrid::Object;
+package Rokugo::Object;
 use strict;
 use warnings;
 use utf8;

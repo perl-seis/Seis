@@ -1,14 +1,14 @@
 # NAME
 
-Hybrid - It's new $module
+Rokugo - It's new $module
 
 # SYNOPSIS
 
-    use Hybrid;
+    use Rokugo;
 
 # DESCRIPTION
 
-Hybrid is ...
+Rokugo is ...
 
 # LICENSE
 

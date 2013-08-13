@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Caroline;
-use Hybrid;
+use Rokugo;
 use Getopt::Long;
 use Data::Dumper;
 
@@ -14,22 +14,22 @@ $p->getoptions(
 );
 
 if (defined $eval) {
-    my $compiler = Hybrid::Compiler->new();
+    my $compiler = Rokugo::Compiler->new();
     my $compiled = $compiler->compile($eval);
     eval $compiled;
     die $@ if $@;
 } elsif (@ARGV) {
     my $fname= shift @ARGV;
-    my $compiler = Hybrid::Compiler->new();
+    my $compiler = Rokugo::Compiler->new();
     my $compiled = $compiler->compile(slurp($fname));
     eval $compiled;
     die $@ if $@;
 } else {
     my $caroline = Caroline->new();
-    while (defined(my $line = $caroline->readline('hybrid> '))) {
+    while (defined(my $line = $caroline->readline('rokugo> '))) {
         if ($line =~ /\S/) {
             $caroline->history_add($line);
-            my $compiler = Hybrid::Compiler->new();
+            my $compiler = Rokugo::Compiler->new();
             my $compiled = eval {
                 $compiler->compile($line);
             };

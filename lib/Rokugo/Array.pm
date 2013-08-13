@@ -1,4 +1,4 @@
-package Hybrid::Array;
+package Rokugo::Array;
 use strict;
 use warnings;
 use utf8;

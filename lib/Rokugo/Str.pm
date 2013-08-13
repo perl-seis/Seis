@@ -1,4 +1,4 @@
-package Hybrid::Str;
+package Rokugo::Str;
 use strict;
 use warnings;
 use utf8;
