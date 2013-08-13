@@ -119,7 +119,6 @@ typedef enum {
     PVIP_NODE_UNARY_UPTO, /* ^ */
     PVIP_NODE_STDOUT, /* $*OUT */
     PVIP_NODE_STDERR, /* $*ERR */
-    PVIP_NODE_INFINITY, /* * in `1..*` */
     PVIP_NODE_SCALAR_DEREF, /* $$var */
     PVIP_NODE_TW_INC, /* @*INC */
     PVIP_NODE_META_METHOD_CALL, /* $foo.^methods */

@@ -367,8 +367,7 @@ chaining_infix_expr = f1:structural_infix_expr { $$ = PVIP_node_new_children1(PV
 
 structural_infix_expr =
     a1:named_unary_expr (
-        '..' - '*' { $$=PVIP_node_new_children2(PVIP_NODE_RANGE, a1, PVIP_node_new_children(PVIP_NODE_INFINITY)); a1=$$; }
-        | - '..' !'.' - a2:named_unary_expr { $$=PVIP_node_new_children2(PVIP_NODE_RANGE, a1, a2); a1=$$; }
+        - '..' !'.' - a2:named_unary_expr { $$=PVIP_node_new_children2(PVIP_NODE_RANGE, a1, a2); a1=$$; }
         | - 'cmp' ![a-z] - a2:named_unary_expr { $$=PVIP_node_new_children2(PVIP_NODE_CMP, a1, a2); a1=$$; }
         | - '<=>' - a2:named_unary_expr { $$=PVIP_node_new_children2(PVIP_NODE_NUM_CMP, a1, a2); a1=$$; }
     )? { $$=a1; }

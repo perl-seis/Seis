@@ -46,12 +46,6 @@ q|a'|
 
 ===
 --- code
-1..*
---- expected
-(statements (range (int 1) (infinity)))
-
-===
---- code
 { 'baz' => 3 }
 --- expected
 (statements (hash (pair (string "baz") (int 3))))
