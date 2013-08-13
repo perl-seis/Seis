@@ -4,6 +4,7 @@ use warnings;
 use utf8;
 use 5.010_001;
 use Sub::Identify qw();
+use Class::XSAccessor ();
 
 # DO NOT CALL THIS METHOD DIRECTLY.
 sub new {
@@ -27,6 +28,18 @@ sub methods {
         push @ret, $k;
     }
     return @ret;
+}
+
+sub add_public_attribute {
+    my ($self, $name) = @_;
+    push @{$self->{attribute_names}}, $name;
+    Class::XSAccessor->import(
+        class => $self->{name},
+        accessors => {
+            $name => $name,
+        },
+        replace => 1,
+    );
 }
 
 1;

@@ -11,5 +11,14 @@ sub new {
     bless { %args }, $class;
 }
 
+sub meta {
+    my $self = shift;
+    my $pkg = ref $self || $self;
+    no strict 'refs';
+    my $meta = Rokugo::MetaClass->new(name => $pkg);
+    *{"${pkg}::_meta"} = sub { $meta };
+    $meta;
+}
+
 1;
 

@@ -60,6 +60,7 @@ sub do_compile {
     if ($type == PVIP_NODE_STATEMENTS) {
         my @ret;
         for (my $i=0; $i<@$v; $i++) {
+            next if $v->[$i]->type == PVIP_NODE_NOP;
             push @ret, $self->do_compile($v->[$i], $i==@$v-1 ? G_SCALAR : G_VOID);
         }
         return join(";\n", @ret);
@@ -490,11 +491,20 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_VM) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_VM is not implemented")
     } elsif ($type == PVIP_NODE_HAS) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_HAS is not implemented")
+        # (has (public_attribute "x"))
+        # support private variable
+        if ($v->[0]->type == PVIP_NODE_PUBLIC_ATTRIBUTE) {
+            sprintf('__PACKAGE__->meta->add_public_attribute("%s")', $v->[0]->value);
+        } elsif ($v->[0]->type == PVIP_NODE_PRIVATE_ATTRIBUTE) {
+            sprintf('__PACKAGE__->meta->add_private_attribute("%s")', $v->[0]->value);
+        } else {
+            die "Should not reach here";
+        }
     } elsif ($type == PVIP_NODE_PRIVATE_ATTRIBUTE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_PRIVATE_ATTRIBUTE is not implemented")
     } elsif ($type == PVIP_NODE_PUBLIC_ATTRIBUTE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_PUBLIC_ATTRIBUTE is not implemented")
+        # (public_attribute "x")
+        sprintf('$self->{%s}', $v);
     } elsif ($type == PVIP_NODE_FUNCREF) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_FUNCREF is not implemented")
     } elsif ($type == PVIP_NODE_PATH) {
