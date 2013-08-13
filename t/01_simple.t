@@ -79,6 +79,9 @@ my @result = (
     'sub x($n) { $n*2 }; x(3)' => 6,
     '(1..3)[2]' => 3,
     'my $i=0; my $y=[4,9,3]; for @$y -> $x { $i+=$x }; $i' => 16,
+    '$*OUT' => *STDOUT,
+    '$*ERR' => *STDERR,
+    '3.14' => 3.14,
 );
 
 for (my $i=0; $i<@result; $i+=2) {

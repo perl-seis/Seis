@@ -7,12 +7,18 @@ use 5.010_001;
 use Perl6::PVIP 0.01;
 use Carp ();
 use Hybrid::Object;
+use Hybrid::Array;
+use Hybrid::Int;
+use Hybrid::Real;
+use Hybrid::Exceptions;
+use Hybrid::Str;
 
 our $HEADER = <<'...';
 use strict;
 use 5.010_001;
-use autobox 2.79 ARRAY => 'Hybrid::Array';
+use autobox 2.79 ARRAY => 'Hybrid::Array', INTEGER => 'Hybrid::Int', 'FLOAT' => 'Hybrid::Real', 'STRING' => 'Hybrid::Str';
 
+#line '-' 1
 ...
 
 sub new {
@@ -45,7 +51,7 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_INT) {
         $node->value;
     } elsif ($node->type == PVIP_NODE_NUMBER) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_NUMBER is not implemented")
+        $node->value;
     } elsif ($node->type == PVIP_NODE_STATEMENTS) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_STATEMENTS is not implemented")
     } elsif ($node->type == PVIP_NODE_DIV) {
@@ -384,11 +390,11 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_ARRAY_DEREF) {
         '@{' . $self->do_compile($v->[0]) . '}';
     } elsif ($node->type == PVIP_NODE_STDOUT) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_STDOUT is not implemented")
+        '*STDOUT'
     } elsif ($node->type == PVIP_NODE_STDERR) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_STDERR is not implemented")
+        '*STDERR'
     } elsif ($node->type == PVIP_NODE_SCALAR_DEREF) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_SCALAR_DEREF is not implemented")
+        '${' . $self->do_compile($v->[0]) . '}';
     } elsif ($node->type == PVIP_NODE_TW_INC) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_TW_INC is not implemented")
     } elsif ($node->type == PVIP_NODE_META_METHOD_CALL) {
