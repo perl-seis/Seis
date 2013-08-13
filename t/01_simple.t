@@ -70,6 +70,7 @@ my @result = (
     'my $i=0; for 1,2,3 -> $x { $i+=$x }; $i' => 6,
     'my $i=3; while $i-- { }; $i' => -1,
     'my $a =[ 5,9,6,3]; $a[2]' => 6,
+    'use Time::Piece; 1' => 1,
 );
 
 for (my $i=0; $i<@result; $i+=2) {

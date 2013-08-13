@@ -243,7 +243,7 @@ sub do_compile {
         $ret .= "}";
         $ret;
     } elsif ($node->type == PVIP_NODE_USE) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_USE is not implemented")
+        'use ' . $self->do_compile($v->[0]);
     } elsif ($node->type == PVIP_NODE_MODULE) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_MODULE is not implemented")
     } elsif ($node->type == PVIP_NODE_CLASS) {
