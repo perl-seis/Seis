@@ -25,10 +25,7 @@ unshift @INC, sub {
         my $code = do { local $/; <$fh> };
         my $compiled = $compiler->compile($code) . ";1;";
         open my $tmpfh, '<', \$compiled;
-        return ($tmpfh, sub {
-            $_ =~ s/hello/hi/;
-            $_ ? 1 : 0;
-        });
+        return $tmpfh;
     }
     return;
 };
