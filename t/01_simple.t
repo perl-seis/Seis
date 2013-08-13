@@ -110,6 +110,7 @@ my @result = (
     '[max] 4,2,3' => 4,
     '[(class { }).^methods]' => [],
     '[(class { method foo() { } }).^methods]' => ['foo'],
+    'my $i=0; for 1..10 { $i+=$_; last if $_==5}; $i' => 15,
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 

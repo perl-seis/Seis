@@ -320,11 +320,11 @@ sub do_compile {
             defined($v->[1]) ? $self->do_compile($v->[1]) : '',
         );
     } elsif ($type == PVIP_NODE_LAST) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_LAST is not implemented")
+        'last';
     } elsif ($type == PVIP_NODE_NEXT) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_NEXT is not implemented")
+        'next';
     } elsif ($type == PVIP_NODE_REDO) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_REDO is not implemented")
+        'redo';
     } elsif ($type == PVIP_NODE_POSTINC) {
         sprintf('(%s)++',
             $self->do_compile($v->[0]),
