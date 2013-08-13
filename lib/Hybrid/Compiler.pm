@@ -381,12 +381,12 @@ sub do_compile {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_UNARY_BOOLEAN is not implemented")
     } elsif ($node->type == PVIP_NODE_UNARY_UPTO) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_UNARY_UPTO is not implemented")
+    } elsif ($node->type == PVIP_NODE_ARRAY_DEREF) {
+        '@{' . $self->do_compile($v->[0]) . '}';
     } elsif ($node->type == PVIP_NODE_STDOUT) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_STDOUT is not implemented")
     } elsif ($node->type == PVIP_NODE_STDERR) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_STDERR is not implemented")
-    } elsif ($node->type == PVIP_NODE_INFINITY) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_INFINITY is not implemented")
     } elsif ($node->type == PVIP_NODE_SCALAR_DEREF) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_SCALAR_DEREF is not implemented")
     } elsif ($node->type == PVIP_NODE_TW_INC) {
