@@ -789,7 +789,7 @@ bare_variables =
         - ',' - v2:variable { PVIP_node_push_child(v1, v2); }
     )* { $$=v1; }
 
-variable = scalar | array_var | hash_var | twvars | funcref
+variable = scalar | array_var | hash_var | twvars | funcref | attr_vars
 
 array_var = < '@' varname > { $$ = PVIP_node_new_string(PVIP_NODE_VARIABLE, yytext, yyleng); }
     | '@' s:scalar { $$ = PVIP_node_new_children1(PVIP_NODE_ARRAY_DEREF, s); }

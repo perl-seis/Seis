@@ -80,3 +80,8 @@ class A is B is C { }
 --- expected
 (statements (class (ident "A") (list (is (ident "B")) (is (ident "C"))) (statements)))
 
+=== assign to attribute vars
+--- code
+class Point { has $!x; method set_x($x) { $!x=$x }; };
+--- expected
+(statements (class (ident "Point") (nop) (statements (has (public_attribute "x")) (method (ident "set_x") (params (param (nop) (variable "$x") (nop))) (statements (bind (public_attribute "x") (variable "$x")))) (nop))))
