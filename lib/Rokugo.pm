@@ -38,19 +38,24 @@ __END__
 
 =head1 NAME
 
-Rokugo - It's new $module
+Rokugo - Perl6 on Perl5
 
 =head1 SYNOPSIS
 
-    use Rokugo;
+    for 1..100 { .say }
 
 =head1 DESCRIPTION
 
-Rokugo is ...
+Rokugo is transpiler for Perl6's syntax to Perl5.
+
+It's only emulate perl6's syntax. Not semantics.
+
+But it's useful because perl6's syntax is sane.
 
 =head1 TODO
 
-Renamed to Rokugo
+    Support 'has' and attributes.
+    Implement builtin methods
 
 =head1 LICENSE
 

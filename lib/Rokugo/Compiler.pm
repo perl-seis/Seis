@@ -153,11 +153,23 @@ sub do_compile {
             );
         }
     } elsif ($type == PVIP_NODE_METHODCALL) {
-        sprintf('(%s)->%s(%s)',
-            $self->do_compile($v->[0]),
-            $self->do_compile($v->[1]),
-            defined($v->[2]) ? $self->do_compile($v->[2]) : '',
-        );
+        my $invocant = $self->do_compile($v->[0]);
+        my $method = $self->do_compile($v->[1]);
+        my $params = defined($v->[2]) ? $self->do_compile($v->[2]) : '';
+        if ($v->[0]->type == PVIP_NODE_LIST) {
+            # (8,6,9).elems
+            sprintf('Rokugo::Array::%s([%s], %s)',
+                $method,
+                $invocant,
+                $params,
+            );
+        } else {
+            sprintf('(%s)->%s(%s)',
+                $invocant,
+                $method,
+                $params,
+            );
+        }
     } elsif ($type == PVIP_NODE_FUNC) {
         my $ret = 'sub ';
         $ret .= $self->do_compile($v->[0]);
