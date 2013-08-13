@@ -158,7 +158,6 @@ sub do_compile {
             defined($v->[2]) ? $self->do_compile($v->[2]) : '',
         );
     } elsif ($type == PVIP_NODE_FUNC) {
-        warn $node->as_sexp;
         my $ret = 'sub ';
         $ret .= $self->do_compile($v->[0]);
         $ret .= " {\n";
