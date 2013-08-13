@@ -288,9 +288,9 @@ sub do_compile {
             ';}'
         );
     } elsif ($node->type == PVIP_NODE_UNARY_PLUS) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_PLUS is not implemented")
+        sprintf('+(%s)', $self->do_compile($v->[0]));
     } elsif ($node->type == PVIP_NODE_UNARY_MINUS) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_MINUS is not implemented")
+        sprintf('-(%s)', $self->do_compile($v->[0]));
     } elsif ($node->type == PVIP_NODE_IT_METHODCALL) {
         sprintf('$_->%s(%s)',
             $self->do_compile($v->[0]),
@@ -321,9 +321,15 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_UNARY_BITWISE_NEGATION) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_BITWISE_NEGATION is not implemented")
     } elsif ($node->type == PVIP_NODE_BRSHIFT) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BRSHIFT is not implemented")
+        sprintf('(%s)>>(%s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]),
+        );
     } elsif ($node->type == PVIP_NODE_BLSHIFT) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BLSHIFT is not implemented")
+        sprintf('(%s)<<(%s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]),
+        );
     } elsif ($node->type == PVIP_NODE_CHAIN) {
         if (@$v == 1) {
             return $self->do_compile($v->[0]);
