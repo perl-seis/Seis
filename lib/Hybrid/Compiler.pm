@@ -104,7 +104,13 @@ sub do_compile {
             $self->do_compile($v->[1]),
         );
     } elsif ($node->type == PVIP_NODE_IF) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_IF is not implemented")
+        # (if (int 1) (statements (int 5)) (else (int 4)))
+        my $ret = 'if (' . $self->do_compile($v->[0]) . ') {' . $self->do_compile($v->[1]) . '}';
+        shift @$v; shift @$v;
+        while (@$v) {
+            $ret .= $self->do_compile(shift @$v);
+        }
+        $ret;
     } elsif ($node->type == PVIP_NODE_EQV) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_EQV is not implemented")
     } elsif ($node->type == PVIP_NODE_ARRAY) {
@@ -149,7 +155,7 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_RETURN) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_RETURN is not implemented")
     } elsif ($node->type == PVIP_NODE_ELSE) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_ELSE is not implemented")
+        'else { ' . $self->do_compile($v->[0]) . '}';
     } elsif ($node->type == PVIP_NODE_WHILE) {
         sprintf("while (%s) { %s }",
             $self->do_compile($v->[0]),
@@ -157,7 +163,7 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_DIE) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_DIE is not implemented")
     } elsif ($node->type == PVIP_NODE_ELSIF) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_ELSIF is not implemented")
+        sprintf('elsif (%s) { %s }', $self->do_compile($v->[0]), $self->do_compile($v->[1]));
     } elsif ($node->type == PVIP_NODE_LIST) {
         sprintf('(%s)',
             join(',', map { "($_)" } map { $self->do_compile($_) } @$v)

@@ -82,6 +82,11 @@ my @result = (
     '$*OUT' => *STDOUT,
     '$*ERR' => *STDERR,
     '3.14' => 3.14,
+    'if 1 { 5 } else { 4 }' => 5,
+    'my $n=0; if 1 { $n=9; } $n' => 9,
+    'my $n=0; if 0 { $n=9; } else { $n=8 } $n' => 8,
+    'my $n=0; if 0 { $n=9; } elsif 1 { $n= 4 } else { $n=8 } $n' => 4,
+    # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 
 for (my $i=0; $i<@result; $i+=2) {
