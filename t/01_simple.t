@@ -108,6 +108,8 @@ my @result = (
     '[*] 4,2,3' => 24,
     '[min] 4,2,3' => 2,
     '[max] 4,2,3' => 4,
+    '[(class { }).^methods]' => [],
+    '[(class { method foo() { } }).^methods]' => ['foo'],
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 

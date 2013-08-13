@@ -14,11 +14,18 @@ use Rokugo::Exceptions;
 use Rokugo::Str;
 use Rokugo::Hash;
 
+use constant {
+    G_VOID => 1,
+    G_SCALAR => 2,
+};
+
 our $HEADER = <<'...';
 use strict;
 use 5.010_001;
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash';
 use List::Util qw(min max);
+use Rokugo::MetaClass;
+use Rokugo::Class;
 
 #line '-' 1
 ...
@@ -37,7 +44,8 @@ sub compile {
 }
 
 sub do_compile {
-    my ($self, $node) = @_;
+    my ($self, $node, $gimme) = @_;
+    $gimme //= G_SCALAR;
     Carp::confess "Invalid node" unless ref $node;
 
     my $v = $node->value;
@@ -208,7 +216,7 @@ sub do_compile {
             $self->do_compile($v->[2]),
         );
     } elsif ($type == PVIP_NODE_NOP) {
-        return "();";
+        return "()";
     } elsif ($type == PVIP_NODE_POW) {
         sprintf('(%s)**(%s)',
             $self->do_compile($v->[0]),
@@ -282,7 +290,14 @@ sub do_compile {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_MODULE is not implemented")
     } elsif ($type == PVIP_NODE_CLASS) {
         # TODO support inheritance
-        '{package ' . $self->do_compile($v->[0]) . '; BEGIN { our @ISA; unshift @ISA, "Rokugo::Object"; }' . $self->do_compile($v->[2]) . ';}';
+        state $ANON_CLASS = 0;
+        my $pkg = $v->[0]->type == PVIP_NODE_NOP ? "Rokugo::_AnonClass" . $ANON_CLASS++ : $self->do_compile($v->[0]);
+        sprintf(q!do {
+            package %s;
+            BEGIN { our @ISA; unshift @ISA, "Rokugo::Object"; }
+            %s;
+            Rokugo::Class->new(name => "%s");
+        }!, $pkg, $self->do_compile($v->[2]), $pkg);
     } elsif ($type == PVIP_NODE_METHOD) {
         # (method (ident "bar") (nop) (statements))
         # TODO: support arguments
@@ -427,7 +442,12 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_INC) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_INC is not implemented")
     } elsif ($type == PVIP_NODE_META_METHOD_CALL) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_META_METHOD_CALL is not implemented")
+        # (meta_method_call (class (nop) (nop) (statements)) (ident "methods") (nop))
+        sprintf('(%s)->meta()->%s(%s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]),
+            $self->do_compile($v->[2]),
+        );
     } elsif ($type == PVIP_NODE_REGEXP) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_REGEXP is not implemented")
     } elsif ($type == PVIP_NODE_SMART_MATCH) {
