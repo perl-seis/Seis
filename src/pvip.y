@@ -590,6 +590,10 @@ term =
     | funcref
     | < '$~' [A-Za-z] [A-Za-z0-9]* > { $$ = PVIP_node_new_string(PVIP_NODE_SLANGS, yytext, yyleng); }
     | '*' ![*=] { $$ = PVIP_node_new_children(PVIP_NODE_WHATEVER); }
+    | '$' (
+          '.' <[a-zA-Z_] [A-Za-z0-9_]*> { $$ = PVIP_node_new_string(PVIP_NODE_PRIVATE_ATTRIBUTE, yytext, yyleng); }
+          | '!' <[a-zA-Z_] [A-Za-z0-9_]*> { $$ = PVIP_node_new_string(PVIP_NODE_PUBLIC_ATTRIBUTE, yytext, yyleng); }
+    )
 
 enum =
     'enum' ws+ q:qw { $$ = PVIP_node_new_children2(PVIP_NODE_ENUM, PVIP_node_new_children(PVIP_NODE_NOP), q); }
@@ -794,7 +798,7 @@ hash_var = < '%' varname > { $$ = PVIP_node_new_string(PVIP_NODE_VARIABLE, yytex
 scalar =
     '$' s:scalar { $$ = PVIP_node_new_children1(PVIP_NODE_SCALAR_DEREF, s); }
     | < '$' varname > { assert(yyleng > 0); $$ = PVIP_node_new_string(PVIP_NODE_VARIABLE, yytext, yyleng); }
-    | '$!' { $$=PVIP_node_new_children(PVIP_NODE_SPECIAL_VARIABLE_EXCEPTIONS); }
+    | '$!' ![a-zA-Z0-9_] { $$=PVIP_node_new_children(PVIP_NODE_SPECIAL_VARIABLE_EXCEPTIONS); }
     | '$/' { $$=PVIP_node_new_children(PVIP_NODE_SPECIAL_VARIABLE_REGEXP_MATCH); }
 
 varname = [a-zA-Z_] ( [a-zA-Z0-9_]+ | '-' [a-zA-Z_] [a-zA-Z0-9_]* )*

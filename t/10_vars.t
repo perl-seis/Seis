@@ -120,3 +120,15 @@ $*EXECUTABLE_NAME
 @$v
 --- expected
 (statements (array_deref (variable "$v")))
+
+===
+--- code
+$!x
+--- expected
+(statements (public_attribute "x"))
+
+===
+--- code
+$.x
+--- expected
+(statements (private_attribute "x"))
