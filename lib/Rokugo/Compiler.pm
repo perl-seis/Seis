@@ -389,7 +389,7 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_INPLACE_BRSHIFT) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_INPLACE_BRSHIFT is not implemented")
     } elsif ($node->type == PVIP_NODE_INPLACE_CONCAT_S) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_INPLACE_CONCAT_S is not implemented")
+        '(' . $self->do_compile($v->[0]) . ').=(' . $self->do_compile($v->[1]) . ')';
     } elsif ($node->type == PVIP_NODE_REPEAT_S) {
         '(' . $self->do_compile($v->[0]) . ')x(' . $self->do_compile($v->[1]) . ')';
     } elsif ($node->type == PVIP_NODE_INPLACE_REPEAT_S) {
@@ -405,7 +405,7 @@ sub do_compile {
     } elsif ($node->type == PVIP_NODE_LANG) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_LANG is not implemented")
     } elsif ($node->type == PVIP_NODE_UNARY_BOOLEAN) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_BOOLEAN is not implemented")
+        sprintf '!!(%s)', $self->do_compile($v->[0]);
     } elsif ($node->type == PVIP_NODE_UNARY_UPTO) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_UPTO is not implemented")
     } elsif ($node->type == PVIP_NODE_ARRAY_DEREF) {
