@@ -10,6 +10,7 @@ use Hybrid::Object;
 
 our $HEADER = <<'...';
 use strict;
+use 5.010_001;
 use autobox 2.79 ARRAY => 'Hybrid::Array';
 
 ...
