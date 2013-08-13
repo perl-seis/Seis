@@ -23,7 +23,7 @@ unshift @INC, sub {
 
         open my $fh, '<', $real or die $!;
         my $code = do { local $/; <$fh> };
-        my $compiled = $compiler->compile($code) . ";1;";
+        my $compiled = $compiler->compile($code, $real) . ";1;";
         open my $tmpfh, '<', \$compiled;
         return $tmpfh;
     }
