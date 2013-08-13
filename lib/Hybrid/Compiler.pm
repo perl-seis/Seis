@@ -184,7 +184,12 @@ sub do_compile {
             );
         }
     } elsif ($node->type == PVIP_NODE_UNLESS) {
-        Hybrid::Exception::NotImplemented->throw("PVIP_NODE_UNLESS is not implemented")
+        my $ret = 'unless (' . $self->do_compile($v->[0]) . ') {' . $self->do_compile($v->[1]) . '}';
+        shift @$v; shift @$v;
+        while (@$v) {
+            $ret .= $self->do_compile(shift @$v);
+        }
+        $ret;
     } elsif ($node->type == PVIP_NODE_NOT) {
         Hybrid::Exception::NotImplemented->throw("PVIP_NODE_NOT is not implemented")
     } elsif ($node->type == PVIP_NODE_CONDITIONAL) {
