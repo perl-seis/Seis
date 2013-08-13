@@ -13,6 +13,7 @@ use Rokugo::Real;
 use Rokugo::Exceptions;
 use Rokugo::Str;
 use Rokugo::Hash;
+use Rokugo::MetaClass;
 
 use constant {
     G_VOID => 1,
@@ -474,7 +475,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_PACKAGE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_PACKAGE is not implemented")
     } elsif ($type == PVIP_NODE_TW_CLASS) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_CLASS is not implemented")
+        'Rokugo::MetaClass->new(name => __PACKAGE__)'
     } elsif ($type == PVIP_NODE_TW_MODULE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_MODULE is not implemented")
     } elsif ($type == PVIP_NODE_TW_OS) {

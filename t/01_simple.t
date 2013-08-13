@@ -77,7 +77,7 @@ my @result = (
     'class Foo4 { method bar() { 3 } }; Foo4.new.bar' => 3,
     'class Foo5 { method bar($n) { $n*3 } }; Foo5.new.bar(4)' => 12,
     'sub x($n) { $n*2 }; x(3)' => 6,
-    'sub x($n) { return $n*2 }; x(3)' => 6,
+    'sub yy($n) { return $n*2 }; yy(3)' => 6,
     '(1..3)[2]' => 3,
     'my $i=0; my $y=[4,9,3]; for @$y -> $x { $i+=$x }; $i' => 16,
     '$*OUT' => *STDOUT,
@@ -113,6 +113,7 @@ my @result = (
     'my $i=0; for 1..10 { $i+=$_; last if $_==5}; $i' => 15,
     '!1' => false,
     'sub add($x, $y) { $x+$y } add(4,3)' => 7,
+    'class Foo6 { method bar() { $?CLASS } }; Foo6.bar' => Rokugo::MetaClass->new(name => 'Foo6'),
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 
