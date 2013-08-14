@@ -130,13 +130,7 @@ statement =
             | has_stmt
             | '...' { $$ = PVIP_node_new_children(PVIP_NODE_STUB); }
             | funcdef - ';'*
-            | bl:block ';'* {
-                if (bl->type == PVIP_NODE_HASH) {
-                    $$=bl;
-                } else {
-                    $$=PVIP_node_new_children1(PVIP_NODE_BLOCK, bl);
-                }
-            }
+            | bl:block ';'*
             | b:normal_or_postfix_stmt { $$ = b; }
             | ';'+ {
                 $$ = PVIP_node_new_children(PVIP_NODE_NOP);
