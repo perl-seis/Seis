@@ -117,6 +117,7 @@ my @result = (
     'class Foo7 { method bar() { 5963 } };  class Foo8 is Foo7 { } Foo8.bar' => 5963,
     '(6,7,8).elems' => 3,
     '1 < 2 < 2 or "hoge"' => 'hoge',
+    'class {  }; 1' => 1,
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 

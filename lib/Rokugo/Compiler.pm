@@ -211,13 +211,13 @@ sub do_compile {
         if ($v->[1]->type == PVIP_NODE_LAMBDA) {
             # (for (list (int 1) (int 2) (int 3)) (lambda (params (param (nop) (variable "$x") (nop))) (statements (inplace_add (variable "$i") (variable "$x")))))
             my $varname = $v->[1]->value->[0]->value->[0]->value->[1]->value;
-            sprintf('for my %s (%s) { %s }',
+            sprintf('for my %s (%s) %s',
                 $varname,
                 $self->do_compile($v->[0]),
                 $self->do_compile($v->[1]->value->[1])
             );
         } else {
-            sprintf('for (%s) { %s }',
+            sprintf('for (%s) %s',
                 $self->do_compile($v->[0]),
                 $self->do_compile($v->[1])
             );
@@ -300,7 +300,11 @@ sub do_compile {
             $self->do_compile($v->[1]),
         );
     } elsif ($type == PVIP_NODE_BLOCK) {
-        '{' . $self->do_compile($v->[0]) . '}';
+        if (@$v) {
+            '{' . $self->do_compile($v->[0]) . '}';
+        } else {
+            '()';
+        }
     } elsif ($type == PVIP_NODE_LAMBDA) {
         # (lambda (params (param (nop) (variable "$n") (nop))) (statements (mul (variable "$n") (int 2))))
         my $ret = 'sub {';
