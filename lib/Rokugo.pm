@@ -57,6 +57,34 @@ But it's useful because perl6's syntax is sane.
     Support 'has' and attributes.
     Implement builtin methods
 
+=head1 KNOWN ISSUES
+
+There is some known issues. Rokugo do in the forcible way.
+And Rokugo placed great importance on performance.
+Then, rokugo giving ups some features on Perl 6.
+
+If you have any ideas to support these things without performance issue, patches welcome(I guess most of features can fix if you are XS hacker).
+
+=head2 Compilation speed is optimizable
+
+You can rewrite code generator to generate B tree directly.
+
+I know it's the best way, but I don't have enough knowledge to do.
+Please help us.
+
+=head2 Automatic literal conversion is not available
+
+Perl6 has some more string litrals perl5 does not have.
+
+For example, I can't generate fast code from following code:
+
+    say 'ok ', '0b1010' + 1;
+    say 'ok ', '0o6' * '0b10';
+
+Note. THere is a idea... You can support this feature in fast code with XS magic. You can replace pp code in XS world...
+
+Another option, you can send a patch for support perl6 style literals to p5p.
+
 =head1 LICENSE
 
 Copyright (C) tokuhirom.
