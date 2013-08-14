@@ -6,7 +6,7 @@ __END__
 --- code
 try { 3 }
 --- expected
-(statements (try (statements (int 3))))
+(statements (try (block (statements (int 3)))))
 
 ===
 --- code
@@ -70,11 +70,10 @@ my @a_o=<x y z>
 --- code
 @sines.map({ 3 })
 --- expected
-(statements (methodcall (variable "@sines") (ident "map") (args (lambda (statements (int 3))))))
+(statements (methodcall (variable "@sines") (ident "map") (args (lambda (block (statements (int 3)))))))
 
 ===
 --- code
 -> { 3 }
 --- expected
-(statements (lambda (params) (statements (int 3))))
-
+(statements (lambda (params) (block (statements (int 3)))))

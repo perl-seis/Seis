@@ -634,17 +634,17 @@ language =
 reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' ) ![-A-Za-z0-9]
 
 role =
-    'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children1(PVIP_NODE_ROLE, b); }
+    'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children2(PVIP_NODE_ROLE, i, b); }
 
 # TODO optimizable
 class =
-    'class' { $$=i=NULL; is=NULL; } (
+    { i=NULL; is=NULL; } 'class'  (
         ws+ i:ident
     )? - is:is_does_list? - b:block {
         $$ = PVIP_node_new_children3(
             PVIP_NODE_CLASS,
-            i ? i : PVIP_node_new_children(PVIP_NODE_NOP),
-            is ? is : PVIP_node_new_children(PVIP_NODE_NOP),
+            MAYBE(i),
+            MAYBE(is),
             b
         );
     }
@@ -754,18 +754,20 @@ param_defaults =
     '=' - e:expr { $$=e; }
 
 block =
-    ('{' - s:statementlist - '}' !'.') {
-        if (s->children.nodes[0]->type == PVIP_NODE_PAIR) {
+    {s=NULL; } ('{' - s:statementlist? - '}' !'.') {
+        if (!s) {
+            /* empty block */
+            $$=PVIP_node_new_children(PVIP_NODE_BLOCK);
+        } else if (s->children.nodes[0]->type == PVIP_NODE_PAIR) {
             PVIP_node_change_type(s, PVIP_NODE_HASH);
             $$=s;
         } else if (s->children.nodes[0]->type == PVIP_NODE_LIST && node_all_children_are(s->children.nodes[0], PVIP_NODE_PAIR)) {
             PVIP_node_change_type(s, PVIP_NODE_HASH);
             $$=s;
         } else {
-            $$=s;
+            $$=PVIP_node_new_children1(PVIP_NODE_BLOCK, s);
         }
     }
-    | ('{' - '}' ) { $$ = PVIP_node_new_children(PVIP_NODE_STATEMENTS); }
 
 # XXX optimizable
 array =

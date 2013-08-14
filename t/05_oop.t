@@ -6,19 +6,19 @@ __END__
 --- code
 class { }
 --- expected
-(statements (class (nop) (nop) (statements)))
+(statements (class (nop) (nop) (block)))
 
 ===
 --- code
 class Foo { }
 --- expected
-(statements (class (ident "Foo") (nop) (statements)))
+(statements (class (ident "Foo") (nop) (block)))
 
 ===
 --- code
 class NotComplex is Cool { }
 --- expected
-(statements (class (ident "NotComplex") (list (is (ident "Cool"))) (statements)))
+(statements (class (ident "NotComplex") (list (is (ident "Cool"))) (block)))
 
 ===
 --- code
@@ -30,7 +30,7 @@ class NotComplex is Cool { }
 --- code
 multi method foo() { }
 --- expected
-(statements (multi (method (ident "foo") (nop) (statements))))
+(statements (multi (method (ident "foo") (nop) (block))))
 
 ===
 --- code
@@ -54,34 +54,34 @@ $foo.^methods(3)
 --- code
 class A { has $.b }
 --- expected
-(statements (class (ident "A") (nop) (statements (has (private_attribute "b")))))
+(statements (class (ident "A") (nop) (block (statements (has (private_attribute "b"))))))
 
 ===
 --- code
 class A { has $!b }
 --- expected
-(statements (class (ident "A") (nop) (statements (has (public_attribute "b")))))
+(statements (class (ident "A") (nop) (block (statements (has (public_attribute "b"))))))
 
 ===
 --- code
 class Foo::Bar { }
 --- expected
-(statements (class (ident "Foo::Bar") (nop) (statements)))
+(statements (class (ident "Foo::Bar") (nop) (block)))
 
 ===
 --- code
 role C { }
 --- expected
-(statements (role (statements)))
+(statements (role (ident "C") (block)))
 
 === class A is B is C
 --- code
 class A is B is C { }
 --- expected
-(statements (class (ident "A") (list (is (ident "B")) (is (ident "C"))) (statements)))
+(statements (class (ident "A") (list (is (ident "B")) (is (ident "C"))) (block)))
 
 === assign to attribute vars
 --- code
 class Point { has $!x; method set_x($x) { $!x=$x }; };
 --- expected
-(statements (class (ident "Point") (nop) (statements (has (public_attribute "x")) (method (ident "set_x") (params (param (nop) (variable "$x") (nop))) (statements (bind (public_attribute "x") (variable "$x")))) (nop))))
+(statements (class (ident "Point") (nop) (block (statements (has (public_attribute "x")) (method (ident "set_x") (params (param (nop) (variable "$x") (nop))) (block (statements (bind (public_attribute "x") (variable "$x"))))) (nop)))))

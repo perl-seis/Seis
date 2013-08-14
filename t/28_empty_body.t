@@ -6,19 +6,19 @@ __END__
 --- code
 while 1 { }
 --- expected
-(statements (while (int 1) (statements)))
+(statements (while (int 1) (block)))
 
 ===
 --- code
 for 1 { }
 --- expected
-(statements (for (int 1) (statements)))
+(statements (for (int 1) (block)))
 
 ===
 --- code
 while @a.pop -> $n { }
 --- expected
-(statements (while (methodcall (variable "@a") (ident "pop")) (lambda (params (param (nop) (variable "$n") (nop))) (statements))))
+(statements (while (methodcall (variable "@a") (ident "pop")) (lambda (params (param (nop) (variable "$n") (nop))) (block))))
 
 ===
 --- code

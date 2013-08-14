@@ -166,54 +166,25 @@ __END__
 --- code
 sub foo() { 4 }
 --- expected
-(statements
-    (func
-        (ident "foo")
-        (params)
-        (nop)
-        (statements (int 4))))
+(statements (func (ident "foo") (params) (nop) (block (statements (int 4)))))
 
 ===
 --- code
 sub foo() { return 5963 } say(foo());
 --- expected
-(statements
-    (func
-        (ident "foo")
-        (params)
-        (nop)
-        (statements (return (int 5963))))
-    (funcall
-        (ident "say")
-        (args (funcall (ident "foo") (args))))
-)
+(statements (func (ident "foo") (params) (nop) (block (statements (return (int 5963))))) (funcall (ident "say") (args (funcall (ident "foo") (args)))))
 
 ===
 --- code
 sub foo() { return 5963 }; say(foo());
 --- expected
-(statements
-    (func
-        (ident "foo")
-        (params)
-        (nop)
-        (statements (return (int 5963))))
-    (funcall
-        (ident "say")
-        (args (funcall (ident "foo") (args))))
-)
+(statements (func (ident "foo") (params) (nop) (block (statements (return (int 5963))))) (funcall (ident "say") (args (funcall (ident "foo") (args)))))
 
 ===
 --- code
 sub foo ($n) {  }
 --- expected
-(statements
-    (func
-        (ident "foo")
-        (params (param (nop) (variable "$n") (nop)))
-        (nop)
-        (statements))
-)
+(statements (func (ident "foo") (params (param (nop) (variable "$n") (nop))) (nop) (block)))
 
 ===
 --- code: if 1 {4} else {5}
@@ -256,9 +227,7 @@ sub foo ($n) {  }
 --- code
 for @a { 1; }
 --- expected
-(statements
-    (for (variable "@a") (statements (int 1)))
-)
+(statements (for (variable "@a") (block (statements (int 1)))))
 
 ====
 --- code
@@ -377,19 +346,19 @@ say 'ok ', 11*say 'ok 10';
 --- code
 class { 1 }
 --- expected
-(statements (class (nop) (nop) (statements (int 1))))
+(statements (class (nop) (nop) (block (statements (int 1)))))
 
 ===
 --- code
 class Foo { 1 }
 --- expected
-(statements (class (ident "Foo") (nop) (statements (int 1))))
+(statements (class (ident "Foo") (nop) (block (statements (int 1)))))
 
 ===
 --- code
 class { method bar() { } }
 --- expected
-(statements (class (nop) (nop) (statements (method (ident "bar") (nop) (statements)))))
+(statements (class (nop) (nop) (block (statements (method (ident "bar") (nop) (block))))))
 
 ===
 --- code

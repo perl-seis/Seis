@@ -11,11 +11,11 @@ unless Mu { 1 }
 --- code
 live { 3 };
 --- expected
-(statements (funcall (ident "live") (args (lambda (statements (int 3))))))
+(statements (funcall (ident "live") (args (lambda (block (statements (int 3)))))))
 
 ===
 --- code
 @a = map { $_ }, @a
 --- expected
-(statements (bind (variable "@a") (funcall (ident "map") (args (lambda (statements (variable "$_"))) (variable "@a")))))
+(statements (bind (variable "@a") (funcall (ident "map") (args (lambda (block (statements (variable "$_")))) (variable "@a")))))
 

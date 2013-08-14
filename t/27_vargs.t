@@ -6,10 +6,10 @@ __END__
 --- code
 sub foo(*@a) { }
 --- expected
-(statements (func (ident "foo") (params (param (vargs (variable "@a")))) (nop) (statements)))
+(statements (func (ident "foo") (params (param (vargs (variable "@a")))) (nop) (block)))
 
 ===
 --- code
 method foo(*@a) { }
 --- expected
-(statements (method (ident "foo") (params (param (vargs (variable "@a")))) (statements)))
+(statements (method (ident "foo") (params (param (vargs (variable "@a")))) (block)))
