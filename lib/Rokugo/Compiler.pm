@@ -423,6 +423,7 @@ sub do_compile {
                 PVIP_NODE_STRGE() => 'ge',
                 PVIP_NODE_STRLT() => 'lt',
                 PVIP_NODE_STRLE() => 'le',
+                PVIP_NODE_EQV()   => 'eq', # TODO
             }->{$type};
             unless ($op) {
                 Rokugo::Exception::NotImplemented->throw(sprintf "PVIP_NODE_%s is not implemented in chaning", $type)

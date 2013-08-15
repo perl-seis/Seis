@@ -85,6 +85,16 @@ Note. THere is a idea... You can support this feature in fast code with XS magic
 
 Another option, you can send a patch for support perl6 style literals to p5p.
 
+=head2 No stringification available about refs
+
+Following code does not works well. I need overloading stuff in autobox.pm.
+
+    ~<a b>
+
+=head2 `eqv` operator is not compatible.
+
+Not yet implemented.
+
 =head1 LICENSE
 
 Copyright (C) tokuhirom.
