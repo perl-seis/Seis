@@ -1,7 +1,7 @@
 #!./blib/script/rg
 
 # L<S01/"Random Thoughts"/specifically tell it you're running Perl 6>
-use v6;
+# use v6;
 
 
 # Checking that testing is sane: TAP output

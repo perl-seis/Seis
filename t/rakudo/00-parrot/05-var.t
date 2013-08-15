@@ -2,7 +2,7 @@
 
 # check variables
 
-use v6;
+# use v6;
 
 say '1..12';
 

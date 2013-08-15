@@ -26,3 +26,8 @@ MYMETA.*
 /Hybrid-*
 /bin/rg
 /bin/rg.c
+/Rokugo-*
+/.build
+/_build_params
+!Build/
+!META.json

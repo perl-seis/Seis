@@ -1,2 +1,6 @@
 [PL_files]
 bin/rg.c.PL="bin/rg.c"
+
+[build]
+build_class = "builder::MyBuilder"
+

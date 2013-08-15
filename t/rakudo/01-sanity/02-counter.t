@@ -1,6 +1,6 @@
 #!./blib/script/rg
 # L<S02/"Whitespace and Comments"/space before it, but may be written in any>
-use v6;
+# use v6;
 
 # Checking that testing is sane: counted tests
 

@@ -34,6 +34,8 @@ unshift @INC, sub {
 1;
 __END__
 
+=for stopwords transpiler rokugo
+
 =encoding utf-8
 
 =head1 NAME
@@ -74,14 +76,14 @@ Please help us.
 
 =head2 Automatic literal conversion is not available
 
-Perl6 has some more string litrals perl5 does not have.
+Perl6 has some more string literals perl5 does not have.
 
 For example, I can't generate fast code from following code:
 
     say 'ok ', '0b1010' + 1;
     say 'ok ', '0o6' * '0b10';
 
-Note. THere is a idea... You can support this feature in fast code with XS magic. You can replace pp code in XS world...
+Note. There is a idea... You can support this feature in fast code with XS magic. You can replace PP code in XS world...
 
 Another option, you can send a patch for support perl6 style literals to p5p.
 
@@ -93,7 +95,7 @@ Following code does not works well. I need overloading stuff in autobox.pm.
 
 This issue can solve with PP_check hack.
 
-=head2 `eqv` operator is not compatible.
+=head2 C<eqv> operator is not compatible.
 
 Not yet implemented.
 

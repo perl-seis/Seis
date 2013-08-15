@@ -1,6 +1,6 @@
 #!./blib/script/rg
 #
-#use v6;
+## use v6;
 
 # Checking that testing is sane: subroutines
 

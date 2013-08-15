@@ -6,6 +6,8 @@ use File::Spec;
 
 my $file = shift;
 
+print("Generating $file\n");
+
 # Its going inside double quotes.
 my $perl_path = $^X;
 $perl_path =~ s{ ([\\"]) }{\\$1}gx;
