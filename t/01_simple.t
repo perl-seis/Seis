@@ -118,6 +118,7 @@ my @result = (
     '(6,7,8).elems' => 3,
     '1 < 2 < 2 or "hoge"' => 'hoge',
     'class {  }; 1' => 1,
+    q{my $b=3; 'x $b'} => 'x $b',
     # 'my $i=0;for 1,2,3 { $i+=$_; last if $_==2 }; $i ' => 3.14,
 );
 
@@ -130,7 +131,10 @@ for (my $i=0; $i<@result; $i+=2) {
     note 'code: ' . $code;
     note 'compiled: ' .  $compiled;
     my $result = eval $compiled;
-    ok !$@ or diag $@;
+    ok !$@ or do {
+        diag $code;
+        diag $@;
+    };
     is_deeply($result, $expected) or eval { diag(Perl6::PVIP->new->parse_string($code)->as_sexp) };
     warn $@ if $@;
 }

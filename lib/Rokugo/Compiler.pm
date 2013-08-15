@@ -14,12 +14,15 @@ use Rokugo::Exceptions;
 use Rokugo::Str;
 use Rokugo::Hash;
 use Rokugo::MetaClass;
+use Data::Dumper ();
 
 use constant {
     G_VOID => 1,
     G_SCALAR => 2,
 };
 
+# `no warnings 'misc'` suppress `"our" variable $x redeclared` message
+# in `our $x; { my $x; { our $x}}`
 our $HEADER = <<'...';
 use strict;
 use 5.010_001;
@@ -27,6 +30,7 @@ use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 
 use List::Util qw(min max);
 use Rokugo::MetaClass;
 use Rokugo::Class;
+no warnings 'misc';
 
 ...
 
@@ -105,7 +109,11 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_ARGS) {
         join(",", map { "scalar($_)" } map { $self->do_compile($_) } @$v);
     } elsif ($type == PVIP_NODE_STRING) {
-        '"' . $v . '"'
+        local $Data::Dumper::Terse = 1;
+        local $Data::Dumper::Useqq = 1;
+        local $Data::Dumper::Purity = 1;
+        local $Data::Dumper::Indent = 0;
+        Data::Dumper::Dumper($v);
     } elsif ($type == PVIP_NODE_MOD) {
         sprintf('(%s)%%(%s)',
             $self->do_compile($v->[0]),
@@ -118,11 +126,12 @@ sub do_compile {
             join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
         );
     } elsif ($type == PVIP_NODE_OUR) {
+        my @vars = map { $self->do_compile($_) } @$v;
         sprintf('our (%s)',
-            join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
+            join(',', map { "($_)" } @vars)
         );
     } elsif ($type == PVIP_NODE_BIND) {
-        sprintf('(%s)=(%s)',
+        sprintf('%s=(%s)',
             $self->do_compile($v->[0]),
             $self->do_compile($v->[1]),
         );
@@ -196,9 +205,9 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_ELSE) {
         'else { ' . $self->do_compile($v->[0]) . '}';
     } elsif ($type == PVIP_NODE_WHILE) {
-        sprintf("while (%s) { %s }",
+        sprintf("while (%s) %s",
             $self->do_compile($v->[0]),
-            $self->do_compile($v->[1]));
+            $self->maybe_block($v->[1]));
     } elsif ($type == PVIP_NODE_DIE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_DIE is not implemented")
     } elsif ($type == PVIP_NODE_ELSIF) {
@@ -214,12 +223,12 @@ sub do_compile {
             sprintf('for my %s (%s) %s',
                 $varname,
                 $self->do_compile($v->[0]),
-                $self->do_compile($v->[1]->value->[1])
+                $self->maybe_block($v->[1]->value->[1])
             );
         } else {
             sprintf('for (%s) %s',
                 $self->do_compile($v->[0]),
-                $self->do_compile($v->[1])
+                $self->maybe_block($v->[1])
             );
         }
     } elsif ($type == PVIP_NODE_UNLESS) {
@@ -303,7 +312,7 @@ sub do_compile {
         if (@$v) {
             '{' . $self->do_compile($v->[0]) . '}';
         } else {
-            '()';
+            '{ }';
         }
     } elsif ($type == PVIP_NODE_LAMBDA) {
         # (lambda (params (param (nop) (variable "$n") (nop))) (statements (mul (variable "$n") (int 2))))
@@ -326,6 +335,10 @@ sub do_compile {
         state $ANON_CLASS = 0;
         my $pkg = $v->[0]->type == PVIP_NODE_NOP ? "Rokugo::_AnonClass" . $ANON_CLASS++ : $self->do_compile($v->[0]);
         my $retval = $gimme == G_VOID ? '' : "Rokugo::Class->new(name => '$pkg')";
+        my $body = $self->do_compile($v->[2]);
+        if ($body eq '{ }') {
+            $body = '';
+        }
         sprintf(q!do {
             package %s;
             BEGIN {
@@ -335,7 +348,7 @@ sub do_compile {
             }
             %s;
             %s
-        }!, $pkg, join(";\n", map { $self->do_compile($_) } @{$v->[1]->value}), $self->do_compile($v->[2]), $retval);
+        }!, $pkg, join(";\n", map { $self->do_compile($_) } @{$v->[1]->value}), $body, $retval);
     } elsif ($type == PVIP_NODE_METHOD) {
         # (method (ident "bar") (nop) (statements))
         # TODO: support arguments
@@ -615,6 +628,15 @@ sub binop {
         $v,
         $self->do_compile($v->[1]),
     );
+}
+
+sub maybe_block {
+    my ($self, $node) = @_;
+    if ($node->type == PVIP_NODE_BLOCK) {
+        return $self->do_compile($node);
+    } else {
+        return '{' . $self->do_compile($node) . "}";
+    }
 }
 
 1;
