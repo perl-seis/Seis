@@ -96,10 +96,19 @@ sub do_compile {
         $v;
     } elsif ($type == PVIP_NODE_FUNCALL) {
         if ($v->[0]->type == PVIP_NODE_IDENT) {
-            sprintf('%s(%s)',
-                $self->do_compile($v->[0]),
-                $self->do_compile($v->[1]),
-            );
+            if ($v->[0]->value eq 'shift') {
+                # shift(@array)
+                local $self->{args_list} = 1;
+                sprintf('%s(%s)',
+                    $self->do_compile($v->[0]),
+                    $self->do_compile($v->[1]),
+                );
+            } else {
+                sprintf('%s(%s)',
+                    $self->do_compile($v->[0]),
+                    $self->do_compile($v->[1]),
+                );
+            }
         } else {
             sprintf('(%s)->(%s)',
                 $self->do_compile($v->[0]),
@@ -107,7 +116,11 @@ sub do_compile {
             );
         }
     } elsif ($type == PVIP_NODE_ARGS) {
-        join(",", map { "scalar($_)" } map { $self->do_compile($_) } @$v);
+        if ($self->{args_list}) {
+            join(",", map { "$_" } map { $self->do_compile($_) } @$v);
+        } else {
+            join(",", map { "scalar($_)" } map { $self->do_compile($_) } @$v);
+        }
     } elsif ($type == PVIP_NODE_STRING) {
         local $Data::Dumper::Terse = 1;
         local $Data::Dumper::Useqq = 1;
@@ -567,7 +580,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_OS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_OS is not implemented")
     } elsif ($type == PVIP_NODE_TW_PID) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_PID is not implemented")
+        '($$)';
     } elsif ($type == PVIP_NODE_TW_PERLVER) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_PERLVER is not implemented")
     } elsif ($type == PVIP_NODE_TW_OSVER) {

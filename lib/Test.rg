@@ -12,3 +12,6 @@ sub ok($x) is exportable {
     print "ok $cnt\n";
 }
 
+sub is($x,$y) is exportable {
+    ok($x eq $y);
+}
