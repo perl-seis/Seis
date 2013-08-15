@@ -37,6 +37,9 @@ int main (int argc, char* argv[]) {
 
     const char* perl_cmd = "%s";
     char* perl_args[argc+5];
+    for (i=0; i<argc+5; i++) { /* NULL clear */
+        perl_args[i] = NULL;
+    }
 
     perl_args[0] = argv[0];
     perl_args[1] = "-MRokugo::CLI";
