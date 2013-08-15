@@ -1,10 +1,10 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Perl6 on Perl5",
    "author" : [
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.5.6, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Minilla/v0.6.0, CPAN::Meta::Converter version 2.131560",
    "license" : [
       "perl_5"
    ],
@@ -42,7 +42,12 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "Caroline" : "0",
+            "Class::XSAccessor" : "1.16",
+            "Exception::Tiny" : "0",
+            "Perl6::PVIP" : "0.01",
+            "autobox" : "2.79",
+            "perl" : "5.010001"
          }
       },
       "test" : {

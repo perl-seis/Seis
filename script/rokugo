@@ -1,6 +1,0 @@
-#!perl
-use strict;
-use warnings;
-use Rokugo::CLI;
-
-Rokugo::CLI->new->run;

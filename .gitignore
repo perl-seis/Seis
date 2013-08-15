@@ -24,3 +24,5 @@ cover_db/
 MYMETA.*
 
 /Hybrid-*
+/bin/rg
+/bin/rg.c

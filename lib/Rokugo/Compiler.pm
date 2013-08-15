@@ -30,7 +30,7 @@ use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 
 use List::Util qw(min max);
 use Rokugo::MetaClass;
 use Rokugo::Class;
-no warnings 'misc';
+no warnings 'misc', 'void';
 
 ...
 

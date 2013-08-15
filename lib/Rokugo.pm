@@ -91,6 +91,8 @@ Following code does not works well. I need overloading stuff in autobox.pm.
 
     ~<a b>
 
+This issue can solve with PP_check hack.
+
 =head2 `eqv` operator is not compatible.
 
 Not yet implemented.
