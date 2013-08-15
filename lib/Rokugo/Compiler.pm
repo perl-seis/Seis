@@ -96,7 +96,7 @@ sub do_compile {
         $v;
     } elsif ($type == PVIP_NODE_FUNCALL) {
         if ($v->[0]->type == PVIP_NODE_IDENT) {
-            if ($v->[0]->value eq 'shift') {
+            if ($v->[0]->value eq 'shift' || $v->[0]->value eq 'pop') {
                 # shift(@array)
                 local $self->{args_list} = 1;
                 sprintf('%s(%s)',
