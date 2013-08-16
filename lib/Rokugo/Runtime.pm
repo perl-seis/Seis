@@ -17,6 +17,8 @@ use Rokugo::MetaClass;
     package # hide from PAUSE
         Complex;
     sub new {
+        my ($class, $x, $y) = @_;
+        bless {x => $x, y => $y}, $class;
     }
 }
 
