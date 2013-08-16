@@ -6,17 +6,10 @@ use 5.010_001;
 
 use Perl6::PVIP 0.01;
 use Carp ();
-use Rokugo::Object;
-use Rokugo::Array;
-use Rokugo::Int;
-use Rokugo::Real;
-use Rokugo::Exceptions;
-use Rokugo::Str;
-use Rokugo::Hash;
-use Rokugo::MetaClass;
 use Data::Dumper ();
 use Encode ();
 use boolean ();
+use Rokugo::Runtime;
 
 use constant {
     G_VOID => 1,
@@ -31,8 +24,7 @@ use strict;
 use 5.014_001;
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash';
 use List::Util qw(min max);
-use Rokugo::MetaClass;
-use Rokugo::Class;
+use Rokugo::Runtime;
 no warnings 'misc', 'void';
 
 ...
