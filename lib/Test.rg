@@ -14,6 +14,10 @@ sub ok($x) is exportable {
     print "ok $cnt\n";
 }
 
+sub nok($x, $desc=undef) is exportable {
+    ok(!$x, $desc);
+}
+
 sub is($x,$y) is exportable {
     ok($x eq $y);
 }

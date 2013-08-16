@@ -20,5 +20,7 @@ sub perl {
 
 sub clone { "$_[0]" }
 
+sub Bool { boolean::boolean($_[0]) }
+
 1;
 

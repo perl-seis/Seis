@@ -15,6 +15,8 @@ use Rokugo::Str;
 use Rokugo::Hash;
 use Rokugo::MetaClass;
 use Data::Dumper ();
+use Encode ();
+use boolean ();
 
 use constant {
     G_VOID => 1,
@@ -24,8 +26,9 @@ use constant {
 # `no warnings 'misc'` suppress `"our" variable $x redeclared` message
 # in `our $x; { my $x; { our $x}}`
 our $HEADER = <<'...';
+package main;
 use strict;
-use 5.010_001;
+use 5.014_001;
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash';
 use List::Util qw(min max);
 use Rokugo::MetaClass;
@@ -116,17 +119,22 @@ sub do_compile {
             );
         }
     } elsif ($type == PVIP_NODE_ARGS) {
+        my @args = map {
+            ($_->type == PVIP_NODE_IDENT && $_->value eq 'Bool')
+                ? 'boolean::'
+                : $self->do_compile($_)
+        } @$v;
         if ($self->{args_list}) {
-            join(",", map { "$_" } map { $self->do_compile($_) } @$v);
+            join(",", map { "$_" } @args);
         } else {
-            join(",", map { "scalar($_)" } map { $self->do_compile($_) } @$v);
+            join(",", map { "scalar($_)" } @args);
         }
     } elsif ($type == PVIP_NODE_STRING) {
         local $Data::Dumper::Terse = 1;
         local $Data::Dumper::Useqq = 1;
         local $Data::Dumper::Purity = 1;
         local $Data::Dumper::Indent = 0;
-        Data::Dumper::Dumper($v);
+        Data::Dumper::Dumper(Encode::decode_utf8($v));
     } elsif ($type == PVIP_NODE_MOD) {
         sprintf('(%s)%%(%s)',
             $self->do_compile($v->[0]),
@@ -512,7 +520,7 @@ sub do_compile {
         # stringification
         sprintf(q{''.(%s)}, $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_TRY) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TRY is not implemented")
+        "eval " . $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_REF) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_REF is not implemented")
     } elsif ($type == PVIP_NODE_MULTI) {
@@ -520,7 +528,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_LANG) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_LANG is not implemented")
     } elsif ($type == PVIP_NODE_UNARY_BOOLEAN) {
-        sprintf '!!(%s)', $self->do_compile($v->[0]);
+        sprintf 'boolean::boolean(%s)', $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_UNARY_UPTO) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_UPTO is not implemented")
     } elsif ($type == PVIP_NODE_ARRAY_DEREF) {
@@ -643,6 +651,8 @@ sub do_compile {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_VARGS is not implemented")
     } elsif ($type == PVIP_NODE_WHATEVER) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_WHATEVER is not implemented")
+    } elsif ($type == PVIP_NODE_END) {
+        "END " . $self->do_compile($v->[0]);
     } else {
         Rokugo::Exception::UnknownNode->throw(
              ("Unknown node: PVIP_NODE_" . uc($node->name))

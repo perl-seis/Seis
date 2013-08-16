@@ -3,6 +3,7 @@ use warnings;
 use utf8;
 use Test::More;
 use Rokugo;
+use boolean ();
 
 sub true()  { !!1 }
 sub false() { !!0 }
@@ -102,8 +103,8 @@ my @result = (
     '3+<2' => 12,
     '256+>1' => 128,
     'my $n="a"; $n~="b";$n' => 'ab',
-    '?1' => true,
-    '?0' => false,
+    '?1' => boolean::true,
+    '?0' => boolean::false,
     '[+] 1,2,3' => 6,
     '[*] 4,2,3' => 24,
     '[min] 4,2,3' => 2,
