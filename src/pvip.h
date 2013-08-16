@@ -160,7 +160,7 @@ typedef enum {
     PVIP_NODE_JUNCTIVE_OR, /* | */
     PVIP_NODE_UNICODE_CHAR, /* \c[] */
     PVIP_NODE_STUB, /* ... */
-    PVIP_NODE_EXPORTABLE, /* is exportable */
+    PVIP_NODE_EXPORT, /* is export */
     PVIP_NODE_PARAM,
     PVIP_NODE_BITWISE_OR,  /* ~| */
     PVIP_NODE_BITWISE_AND, /* ~& */
@@ -175,6 +175,7 @@ typedef enum {
     PVIP_NODE_IS_DIVISIBLE_BY, /* %% */
     PVIP_NODE_NOT_DIVISIBLE_BY, /* !%% */
     PVIP_NODE_CONTAINER_IDENTITY, /* =:= */
+    PVIP_NODE_Z, /* Z operator */
 } PVIP_node_type_t;
 
 typedef enum {

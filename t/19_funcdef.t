@@ -21,9 +21,9 @@ sub is-true() { True }
 
 ===
 --- code
-sub foo() is exportable { }
+sub foo() is export { }
 --- expected
-(statements (func (ident "foo") (params) (exportable) (block)))
+(statements (func (ident "foo") (params) (export) (block)))
 
 ===
 --- code

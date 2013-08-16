@@ -280,9 +280,17 @@ loose_and_expr =
     )* { $$=f1; }
 
 list_prefix_expr =
-    '[' a:reduce_operator ']' - b:comma_operator_expr { $$ = PVIP_node_new_children2(PVIP_NODE_REDUCE, a, b); }
-    | (v:lvalue - ':'? '=' - e:comma_operator_expr) { $$ = PVIP_node_new_children2(PVIP_NODE_BIND, v, e); }
-    | comma_operator_expr
+    '[' a:reduce_operator ']' - b:list_infix_expr { $$ = PVIP_node_new_children2(PVIP_NODE_REDUCE, a, b); }
+    | (v:lvalue - ':'? '=' - e:list_infix_expr) { $$ = PVIP_node_new_children2(PVIP_NODE_BIND, v, e); }
+    | list_infix_expr
+
+list_infix_expr =
+    a:comma_operator_expr {$$=a;} (
+        - 'Z' - b:comma_operator_expr {
+            $$ = PVIP_node_new_children2(PVIP_NODE_Z, a, b);
+            a=$$;
+        }
+    )*
 
 reduce_operator =
     < '*' > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }
@@ -640,7 +648,7 @@ twvars =
     | '&?ROUTINE' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ROUTINE); }
     | '%*ENV' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ENV); }
 
-reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' | 'BEGIN' ) ![-A-Za-z0-9]
+reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' | 'BEGIN' | 'Z' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children2(PVIP_NODE_ROLE, i, b); }
@@ -723,7 +731,7 @@ funcdef =
         $$ = PVIP_node_new_children4(PVIP_NODE_FUNC, i, pp, NOP(), b);
     }
 
-is_exportable = 'is' ws+ 'exportable' { $$ = PVIP_node_new_children(PVIP_NODE_EXPORTABLE); }
+is_exportable = 'is' ws+ 'export' { $$ = PVIP_node_new_children(PVIP_NODE_EXPORT); }
 
 lambda =
     {p=NULL; } '->' - ( !'{' p:params )? - b:block {

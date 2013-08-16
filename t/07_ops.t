@@ -135,3 +135,9 @@ $a **= 2;
 --- expected
 (statements (chain (int 10) (container_identity (int 3))))
 
+===
+--- code
+$a Z $b
+--- expected
+(statements (z (variable "$a") (variable "$b")))
+
