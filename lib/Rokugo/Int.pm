@@ -22,5 +22,10 @@ sub isa {
 
 sub Bool { boolean::boolean($_[0]) }
 
+sub WHAT {
+    my $self = shift;
+    Rokugo::Class->new(name => 'Int');
+}
+
 1;
 
