@@ -539,8 +539,6 @@ sub do_compile {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_REF is not implemented")
     } elsif ($type == PVIP_NODE_MULTI) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_MULTI is not implemented")
-    } elsif ($type == PVIP_NODE_LANG) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_LANG is not implemented")
     } elsif ($type == PVIP_NODE_UNARY_BOOLEAN) {
         sprintf 'boolean::boolean(%s)', $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_UNARY_UPTO) {
@@ -592,7 +590,7 @@ sub do_compile {
         # (public_attribute "x")
         sprintf('$self->{%s}', $v);
     } elsif ($type == PVIP_NODE_FUNCREF) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_FUNCREF is not implemented")
+        sprintf('\&%s', $v);
     } elsif ($type == PVIP_NODE_PATH) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_PATH is not implemented")
     } elsif ($type == PVIP_NODE_TW_PACKAGE) {
