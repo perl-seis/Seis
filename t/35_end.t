@@ -5,3 +5,9 @@ __END__
 END { 3 } 
 --- expected
 (statements (end (block (statements (int 3)))))
+
+===
+--- code
+BEGIN { 3 } 
+--- expected
+(statements (begin (block (statements (int 3)))))

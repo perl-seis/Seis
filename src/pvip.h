@@ -171,6 +171,7 @@ typedef enum {
     PVIP_NODE_ARRAY_DEREF, /* @$v */
     PVIP_NODE_RAND, /* rand */
     PVIP_NODE_END, /* END { } */
+    PVIP_NODE_BEGIN, /* BEGIN { } */
 } PVIP_node_type_t;
 
 typedef enum {
