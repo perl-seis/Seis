@@ -114,7 +114,6 @@ typedef enum {
     PVIP_NODE_TRY,
     PVIP_NODE_REF,
     PVIP_NODE_MULTI,
-    PVIP_NODE_LANG,
     PVIP_NODE_UNARY_BOOLEAN, /* ? */
     PVIP_NODE_UNARY_UPTO, /* ^ */
     PVIP_NODE_STDOUT, /* $*OUT */

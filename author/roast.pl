@@ -19,6 +19,7 @@ my $fail;
 my $t0 = [gettimeofday];
 for (@files) {
     if (system("./pvip $_")==0) {
+        print "PASSED: $_\n";
         $ok++;
     } else {
         print "FAIL: $_\n";

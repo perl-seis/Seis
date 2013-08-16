@@ -24,7 +24,7 @@ __END__
 --- code
 :lang<perl5>
 --- expected
-(statements (lang "perl5"))
+(statements (pair (string "lang") (string "perl5")))
 
 ===
 --- code

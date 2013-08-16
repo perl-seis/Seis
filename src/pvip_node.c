@@ -42,7 +42,6 @@ PVIPNode * PVIP_node_new_string(PVIP_node_type_t type, const char* str, size_t l
          type != PVIP_NODE_IDENT
       || type != PVIP_NODE_VARIABLE
       || type != PVIP_NODE_STRING
-      || type != PVIP_NODE_LANG
     );
     node->type = type;
     node->pv = PVIP_string_new();
@@ -194,7 +193,6 @@ PVIP_category_t PVIP_node_category(PVIP_node_type_t type) {
     case PVIP_NODE_STRING:
     case PVIP_NODE_VARIABLE:
     case PVIP_NODE_IDENT:
-    case PVIP_NODE_LANG:
     case PVIP_NODE_REGEXP:
     case PVIP_NODE_PERL5_REGEXP:
     case PVIP_NODE_PUBLIC_ATTRIBUTE:

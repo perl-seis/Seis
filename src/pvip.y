@@ -577,7 +577,11 @@ term =
     | !reserved ident
     | '\\' t:term { $$ = PVIP_node_new_children1(PVIP_NODE_REF, t); }
     | '(' - ')' { $$ = PVIP_node_new_children(PVIP_NODE_LIST); }
-    | language
+    | ':' < key:ident > '<' value:ident '>' {
+        PVIP_node_change_type(key, PVIP_NODE_STRING);
+        PVIP_node_change_type(value, PVIP_NODE_STRING);
+        $$ = PVIP_node_new_children2(PVIP_NODE_PAIR, key, value);
+    }
     | ':' < [a-z]+ > { $$ = PVIP_node_new_children2(PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(PVIP_NODE_TRUE)); }
     | ':' v:variable {
         $$ = PVIP_node_new_children2(
@@ -624,9 +628,6 @@ twvars =
     | '$*EXECUTABLE_NAME' { $$ = PVIP_node_new_children(PVIP_NODE_TW_EXECUTABLE_NAME); }
     | '&?ROUTINE' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ROUTINE); }
     | '%*ENV' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ENV); }
-
-language =
-    ':lang<' < [a-zA-Z0-9]+ > '>' { $$ = PVIP_node_new_string(PVIP_NODE_LANG, yytext, yyleng); }
 
 reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' ) ![-A-Za-z0-9]
 
