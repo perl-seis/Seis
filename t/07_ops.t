@@ -116,3 +116,22 @@ say |@arr
 $a **= 2;
 --- expected
 (statements (inplace_pow (variable "$a") (int 2)))
+
+===
+--- code
+10 %%  3
+--- expected
+(statements (is_divisible_by (int 10) (int 3)))
+
+===
+--- code
+10 !%%  3
+--- expected
+(statements (not_divisible_by (int 10) (int 3)))
+
+===
+--- code
+10 =:= 3
+--- expected
+(statements (chain (int 10) (container_identity (int 3))))
+

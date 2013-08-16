@@ -363,6 +363,7 @@ chaining_infix_expr = f1:structural_infix_expr { $$ = PVIP_node_new_children1(PV
         | - 'ge'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRGE,       f2); PVIP_node_push_child(f1, tmp); }
         | - 'lt'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRLT,       f2); PVIP_node_push_child(f1, tmp); }
         | - 'le'  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_STRLE,       f2); PVIP_node_push_child(f1, tmp); }
+        | - '=:='  - f2:structural_infix_expr { PVIPNode* tmp = PVIP_node_new_children1(PVIP_NODE_CONTAINER_IDENTITY,       f2); PVIP_node_push_child(f1, tmp); }
     )* { if (f1->children.size==1) { $$=f1->children.nodes[0]; } else { $$=f1; } }
 
 structural_infix_expr =
@@ -452,6 +453,15 @@ additive_expr =
             $$ = PVIP_node_new_children2(PVIP_NODE_BITWISE_XOR, l, r1);
             l = $$;
           }
+        | - '%%' ![<>=] - r1:multiplicative_expr {
+            $$ = PVIP_node_new_children2(PVIP_NODE_IS_DIVISIBLE_BY, l, r1);
+            l = $$;
+          }
+        # You may use !%% to mean "not divisible by", though % itself generally has the same effect.
+        | - '!%%' ![<>=] - r1:multiplicative_expr {
+            $$ = PVIP_node_new_children2(PVIP_NODE_NOT_DIVISIBLE_BY, l, r1);
+            l = $$;
+          }
     )* {
         $$ = l;
     }
@@ -466,7 +476,7 @@ multiplicative_expr =
             $$ = PVIP_node_new_children2(PVIP_NODE_DIV, l, r);
             l = $$;
         }
-        | - '%' - r:symbolic_unary {
+        | - '%' !'%' - r:symbolic_unary {
             $$ = PVIP_node_new_children2(PVIP_NODE_MOD, l, r);
             l = $$;
         }
@@ -795,7 +805,7 @@ variable = scalar | array_var | hash_var | twvars | funcref | attr_vars
 array_var = < '@' varname > { $$ = PVIP_node_new_string(PVIP_NODE_VARIABLE, yytext, yyleng); }
     | '@' s:scalar { $$ = PVIP_node_new_children1(PVIP_NODE_ARRAY_DEREF, s); }
 
-hash_var = < '%' varname > { $$ = PVIP_node_new_string(PVIP_NODE_VARIABLE, yytext, yyleng); }
+hash_var = < '%' !'%' varname > { $$ = PVIP_node_new_string(PVIP_NODE_VARIABLE, yytext, yyleng); }
 
 scalar =
     '$' s:scalar { $$ = PVIP_node_new_children1(PVIP_NODE_SCALAR_DEREF, s); }

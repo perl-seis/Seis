@@ -172,6 +172,9 @@ typedef enum {
     PVIP_NODE_RAND, /* rand */
     PVIP_NODE_END, /* END { } */
     PVIP_NODE_BEGIN, /* BEGIN { } */
+    PVIP_NODE_IS_DIVISIBLE_BY, /* %% */
+    PVIP_NODE_NOT_DIVISIBLE_BY, /* !%% */
+    PVIP_NODE_CONTAINER_IDENTITY, /* =:= */
 } PVIP_node_type_t;
 
 typedef enum {
