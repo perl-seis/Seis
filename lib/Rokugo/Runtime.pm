@@ -12,6 +12,7 @@ use Rokugo::Exceptions;
 use Rokugo::Str;
 use Rokugo::Hash;
 use Rokugo::MetaClass;
+use Rokugo::Class;
 
 {
     package # hide from PAUSE
