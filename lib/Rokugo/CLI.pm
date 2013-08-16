@@ -15,6 +15,7 @@ use Class::XSAccessor
         map { $_ => $_ } qw(
             dump_ast
             dump_compiled
+            compile_only
         )
     }
 ;
@@ -34,6 +35,7 @@ sub run {
         'e=s'       => \my $eval,
         'debug'     => \$self->{dump_compiled},
         'ast'       => \$self->{dump_ast},
+        'c'         => \$self->{compile_only},
     );
 
     if (defined $eval) {
@@ -70,6 +72,7 @@ sub run_repl {
 sub compile_and_run {
     my ($self, $code, $filename) = @_;
     my $compiled = $self->compile($code, $filename);
+    return if $self->{compile_only};
     my $ret = eval $compiled;
     die $@ if $@;
     $ret;

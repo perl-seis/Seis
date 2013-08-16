@@ -59,6 +59,16 @@ But it's useful because perl6's syntax is sane.
     Support 'has' and attributes.
     Implement builtin methods
 
+=head1 WHY ROKUGO REQUIRES Perl 5.16?
+
+=over 4
+
+=item fc()
+
+Perl6 provides C< String#fc > method. Perl5 supports fc()  5.16 or later.
+
+=back
+
 =head1 KNOWN ISSUES
 
 There is some known issues. Rokugo do in the forcible way.

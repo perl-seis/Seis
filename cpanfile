@@ -1,4 +1,4 @@
-requires 'perl', '5.010001';
+requires 'perl', '5.016000';
 
 requires 'Exception::Tiny';
 requires 'Perl6::PVIP', 0.01;

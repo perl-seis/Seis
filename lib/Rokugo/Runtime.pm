@@ -13,6 +13,7 @@ use Rokugo::Str;
 use Rokugo::Hash;
 use Rokugo::MetaClass;
 use Rokugo::Class;
+use Rokugo::Range;
 
 {
     package # hide from PAUSE

@@ -17,5 +17,10 @@ sub meta {
     return Rokugo::MetaClass->new(name => $self->{name});
 }
 
+sub gist {
+    my $self = shift;
+    '(' . $self->{name} . ')';
+}
+
 1;
 

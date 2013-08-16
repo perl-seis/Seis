@@ -4,9 +4,11 @@ use warnings;
 use utf8;
 use 5.010_001;
 use Data::Dumper ();
+use feature 'fc';
 
 sub uc:method { CORE::uc($_[0]) }
 sub lc:method { CORE::lc($_[0]) }
+sub fc:method { CORE::fc($_[0]) }
 
 sub say { CORE::say($_[0]) }
 
@@ -21,6 +23,12 @@ sub perl {
 sub clone { "$_[0]" }
 
 sub Bool { boolean::boolean($_[0]) }
+
+sub lines {
+    my ($self, $n) = @_;
+    my @lines = split /\n/, $self;
+    $n ? [@lines[0..$n-1]] : \@lines;
+}
 
 1;
 

@@ -10,5 +10,10 @@ sub say { CORE::say($_[0]) }
 
 sub clone { 0+$_[0] }
 
+sub WHAT {
+    my $self = shift;
+    Rokugo::Class->new(name => 'Rat');
+}
+
 1;
 
