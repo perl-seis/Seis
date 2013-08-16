@@ -658,7 +658,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_JUNCTIVE_OR) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_JUNCTIVE_OR is not implemented")
     } elsif ($type == PVIP_NODE_UNICODE_CHAR) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNICODE_CHAR is not implemented")
+        sprintf(q!"\N{%s}"!, $v);
     } elsif ($type == PVIP_NODE_STUB) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STUB is not implemented")
     } elsif ($type == PVIP_NODE_EXPORTABLE) {
