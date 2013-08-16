@@ -27,5 +27,11 @@ sub WHAT {
     Rokugo::Class->new(name => 'Int');
 }
 
+use Math::BaseCnv;
+sub base {
+    my ($num, $base) = @_;
+    Math::BaseCnv::cnv($num, 10, $base);
+}
+
 1;
 
