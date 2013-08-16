@@ -14,6 +14,7 @@ use Rokugo::Hash;
 use Rokugo::MetaClass;
 use Rokugo::Class;
 use Rokugo::Range;
+use Rokugo::Undef;
 
 {
     package # hide from PAUSE

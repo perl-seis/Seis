@@ -23,7 +23,7 @@ our $HEADER = <<'...';
 package main;
 use strict;
 use 5.014_001;
-use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash';
+use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use List::Util qw(min max);
 use Rokugo::Runtime;
 no warnings 'misc', 'void';
@@ -137,11 +137,7 @@ sub do_compile {
             join(",", map { "scalar($_)" } @args);
         }
     } elsif ($type == PVIP_NODE_STRING) {
-        local $Data::Dumper::Terse = 1;
-        local $Data::Dumper::Useqq = 1;
-        local $Data::Dumper::Purity = 1;
-        local $Data::Dumper::Indent = 0;
-        Data::Dumper::Dumper(Encode::decode_utf8($v));
+        $self->compile_string($v);
     } elsif ($type == PVIP_NODE_MOD) {
         sprintf('(%s)%%(%s)',
             $self->do_compile($v->[0]),
@@ -288,8 +284,11 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_HASH) {
         '{' . join(',', map { $self->do_compile($_) } @$v) . '}';
     } elsif ($type == PVIP_NODE_PAIR) {
+        my $key = $v->[0]->type == PVIP_NODE_IDENT
+            ? $self->compile_string($v->[0]->value)
+            : $self->do_compile($v->[0]);
         sprintf('(%s)=>scalar(%s)',
-            $self->do_compile($v->[0]),
+            $key,
             $self->do_compile($v->[1]),
         );
     } elsif ($type == PVIP_NODE_ATKEY) {
@@ -667,6 +666,8 @@ sub do_compile {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_WHATEVER is not implemented")
     } elsif ($type == PVIP_NODE_END) {
         "END " . $self->do_compile($v->[0]);
+    } elsif ($type == PVIP_NODE_BEGIN) {
+        "BEGIN " . $self->do_compile($v->[0]);
     } else {
         Rokugo::Exception::UnknownNode->throw(
              ("Unknown node: PVIP_NODE_" . uc($node->name))
@@ -691,6 +692,16 @@ sub maybe_block {
     } else {
         return '{' . $self->do_compile($node) . "}";
     }
+}
+
+sub compile_string{
+    my ($self, $v) = @_;
+
+    local $Data::Dumper::Terse = 1;
+    local $Data::Dumper::Useqq = 1;
+    local $Data::Dumper::Purity = 1;
+    local $Data::Dumper::Indent = 0;
+    Data::Dumper::Dumper(Encode::decode_utf8($v));
 }
 
 1;

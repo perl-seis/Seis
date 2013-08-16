@@ -33,5 +33,7 @@ sub base {
     Math::BaseCnv::cnv($num, 10, $base);
 }
 
+sub defined { 1 }
+
 1;
 
