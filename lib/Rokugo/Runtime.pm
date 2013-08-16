@@ -15,6 +15,7 @@ use Rokugo::MetaClass;
 use Rokugo::Class;
 use Rokugo::Range;
 use Rokugo::Undef;
+use Rokugo::Buf;
 
 {
     package # hide from PAUSE

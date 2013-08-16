@@ -20,5 +20,9 @@ sub join {
     join $stuff, @$self;
 }
 
+sub WHAT {
+    Rokugo::Class->new(name => 'Array');
+}
+
 1;
 

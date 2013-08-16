@@ -93,7 +93,15 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_SUB) {
         '(' . $self->do_compile($v->[0]) . ')-(' . $self->do_compile($v->[1]) . ')';
     } elsif ($type == PVIP_NODE_IDENT) {
-        $v;
+        if ($v eq '::Array') {
+            'Rokugo::Class->new(name => "Array")'
+        } elsif ($v eq '::Hash') {
+            'Rokugo::Class->new(name => "Hash")'
+        } elsif ($v eq 'Buf') {
+            'Rokugo::Buf::'
+        } else {
+            $v;
+        }
     } elsif ($type == PVIP_NODE_FUNCALL) {
         if ($v->[0]->type == PVIP_NODE_IDENT) {
             if ($v->[0]->value eq 'shift' || $v->[0]->value eq 'pop') {
@@ -105,6 +113,10 @@ sub do_compile {
                 );
             } elsif ($v->[0]->value eq 'lines') {
                 sprintf('Rokugo::Str::lines(%s)',
+                    $self->do_compile($v->[1]),
+                );
+            } elsif ($v->[0]->value eq 'hash') {
+                sprintf('+{%s}',
                     $self->do_compile($v->[1]),
                 );
             } else {

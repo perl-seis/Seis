@@ -5,11 +5,17 @@ use utf8;
 use 5.010_001;
 use Rokugo::MetaClass;
 
+our %INSTANCES;
+
 # DO NOT CALL THIS METHOD DIRECTLY.
 sub new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
-    return bless { %args }, $class;
+    if ($args{name}) {
+        $INSTANCES{$args{name}} //= bless { %args }, $class;
+    } else {
+        bless { %args }, $class;
+    }
 }
 
 sub meta {
