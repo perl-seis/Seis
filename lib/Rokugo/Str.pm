@@ -9,6 +9,7 @@ use feature 'fc';
 sub uc:method { CORE::uc($_[0]) }
 sub lc:method { CORE::lc($_[0]) }
 sub fc:method { CORE::fc($_[0]) }
+sub ord:method { CORE::ord($_[0]) }
 
 sub say { CORE::say($_[0]) }
 

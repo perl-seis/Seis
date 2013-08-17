@@ -16,6 +16,7 @@ use Rokugo::Class;
 use Rokugo::Range;
 use Rokugo::Undef;
 use Rokugo::Buf;
+use Rokugo::Whatever;
 
 {
     package # hide from PAUSE
@@ -24,6 +25,17 @@ use Rokugo::Buf;
         my ($class, $x, $y) = @_;
         bless {x => $x, y => $y}, $class;
     }
+}
+
+sub builtin_eval {
+    my ($code) = @_;
+    my $compiler = Rokugo::Compiler->new();
+    my $compiled = $compiler->compile($code);
+    my $ret = eval $compiled;
+    if ($@) {
+        Rokugo::Exception::CompilationFailed->new("$@");
+    }
+    return $ret;
 }
 
 1;

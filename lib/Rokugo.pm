@@ -56,8 +56,16 @@ But it's useful because perl6's syntax is sane.
 
 =head1 TODO
 
-    Support 'has' and attributes.
     Implement builtin methods
+    multi methods
+    perl6 regexp
+    perl6 rules
+    perl6 junctions
+    perl6 open
+    perl6 slurp
+    pass the 200+ roast cases
+    care the pairs
+    my own virtual machine?
 
 =head1 WHY ROKUGO REQUIRES Perl 5.16?
 

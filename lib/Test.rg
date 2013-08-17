@@ -38,12 +38,28 @@ sub lives_ok($closure, $reason='') is export {
     proclaim((not defined $!), $reason);
 }
 
+sub dies_ok($closure, $reason='') is export {
+    try {
+        $closure();
+    };
+    proclaim((defined $!), $reason);
+}
+
 sub eval_dies_ok($code, $reason=undef) is export {
     my $ee = eval_exception($code);
     if defined $ee {
         proclaim(1, $reason);
     } else {
         proclaim(0, $reason);
+    }
+}
+
+sub eval_lives_ok($code, $reason=undef) is export {
+    my $ee = eval_exception($code);
+    if defined $ee {
+        proclaim(0, $reason);
+    } else {
+        proclaim(1, $reason);
     }
 }
 

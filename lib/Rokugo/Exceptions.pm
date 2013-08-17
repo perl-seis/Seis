@@ -13,6 +13,8 @@ use parent qw(Exception::Tiny);
 package Rokugo::Exception::UnknownNode;
 use parent qw(Exception::Tiny);
 
+package Rokugo::Exception::CompilationFailed;
+use parent qw(Exception::Tiny);
 
 1;
 

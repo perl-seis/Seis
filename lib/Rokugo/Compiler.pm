@@ -104,11 +104,16 @@ sub do_compile {
         }
     } elsif ($type == PVIP_NODE_FUNCALL) {
         if ($v->[0]->type == PVIP_NODE_IDENT) {
+            # builtin functions
             if ($v->[0]->value eq 'shift' || $v->[0]->value eq 'pop') {
                 # shift(@array)
                 local $self->{args_list} = 1;
                 sprintf('%s(%s)',
                     $self->do_compile($v->[0]),
+                    $self->do_compile($v->[1]),
+                );
+            } elsif ($v->[0]->value eq 'eval') {
+                sprintf('Rokugo::Runtime::builtin_eval(%s)',
                     $self->do_compile($v->[1]),
                 );
             } elsif ($v->[0]->value eq 'lines') {
@@ -167,6 +172,12 @@ sub do_compile {
             join(',', map { "($_)" } @vars)
         );
     } elsif ($type == PVIP_NODE_BIND) {
+        # TODO: This may not compatible with Perl6.
+        sprintf('%s=(%s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1], G_ARRAY),
+        );
+    } elsif ($type == PVIP_NODE_LIST_ASSIGNMENT) {
         sprintf('%s=(%s)',
             $self->do_compile($v->[0]),
             $self->do_compile($v->[1], G_ARRAY),
@@ -675,7 +686,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_VARGS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_VARGS is not implemented")
     } elsif ($type == PVIP_NODE_WHATEVER) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_WHATEVER is not implemented")
+        '(Rokugo::Whatever->new())';
     } elsif ($type == PVIP_NODE_END) {
         "END " . $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_BEGIN) {

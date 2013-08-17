@@ -35,5 +35,7 @@ sub base {
 
 sub defined { 1 }
 
+sub chr: method { CORE::chr($_[0]) }
+
 1;
 
