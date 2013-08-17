@@ -685,6 +685,12 @@ sub do_compile {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BITWISE_XOR is not implemented")
     } elsif ($type == PVIP_NODE_VARGS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_VARGS is not implemented")
+    } elsif ($type == PVIP_NODE_TW_A) {
+        '($Rokugo::Runtime::TW_A)';
+    } elsif ($type == PVIP_NODE_TW_B) {
+        '($Rokugo::Runtime::TW_B)';
+    } elsif ($type == PVIP_NODE_TW_C) {
+        '($Rokugo::Runtime::TW_C)';
     } elsif ($type == PVIP_NODE_WHATEVER) {
         '(Rokugo::Whatever->new())';
     } elsif ($type == PVIP_NODE_END) {
