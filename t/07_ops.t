@@ -141,3 +141,15 @@ $a Z $b
 --- expected
 (statements (z (variable "$a") (variable "$b")))
 
+===
+--- code
+$a := $b
+--- expected
+(statements (bind (variable "$a") (variable "$b")))
+
+===
+--- code
+$a = $b
+--- expected
+(statements (list_assignment (variable "$a") (variable "$b")))
+

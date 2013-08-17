@@ -258,7 +258,7 @@ for @a { 1; }
 my $i=3;
 --- expected
 (statements
-    (bind (my (variable "$i"))
+    (list_assignment (my (variable "$i"))
           (int "3"))
 )
 
@@ -267,7 +267,7 @@ my $i=3;
 my $i=3;
 --- expected
 (statements
-    (bind (my (variable "$i"))
+    (list_assignment (my (variable "$i"))
           (int "3"))
 )
 

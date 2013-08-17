@@ -17,5 +17,5 @@ live { 3 };
 --- code
 @a = map { $_ }, @a
 --- expected
-(statements (bind (variable "@a") (funcall (ident "map") (args (lambda (block (statements (variable "$_")))) (variable "@a")))))
+(statements (list_assignment (variable "@a") (funcall (ident "map") (args (lambda (block (statements (variable "$_")))) (variable "@a")))))
 

@@ -84,4 +84,4 @@ class A is B is C { }
 --- code
 class Point { has $!x; method set_x($x) { $!x=$x }; };
 --- expected
-(statements (class (ident "Point") (nop) (block (statements (has (public_attribute "x")) (method (ident "set_x") (params (param (nop) (variable "$x") (nop))) (block (statements (bind (public_attribute "x") (variable "$x"))))) (nop)))))
+(statements (class (ident "Point") (nop) (block (statements (has (public_attribute "x")) (method (ident "set_x") (params (param (nop) (variable "$x") (nop))) (block (statements (list_assignment (public_attribute "x") (variable "$x"))))) (nop)))))

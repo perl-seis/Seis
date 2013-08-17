@@ -282,7 +282,12 @@ loose_and_expr =
 
 list_prefix_expr =
     '[' a:reduce_operator ']' - b:list_infix_expr { $$ = PVIP_node_new_children2(PVIP_NODE_REDUCE, a, b); }
-    | (v:lvalue - ':'? '=' - e:list_infix_expr) { $$ = PVIP_node_new_children2(PVIP_NODE_BIND, v, e); }
+    # infix:<=>, list assignment
+    | (v:lvalue - '=' - e:list_infix_expr) { $$ = PVIP_node_new_children2(PVIP_NODE_LIST_ASSIGNMENT, v, e); }
+    # infix:<:=>, run-time binding
+    | (v:lvalue - ':=' - e:list_infix_expr) { $$ = PVIP_node_new_children2(PVIP_NODE_BIND, v, e); }
+    # infix:<::=>, bind and make readonly
+    | (v:lvalue - '::=' - e:list_infix_expr) { $$ = PVIP_node_new_children2(PVIP_NODE_BINDAND_MAKE_READONLY, v, e); }
     | list_infix_expr
 
 list_infix_expr =

@@ -12,4 +12,4 @@ __END__
 --- code
 my &a = sub { }
 --- expected
-(statements (bind (my (funcref (ident "a"))) (func (nop) (params) (nop) (block))))
+(statements (list_assignment (my (funcref (ident "a"))) (func (nop) (params) (nop) (block))))
