@@ -326,8 +326,10 @@ comma_operator_expr = a:loose_unary_expr { $$=a; } ( - ',' - b:loose_unary_expr 
         }
     } )*
 
+# L
 loose_unary_expr =
-    'not' - f1:item_assignment_expr { $$ = PVIP_node_new_children1(PVIP_NODE_NOT, f1); }
+    'not' ![-a-zA-Z0-9] - f1:loose_unary_expr { $$ = PVIP_node_new_children1(PVIP_NODE_NOT, f1); }
+    | 'so' ![-a-zA-Z0-9] - f1:loose_unary_expr { $$ = PVIP_node_new_children1(PVIP_NODE_SO, f1); }
     | f1:item_assignment_expr { $$=f1 }
 
 item_assignment_expr =
@@ -660,7 +662,7 @@ twvars =
     | '$^b' { $$ = PVIP_node_new_children(PVIP_NODE_TW_B); }
     | '$^c' { $$ = PVIP_node_new_children(PVIP_NODE_TW_C); }
 
-reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' | 'BEGIN' | 'Z' ) ![-A-Za-z0-9]
+reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children2(PVIP_NODE_ROLE, i, b); }
@@ -753,7 +755,7 @@ lambda =
         $$ = PVIP_node_new_children2(PVIP_NODE_LAMBDA, p, b);
     }
     | b:block { $$ = PVIP_node_new_children1(PVIP_NODE_LAMBDA, b); }
-    | {p=NULL; } 'sub' ws+ (!'{' p:params)? - b:block {
+    | {p=NULL; } 'sub' ![-a-zA-Z0-9] - ( !'{' p:params)? - b:block {
         if (!p) {
             p = PVIP_node_new_children(PVIP_NODE_PARAMS);
         }
