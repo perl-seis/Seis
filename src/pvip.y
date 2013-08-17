@@ -307,8 +307,7 @@ reduce_operator =
     | < '-' > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }
     | < '<=' > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }
     | < '>=' > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }
-    | < 'min' > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }
-    | < 'max' > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }
+    | < ( 'min' | 'max' | 'gcd' ) > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }
 
 lvalue =
     my
@@ -511,6 +510,10 @@ multiplicative_expr =
             $$ = PVIP_node_new_children2(PVIP_NODE_BLSHIFT, l, r);
             l = $$;
         }
+        | - 'gcd' ![=a-zA-Z0-9] - r:symbolic_unary {
+            $$ = PVIP_node_new_children2(PVIP_NODE_GCD, l, r);
+            l = $$;
+        }
     )* {
         $$ = l;
     }
@@ -662,7 +665,7 @@ twvars =
     | '$^b' { $$ = PVIP_node_new_children(PVIP_NODE_TW_B); }
     | '$^c' { $$ = PVIP_node_new_children(PVIP_NODE_TW_C); }
 
-reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' ) ![-A-Za-z0-9]
+reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' | 'andthen' | 'and' | 'gcd' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children2(PVIP_NODE_ROLE, i, b); }
