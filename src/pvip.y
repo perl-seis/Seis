@@ -169,6 +169,7 @@ attr_vars =
     < [$@] [.!] [a-z]+> {
         $$=PVIP_node_new_string(PVIP_NODE_ATTRIBUTE_VARIABLE, yytext, yyleng);
     }
+    | scalar
 
 multi_method_stmt =
     'multi' ws - m:method_stmt { $$ = PVIP_node_new_children1(PVIP_NODE_MULTI, m); }

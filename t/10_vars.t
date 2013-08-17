@@ -138,3 +138,16 @@ $.x
 $^a
 --- expected
 (statements (tw_a))
+
+=== S03-binding/attributes.t
+--- code
+our $.x
+--- expected
+(statements (our (attribute_variable "$.x")))
+
+=== S03-binding/attributes.t
+--- code
+has $x
+--- expected
+(statements (has (variable "$x")))
+
