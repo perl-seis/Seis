@@ -79,7 +79,7 @@ sub do_compile {
         } else {
             $body = sprintf '$rokugo_reduce_ret %s= $rokugo_reduce_stuff', $v->[0]->value;
         }
-        sprintf('do { my @rokugo_reduce_ary = %s; my $rokugo_reduce_ret = shift @rokugo_reduce_ary; for my $rokugo_reduce_stuff (@rokugo_reduce_ary) { %s } $rokugo_reduce_ret; }', $self->do_compile($v->[1]), $body);
+        sprintf('do { my @rokugo_reduce_ary = %s; my $rokugo_reduce_ret = shift @rokugo_reduce_ary; for my $rokugo_reduce_stuff (@rokugo_reduce_ary) { %s } $rokugo_reduce_ret; }', $self->do_compile($v->[1], G_ARRAY), $body);
     } elsif ($type == PVIP_NODE_INT) {
         $node->value;
     } elsif ($type == PVIP_NODE_NUMBER) {
@@ -183,7 +183,6 @@ sub do_compile {
             $self->do_compile($v->[1], G_ARRAY),
         );
     } elsif ($type == PVIP_NODE_LIST_ASSIGNMENT) {
-                warn $self->is_list_lvalue($v->[0]);
         sprintf('%s=(%s)',
             $self->do_compile($v->[0]),
             $self->do_compile($v->[1],
@@ -207,7 +206,7 @@ sub do_compile {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_EQV is not implemented")
     } elsif ($type == PVIP_NODE_ARRAY) {
         sprintf('[%s]',
-            join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
+            join(',', map { "($_)" } map { $self->do_compile($_, G_ARRAY) } @$v)
         );
     } elsif ($type == PVIP_NODE_ATPOS) {
         if (
@@ -229,20 +228,11 @@ sub do_compile {
         my $invocant = $self->do_compile($v->[0]);
         my $method = $self->do_compile($v->[1]);
         my $params = defined($v->[2]) ? $self->do_compile($v->[2]) : '';
-        if ($v->[0]->type == PVIP_NODE_LIST) {
-            # (8,6,9).elems
-            sprintf('Rokugo::Array::%s([%s], %s)',
-                $method,
-                $invocant,
-                $params,
-            );
-        } else {
-            sprintf('(%s)->%s(%s)',
-                $invocant,
-                $method,
-                $params,
-            );
-        }
+        sprintf('(%s)->%s(%s)',
+            $invocant,
+            $method,
+            $params,
+        );
     } elsif ($type == PVIP_NODE_FUNC) {
         my $ret = 'sub ';
         $ret .= $self->do_compile($v->[0]);
@@ -614,18 +604,14 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_HAS) {
         # (has (public_attribute "x"))
         # support private variable
-        if ($v->[0]->type == PVIP_NODE_PUBLIC_ATTRIBUTE) {
-            sprintf('__PACKAGE__->meta->add_public_attribute("%s")', $v->[0]->value);
-        } elsif ($v->[0]->type == PVIP_NODE_PRIVATE_ATTRIBUTE) {
-            sprintf('__PACKAGE__->meta->add_private_attribute("%s")', $v->[0]->value);
+        if ($v->[0]->type == PVIP_NODE_ATTRIBUTE_VARIABLE) {
+            sprintf(q!__PACKAGE__->meta->add_attribute(%s)!, $self->compile_string($v->[0]->value));
         } else {
             die "Should not reach here";
         }
-    } elsif ($type == PVIP_NODE_PRIVATE_ATTRIBUTE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_PRIVATE_ATTRIBUTE is not implemented")
-    } elsif ($type == PVIP_NODE_PUBLIC_ATTRIBUTE) {
+    } elsif ($type == PVIP_NODE_ATTRIBUTE_VARIABLE) {
         # (public_attribute "x")
-        sprintf('$self->{%s}', $v);
+        sprintf('$self->{%s}', $self->compile_string($v));
     } elsif ($type == PVIP_NODE_FUNCREF) {
         sprintf('\&%s', $v);
     } elsif ($type == PVIP_NODE_PATH) {
@@ -753,7 +739,7 @@ sub is_list_lvalue {
     if ($node->category == PVIP_CATEGORY_CHILDREN) {
         if (@{$node->value}==1) {
             my $c = $node->value->[0];
-            if ($c->type == PVIP_NODE_VARIABLE && $c->value =~ /\A@/) {
+            if ($c->type == PVIP_NODE_VARIABLE && $c->value =~ /\A[%@]/) {
                 # my @x = ...
                 1
             } else {
@@ -765,7 +751,7 @@ sub is_list_lvalue {
         }
     } else {
         # @x = ...
-        if ($node->type == PVIP_NODE_VARIABLE && $node->value =~ /\A@/) {
+        if ($node->type == PVIP_NODE_VARIABLE && $node->value =~ /\A[%@]/) {
             # my @x = ...
             1
         } else {

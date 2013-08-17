@@ -30,21 +30,16 @@ sub methods {
     return @ret;
 }
 
-sub add_public_attribute {
+sub add_attribute {
     my ($self, $name) = @_;
     push @{$self->{attribute_names}}, $name;
     Class::XSAccessor->import(
         class => $self->{name},
         accessors => {
-            $name => $name,
+            $name => substr($name, 2),
         },
         replace => 1,
     );
-}
-
-sub add_private_attribute {
-    my ($self, $name) = @_;
-    push @{$self->{private_attribute_names}}, $name;
 }
 
 1;
