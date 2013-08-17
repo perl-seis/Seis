@@ -179,6 +179,9 @@ typedef enum {
     PVIP_NODE_SUBMETHOD, /* submethod */
     PVIP_NODE_BINDAND_MAKE_READONLY, /* ::= */
     PVIP_NODE_LIST_ASSIGNMENT, /* = */
+    PVIP_NODE_TW_A, /* $^a */
+    PVIP_NODE_TW_B, /* $^b */
+    PVIP_NODE_TW_C, /* $^c */
 } PVIP_node_type_t;
 
 typedef enum {

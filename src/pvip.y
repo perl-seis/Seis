@@ -653,6 +653,9 @@ twvars =
     | '$*EXECUTABLE_NAME' { $$ = PVIP_node_new_children(PVIP_NODE_TW_EXECUTABLE_NAME); }
     | '&?ROUTINE' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ROUTINE); }
     | '%*ENV' { $$ = PVIP_node_new_children(PVIP_NODE_TW_ENV); }
+    | '$^a' { $$ = PVIP_node_new_children(PVIP_NODE_TW_A); }
+    | '$^b' { $$ = PVIP_node_new_children(PVIP_NODE_TW_B); }
+    | '$^c' { $$ = PVIP_node_new_children(PVIP_NODE_TW_C); }
 
 reserved = ( 'my' | 'our' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'rand' | 'END' | 'BEGIN' | 'Z' ) ![-A-Za-z0-9]
 

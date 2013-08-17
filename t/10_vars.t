@@ -132,3 +132,9 @@ $!x
 $.x
 --- expected
 (statements (private_attribute "x"))
+
+===
+--- code
+$^a
+--- expected
+(statements (tw_a))
