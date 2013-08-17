@@ -161,11 +161,14 @@ has_stmt =
         $$ = PVIP_node_new_children1(PVIP_NODE_HAS, v);
     }
 
+# $.var
+# $!var
+# @!var
+# @.var
 attr_vars =
-    '$' (
-          '.' <[a-z]+> { $$=PVIP_node_new_string(PVIP_NODE_PRIVATE_ATTRIBUTE, yytext, yyleng); }
-        | '!' <[a-z]+> { $$=PVIP_node_new_string(PVIP_NODE_PUBLIC_ATTRIBUTE, yytext, yyleng); }
-    )
+    < [$@] [.!] [a-z]+> {
+        $$=PVIP_node_new_string(PVIP_NODE_ATTRIBUTE_VARIABLE, yytext, yyleng);
+    }
 
 multi_method_stmt =
     'multi' ws - m:method_stmt { $$ = PVIP_node_new_children1(PVIP_NODE_MULTI, m); }

@@ -195,8 +195,7 @@ PVIP_category_t PVIP_node_category(PVIP_node_type_t type) {
     case PVIP_NODE_IDENT:
     case PVIP_NODE_REGEXP:
     case PVIP_NODE_PERL5_REGEXP:
-    case PVIP_NODE_PUBLIC_ATTRIBUTE:
-    case PVIP_NODE_PRIVATE_ATTRIBUTE:
+    case PVIP_NODE_ATTRIBUTE_VARIABLE:
     case PVIP_NODE_PATH:
     case PVIP_NODE_SLANGS:
     case PVIP_NODE_UNICODE_CHAR:

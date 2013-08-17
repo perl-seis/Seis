@@ -128,8 +128,7 @@ typedef enum {
     PVIP_NODE_TRUE,
     PVIP_NODE_TW_VM,  /* $*VM */
     PVIP_NODE_HAS,
-    PVIP_NODE_PRIVATE_ATTRIBUTE, /* $.var */
-    PVIP_NODE_PUBLIC_ATTRIBUTE,  /* $!var */
+    PVIP_NODE_ATTRIBUTE_VARIABLE,  /* $!var, $.var, @.var */
     PVIP_NODE_FUNCREF,           /* &var */
     PVIP_NODE_PATH, /* qp{}, IO::Path literal */
     PVIP_NODE_TW_PACKAGE, /* $?PACKAGE */

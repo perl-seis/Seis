@@ -125,13 +125,13 @@ $*EXECUTABLE_NAME
 --- code
 $!x
 --- expected
-(statements (public_attribute "x"))
+(statements (attribute_variable "$!x"))
 
 ===
 --- code
 $.x
 --- expected
-(statements (private_attribute "x"))
+(statements (attribute_variable "$.x"))
 
 ===
 --- code
