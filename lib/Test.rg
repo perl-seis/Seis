@@ -75,6 +75,10 @@ sub eval_exception($code) {
     $!;
 }
 
+sub done() {
+    say("1..$cnt");
+}
+
 END {
     exit 1 if $failed > 0;
 }
