@@ -42,5 +42,10 @@ sub add_public_attribute {
     );
 }
 
+sub add_private_attribute {
+    my ($self, $name) = @_;
+    push @{$self->{private_attribute_names}}, $name;
+}
+
 1;
 

@@ -582,7 +582,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_PERL5_REGEXP) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_PERL5_REGEXP is not implemented")
     } elsif ($type == PVIP_NODE_TRUE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TRUE is not implemented")
+        '(boolean::true())'
     } elsif ($type == PVIP_NODE_TW_VM) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_VM is not implemented")
     } elsif ($type == PVIP_NODE_HAS) {
@@ -635,7 +635,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_REGEXP_MATCH) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_SPECIAL_VARIABLE_REGEXP_MATCH is not implemented")
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_EXCEPTIONS) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_SPECIAL_VARIABLE_EXCEPTIONS is not implemented")
+        '$@';
     } elsif ($type == PVIP_NODE_ENUM) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_ENUM is not implemented")
     } elsif ($type == PVIP_NODE_NUM_CMP) {
@@ -661,7 +661,7 @@ sub do_compile {
         sprintf(q!"\N{%s}"!, $v);
     } elsif ($type == PVIP_NODE_STUB) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STUB is not implemented")
-    } elsif ($type == PVIP_NODE_EXPORTABLE) {
+    } elsif ($type == PVIP_NODE_EXPORT) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_EXPORTABLE is not implemented")
     } elsif ($type == PVIP_NODE_PARAM) {
         # (params (param (nop) (variable "$n") (nop)))
