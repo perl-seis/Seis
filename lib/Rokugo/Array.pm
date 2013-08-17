@@ -6,6 +6,7 @@ use 5.010_001;
 
 sub pop:method { CORE::pop $_[0] }
 sub push:method { CORE::push $_[0], $_[1] }
+sub unshift:method { CORE::unshift $_[0], $_[1] }
 sub elems:method { 0+@{$_[0]} }
 
 # is(([+] (1..999).grep( { $_ % 3 == 0 || $_ % 5 == 0 } )), 233168, 'Project Euler #1');
@@ -22,6 +23,23 @@ sub join {
 
 sub WHAT {
     Rokugo::Class->new(name => 'Array');
+}
+
+sub map:method {
+    my ($self, $code) = @_;
+    if (wantarray) {
+        map { $code->() } @$self;
+    } else {
+        [map { $code->() } @$self];
+    }
+}
+
+sub perl {
+    local $Data::Dumper::Terse = 1;
+    local $Data::Dumper::Useqq = 1;
+    local $Data::Dumper::Purity = 1;
+    local $Data::Dumper::Indent = 0;
+    Data::Dumper::Dumper($_[0]);
 }
 
 1;

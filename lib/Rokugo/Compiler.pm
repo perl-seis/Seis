@@ -168,9 +168,15 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_VARIABLE) {
         $v;
     } elsif ($type == PVIP_NODE_MY) {
-        sprintf('my (%s)',
-            join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
-        );
+        if (@$v == 1) {
+            sprintf('my %s',
+                $self->do_compile($v->[0])
+            );
+        } else {
+            sprintf('my (%s)',
+                join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
+            );
+        }
     } elsif ($type == PVIP_NODE_OUR) {
         my @vars = map { $self->do_compile($_) } @$v;
         sprintf('our (%s)',
