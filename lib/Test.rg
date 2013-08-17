@@ -11,7 +11,12 @@ sub proclaim($cond, $desc) {
         $failed++;
     }
     $cnt++;
-    print "ok $cnt\n";
+    print "ok $cnt";
+    if defined $desc {
+        print " - $desc\n";
+    } else {
+        print "\n";
+    }
     return $cond;
 }
 
@@ -23,8 +28,8 @@ sub nok($cond, $desc=undef) is export {
     proclaim(!$cond, $desc);
 }
 
-sub is($x,$y) is export {
-    proclaim($x eq $y);
+sub is($x,$y, $desc=undef) is export {
+    proclaim($x eq $y, $desc);
 }
 
 sub isa_ok($x, $y, $desc=undef) is export {

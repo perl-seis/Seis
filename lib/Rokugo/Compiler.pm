@@ -112,6 +112,11 @@ sub do_compile {
                     $self->do_compile($v->[0]),
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'elems') {
+                # TODO You may optimize this function... elems(3) can be caluculate while compilation time.
+                sprintf('Rokugo::Runtime::builtin_elems(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'eval') {
                 sprintf('Rokugo::Runtime::builtin_eval(%s)',
                     $self->do_compile($v->[1]),
@@ -178,9 +183,12 @@ sub do_compile {
             $self->do_compile($v->[1], G_ARRAY),
         );
     } elsif ($type == PVIP_NODE_LIST_ASSIGNMENT) {
+                warn $self->is_list_lvalue($v->[0]);
         sprintf('%s=(%s)',
             $self->do_compile($v->[0]),
-            $self->do_compile($v->[1], G_ARRAY),
+            $self->do_compile($v->[1],
+                $self->is_list_lvalue($v->[0]) ? G_ARRAY : G_SCALAR
+            ),
         );
     } elsif ($type == PVIP_NODE_STRING_CONCAT) {
         sprintf('(%s).(%s)',
@@ -259,9 +267,16 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_ELSIF) {
         sprintf('elsif (%s) { %s }', $self->do_compile($v->[0]), $self->do_compile($v->[1]));
     } elsif ($type == PVIP_NODE_LIST) {
-        sprintf('(%s)',
-            join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
-        );
+        if ($gimme == G_SCALAR) {
+            # In scalar context, create arrayref automatically.
+            sprintf('[%s]',
+                join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
+            );
+        } else {
+            sprintf('(%s)',
+                join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
+            );
+        }
     } elsif ($type == PVIP_NODE_FOR) {
         my $iteratee = $self->do_compile($v->[0], G_ARRAY);
         if ($v->[1]->type == PVIP_NODE_LAMBDA) {
@@ -626,7 +641,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_PID) {
         '($$)';
     } elsif ($type == PVIP_NODE_TW_PERLVER) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_PERLVER is not implemented")
+        '6'
     } elsif ($type == PVIP_NODE_TW_OSVER) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_OSVER is not implemented")
     } elsif ($type == PVIP_NODE_TW_CWD) {
@@ -731,6 +746,33 @@ sub compile_string{
     local $Data::Dumper::Purity = 1;
     local $Data::Dumper::Indent = 0;
     Data::Dumper::Dumper(Encode::decode_utf8($v));
+}
+
+sub is_list_lvalue {
+    my ($self, $node) = @_;
+    if ($node->category == PVIP_CATEGORY_CHILDREN) {
+        if (@{$node->value}==1) {
+            my $c = $node->value->[0];
+            if ($c->type == PVIP_NODE_VARIABLE && $c->value =~ /\A@/) {
+                # my @x = ...
+                1
+            } else {
+                # my $x = ...
+                0
+            }
+        } else {
+            1; # my ($x, $y) = ...
+        }
+    } else {
+        # @x = ...
+        if ($node->type == PVIP_NODE_VARIABLE && $node->value =~ /\A@/) {
+            # my @x = ...
+            1
+        } else {
+            # my $x = ...
+            0
+        }
+    }
 }
 
 1;

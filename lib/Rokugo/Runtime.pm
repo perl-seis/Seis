@@ -38,5 +38,7 @@ sub builtin_eval {
     return $ret;
 }
 
+sub builtin_elems { 0+@_ }
+
 1;
 
