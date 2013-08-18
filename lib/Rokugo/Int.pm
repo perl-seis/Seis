@@ -37,5 +37,7 @@ sub defined { 1 }
 
 sub chr: method { CORE::chr($_[0]) }
 
+sub rand:method { CORE::rand($_[0]) }
+
 1;
 
