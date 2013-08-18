@@ -23,6 +23,7 @@ our $HEADER = <<'...';
 package main;
 use strict;
 use 5.014_001;
+no if $] >= 5.018, warnings => "experimental::smartmatch";
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use List::Util qw(min max);
 use Rokugo::Runtime;
@@ -41,7 +42,7 @@ sub compile {
     local $self->{filename} = $filename;
     my $parser = Perl6::PVIP->new();
     my $node = $parser->parse_string($src)
-        or Rokugo::Exception::ParsingError->throw($parser->errstr);
+        or Rokugo::Exception::ParsingError->throw("Can't parse $filename:\n"  . $parser->errstr);
     return join('',
         $HEADER,
         qq{#line 1 "$filename"\n},
@@ -508,6 +509,7 @@ sub do_compile {
                 PVIP_NODE_STRLT() => 'lt',
                 PVIP_NODE_STRLE() => 'le',
                 PVIP_NODE_EQV()   => 'eq', # TODO
+                PVIP_NODE_SMART_MATCH()   => '~~',
             }->{$type};
             unless ($op) {
                 Rokugo::Exception::NotImplemented->throw(sprintf "PVIP_NODE_%s is not implemented in chaning", $type)
@@ -612,13 +614,13 @@ sub do_compile {
             $self->do_compile($v->[2]),
         );
     } elsif ($type == PVIP_NODE_REGEXP) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_REGEXP is not implemented")
+        $self->compile_regexp($v);
     } elsif ($type == PVIP_NODE_SMART_MATCH) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_SMART_MATCH is not implemented")
     } elsif ($type == PVIP_NODE_NOT_SMART_MATCH) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_NOT_SMART_MATCH is not implemented")
     } elsif ($type == PVIP_NODE_PERL5_REGEXP) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_PERL5_REGEXP is not implemented")
+        sprintf('qr!%s!', $v);
     } elsif ($type == PVIP_NODE_TRUE) {
         '(boolean::true())'
     } elsif ($type == PVIP_NODE_TW_VM) {
@@ -667,7 +669,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_CMP) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_CMP is not implemented")
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_REGEXP_MATCH) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_SPECIAL_VARIABLE_REGEXP_MATCH is not implemented")
+        '@Rokugo::Runtime::REGEXP_MATCH'
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_EXCEPTIONS) {
         '$@';
     } elsif ($type == PVIP_NODE_ENUM) {
@@ -797,6 +799,23 @@ sub is_list_lvalue {
             0
         }
     }
+}
+
+sub compile_regexp {
+    my ($class, $regexp) = @_;
+    my $ret = '';
+    while (length($regexp)) {
+        if ($regexp =~ s/\A<alpha>//) {
+            $ret .= '\p{PosixAlpha}';
+        } elsif ($regexp =~ s/\A +//) {
+            next;
+        } elsif ($regexp =~ s/\A!//) {
+            $ret .= '\!';
+        } elsif ($regexp =~ s/\A(.)//) {
+            $ret .= $1;
+        }
+    }
+    sprintf('qr!%s!sxp', $ret);
 }
 
 1;

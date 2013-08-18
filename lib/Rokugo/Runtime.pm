@@ -43,5 +43,26 @@ sub builtin_eval {
 
 sub builtin_elems { 0+@_ }
 
+{
+    package Rokugo::Match;
+    sub DESTROY { }
+    sub TIEARRAY {
+        my $class = shift;
+        bless {}, $class;
+    }
+    sub FETCHSIZE {
+        1 + @-;
+    }
+    sub FETCH($$) {
+        my ($self, $index) = @_;
+        return ${^MATCH} if $index == 0;
+        return $-[$index-1];
+    }
+}
+
+# This variable emulates $/ in Perl6.
+our @REGEXP_MATCH;
+tie @REGEXP_MATCH, 'Rokugo::Match';
+
 1;
 

@@ -15,7 +15,8 @@ my $compiler = Rokugo::Compiler->new();
 
 unshift @INC, sub {
     my ($self, $fname) = @_;
-    (my $rg_fname = $fname) =~ s!\.pm\z!\.rg!;
+    (my $rg_fname = $fname) =~ s!\.pm\z!\.rg!
+        or return;
     for my $inc (@INC) {
         next if ref $inc;
         my $real = File::Spec->catfile($inc, $rg_fname);
@@ -83,6 +84,16 @@ But it's useful because perl6's syntax is sane.
 
 c<<end (1,2,3)>> and C<<end(1,2,3)>> is a different thing.
 But PVIP handles these things are same.
+
+=head1 WHY ROKUGO REQUIRES Perl 5.10+?
+
+=over 4
+
+=item //p flag
+
+//p flag was introduced at 5.10. It's needed by regexp operation.
+
+=back
 
 =head1 WHY ROKUGO REQUIRES Perl 5.16?
 
