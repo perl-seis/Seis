@@ -34,6 +34,15 @@ sub map:method {
     }
 }
 
+sub keys:method {
+    my $self = shift;
+    if (wantarray) {
+        CORE::keys(@$self);
+    } else {
+        [CORE::keys(@$self)];
+    }
+}
+
 sub perl {
     local $Data::Dumper::Terse = 1;
     local $Data::Dumper::Useqq = 1;
@@ -41,6 +50,8 @@ sub perl {
     local $Data::Dumper::Indent = 0;
     Data::Dumper::Dumper($_[0]);
 }
+
+sub Bool { !!@{$_[0]} }
 
 1;
 
