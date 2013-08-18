@@ -113,6 +113,16 @@ Then, rokugo giving ups some features on Perl 6.
 
 If you have any ideas to support these things without performance issue, patches welcome(I guess most of features can fix if you are XS hacker).
 
+=head1 Compiling regeular expression is slow.
+
+It can be optimizable.
+
+=head1 1..* was not supported.
+
+You can implement this by dankogai's hack.
+
+http://blog.livedoor.jp/dankogai/archives/50839189.html
+
 =head2 Compilation speed is optimizable
 
 You can rewrite code generator to generate B tree directly.
