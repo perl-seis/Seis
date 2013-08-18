@@ -120,7 +120,7 @@ __END__
 ===
 --- code: my $n := 3
 --- expected
-(statements (bind (my (variable "$n")) (int 3)))
+(statements (bind (my (nop) (variable "$n")) (int 3)))
 
 === test( '"H" ~ "M"', string_concat(string("H"), string("M")));
 --- code: "H" ~ "M"
@@ -257,19 +257,7 @@ for @a { 1; }
 --- code
 my $i=3;
 --- expected
-(statements
-    (list_assignment (my (variable "$i"))
-          (int "3"))
-)
-
-===
---- code
-my $i=3;
---- expected
-(statements
-    (list_assignment (my (variable "$i"))
-          (int "3"))
-)
+(statements (list_assignment (my (nop) (variable "$i")) (int 3)))
 
 ===
 --- code

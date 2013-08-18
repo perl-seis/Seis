@@ -133,6 +133,8 @@ statement =
             | bl:block ';'*
             | 'END' - b:block { $$ = PVIP_node_new_children1(PVIP_NODE_END, b) }
             | 'BEGIN' - b:block { $$ = PVIP_node_new_children1(PVIP_NODE_BEGIN, b) }
+            | 'KEEP' ![-a-zA-Z0-9_] - e:expr { $$ = PVIP_node_new_children1(PVIP_NODE_KEEP, e); }
+            | 'UNDO' ![-a-zA-Z0-9_] - e:expr { $$ = PVIP_node_new_children1(PVIP_NODE_UNDO, e); }
             | b:normal_or_postfix_stmt { $$ = b; }
             | ';'+ {
                 $$ = PVIP_node_new_children(PVIP_NODE_NOP);
@@ -258,14 +260,15 @@ paren_args = '(' - a:expr - ','? - ')' {
     }
     | '(' - ')' { $$ = PVIP_node_new_children(PVIP_NODE_ARGS); }
 
-bare_args = a:expr {
-        if (a->type == PVIP_NODE_LIST) {
-            $$ = a;
-            PVIP_node_change_type($$, PVIP_NODE_ARGS);
-        } else {
-            $$ = PVIP_node_new_children1(PVIP_NODE_ARGS, a);
+bare_args = a:loose_unary_expr {
+        $$ = PVIP_node_new_children1(PVIP_NODE_ARGS, a);
+        a=$$;
+    } (
+        - ',' - b:loose_unary_expr {
+            PVIP_node_push_child(a, b);
+            $$=a;
         }
-    }
+    )*
 
 expr = sequencer_expr
 
@@ -402,7 +405,7 @@ funcall =
 
 #  L  Named unary       temp let
 named_unary_expr =
-    'my' ws+ a:junctive_or_expr { $$ = PVIP_node_new_children1(PVIP_NODE_MY, a); }
+    {type=NULL; } 'my' ws+ type:ident? - a:junctive_or_expr { $$ = PVIP_node_new_children2(PVIP_NODE_MY, MAYBE(type), a); }
     | 'our' ws+ a:junctive_or_expr { $$ = PVIP_node_new_children1(PVIP_NODE_OUR, a); }
     | !reserved i:ident ws+ a:bare_args { $$ = PVIP_node_new_children2(PVIP_NODE_FUNCALL, i, a); }
     | junctive_or_expr
@@ -736,7 +739,7 @@ qw_item = < [^ >\n]+ > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyl
 
 # TODO optimize
 funcdef =
-    'my' ws - f:funcdef { $$ = PVIP_node_new_children1(PVIP_NODE_MY, f); }
+    'my' ws - f:funcdef { $$ = PVIP_node_new_children2(PVIP_NODE_MY, NOP(), f); }
     | 'our' ws - f:funcdef { $$ = PVIP_node_new_children1(PVIP_NODE_OUR, f); }
     | 'sub' { p=NULL; e=NULL; } ws+ i:ident - '(' - p:params? - ')' - e:is_exportable? - b:block {
         if (!p) {
@@ -817,7 +820,7 @@ array =
     | '[' - ']' { $$ = PVIP_node_new_children(PVIP_NODE_ARRAY); }
 
 my = 
-    'my' ws+ v:variable { $$ = PVIP_node_new_children1(PVIP_NODE_MY, v); }
+    { type=NULL; } 'my' ws+ type:ident? - v:variable { $$ = PVIP_node_new_children2(PVIP_NODE_MY, MAYBE(type), v); }
     | 'my' ws+ '(' - v:bare_variables - ')' { $$ = PVIP_node_new_children1(PVIP_NODE_MY, v); }
     | 'our' ws+ v:variable { $$ = PVIP_node_new_children1(PVIP_NODE_OUR, v); }
 

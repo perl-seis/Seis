@@ -5,7 +5,7 @@ __END__
 --- code
 my ($k, $v);
 --- expected
-(statements (my (list (variable "$k") (variable "$v"))))
+(statements (my (nop) (list (variable "$k") (variable "$v"))))
 
 ===
 --- code

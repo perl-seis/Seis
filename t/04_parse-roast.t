@@ -34,7 +34,7 @@ try { 3 }
 --- code
 my %hash={a => 1};
 --- expected
-(statements (list_assignment (my (variable "%hash")) (hash (pair (string "a") (int 1)))))
+(statements (list_assignment (my (nop) (variable "%hash")) (hash (pair (string "a") (int 1)))))
 
 ===
 --- code
@@ -58,7 +58,7 @@ my %hash={a => 1};
 --- code
 my @a_o=<x y z>
 --- expected
-(statements (list_assignment (my (variable "@a_o")) (list (string "x") (string "y") (string "z"))))
+(statements (list_assignment (my (nop) (variable "@a_o")) (list (string "x") (string "y") (string "z"))))
 
 ===
 --- code

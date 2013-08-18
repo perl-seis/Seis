@@ -9,6 +9,8 @@
 extern "C" {
 #endif
 
+#define PVIP_VERSION_STRING "0.1.0"
+
 #define PVIP_FALSE 0
 #define PVIP_TRUE  1
 
@@ -183,6 +185,8 @@ typedef enum {
     PVIP_NODE_TW_C, /* $^c */
     PVIP_NODE_SO, /* so */
     PVIP_NODE_GCD, /* gcd */
+    PVIP_NODE_KEEP, /* KEEP */
+    PVIP_NODE_UNDO, /* UNDO */
 } PVIP_node_type_t;
 
 typedef enum {

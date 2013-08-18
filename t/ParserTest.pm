@@ -18,7 +18,10 @@ END {
             }
             my $got_sexp = parse_perl6($block->code);
             my $got = parse_sexp($got_sexp);
-            my $expected = parse_sexp($block->expected);
+            my $expected = parse_sexp(do {
+                my $e = $block->expected;
+                $e =~ /\S/ ? $e : '()';
+            });
             is_deeply($got, $expected, 'Test: ' . $block->code) or do {
                 $Data::Dumper::Sortkeys=1;
                 $Data::Dumper::Indent=1;

@@ -23,6 +23,13 @@ Interface stability
 
 It's unstable for now. We will change any interfaces without notice.
 
+Known bugs
+----------
+
+### `@a[4]:exists`
+
+pvip can't parse this thing corectly.
+
 Project status of pvip
 ----------------------
 
