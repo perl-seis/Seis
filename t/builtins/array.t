@@ -21,6 +21,7 @@ ok compile(q!<a b c d>.exists(2)!);
 ok compile(q!<a b c d>.exists(3)!);
 ok !compile(q!<a b c d>.exists(4)!);
 ok !compile(q!<a b c d>.exists(5)!);
+is_deeply compile(q![<d a c b>].sort!), [qw(a b c d)];
 
 done_testing;
 
