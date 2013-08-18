@@ -173,14 +173,25 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_VARIABLE) {
         $v;
     } elsif ($type == PVIP_NODE_MY) {
-        if (@$v == 1) {
-            sprintf('my %s',
-                $self->do_compile($v->[0])
-            );
+        if (@$v==1) {
+            # (my (list (variable "$a") (variable "$b") (variable "$c")))
+            if ($v->[0]->type == PVIP_NODE_LIST) {
+                sprintf('my (%s)',
+                    join(',', map { $self->do_compile($_) } @{$v->[0]->value})
+                );
+            } else {
+                die "NYI: " . $node->as_sexp
+            }
         } else {
-            sprintf('my (%s)',
-                join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
-            );
+            my ($type, $vars) = @$v;
+            if ($vars->type == PVIP_NODE_VARIABLE) {
+                # (my (nop) (variable "$i"))
+                sprintf('my %s',
+                    $vars->value
+                );
+            } else {
+                die "NYI: " . $node->as_sexp
+            }
         }
     } elsif ($type == PVIP_NODE_OUR) {
         my @vars = map { $self->do_compile($_) } @$v;
@@ -747,22 +758,38 @@ sub compile_string{
 
 sub is_list_lvalue {
     my ($self, $node) = @_;
-    if ($node->category == PVIP_CATEGORY_CHILDREN) {
-        if (@{$node->value}==1) {
-            my $c = $node->value->[0];
-            if ($c->type == PVIP_NODE_VARIABLE && $c->value =~ /\A[%@]/) {
+    my $is_list_var = sub {
+        my $c = shift;
+        return $c->type == PVIP_NODE_VARIABLE && $c->value =~ /\A[%@]/;
+    };
+    if ($node->type == PVIP_NODE_MY) {
+        # my, nop, list
+        # my, nop, var
+        if (@{$node->value}==2) {
+            my $c = $node->value->[1];
+            if ($is_list_var->($c)) {
                 # my @x = ...
+                1
+            } elsif ($c->type == PVIP_NODE_LIST) {
+                # my ($x, $y) = ...
                 1
             } else {
                 # my $x = ...
                 0
             }
+        } elsif (@{$node->value}==1) {
+            my $c = $node->value->[0];
+            if ($c->type == PVIP_NODE_LIST) {
+                1
+            } else {
+                0;
+            }
         } else {
-            1; # my ($x, $y) = ...
+            0;
         }
     } else {
         # @x = ...
-        if ($node->type == PVIP_NODE_VARIABLE && $node->value =~ /\A[%@]/) {
+        if ($is_list_var->($node)) {
             # my @x = ...
             1
         } else {
