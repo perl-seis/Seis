@@ -55,5 +55,7 @@ sub Bool { !!@{$_[0]} }
 
 sub end { @{$_[0]}-1 }
 
+sub exists:method { (0+@{$_[0]})>$_[1] }
+
 1;
 

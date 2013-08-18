@@ -54,6 +54,18 @@ It's only emulate perl6's syntax. Not semantics.
 
 But it's useful because perl6's syntax is sane.
 
+=head1 PROJECT PLANS
+
+=head2 Version 1.0 - Maybe production ready release
+
+=over 4
+
+=item Support basic Perl6 OOP features
+
+=item Support basic Perl6 regexp
+
+=back
+
 =head1 TODO
 
     Implement builtin methods
@@ -66,6 +78,11 @@ But it's useful because perl6's syntax is sane.
     pass the 200+ roast cases
     care the pairs
     my own virtual machine?
+
+=head2 Issues in PVIP
+
+c<<end (1,2,3)>> and C<<end(1,2,3)>> is a different thing.
+But PVIP handles these things are same.
 
 =head1 WHY ROKUGO REQUIRES Perl 5.16?
 
