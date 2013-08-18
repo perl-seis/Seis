@@ -15,5 +15,7 @@ sub WHAT {
     Rokugo::Class->new(name => 'Rat');
 }
 
+sub Int { CORE::int($_[0]) }
+
 1;
 
