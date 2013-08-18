@@ -53,5 +53,7 @@ sub perl {
 
 sub Bool { !!@{$_[0]} }
 
+sub end { @{$_[0]}-1 }
+
 1;
 
