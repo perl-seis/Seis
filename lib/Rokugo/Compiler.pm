@@ -472,11 +472,12 @@ sub do_compile {
         # (method (ident "bar") (nop) (statements))
         # TODO: support arguments
         # (method (ident "bar") (params (param (nop) (variable "$n") (nop))) (statements (mul (variable "$n") (int 3))))
+        my $name = $self->do_compile($v->[0]);
         join('',
-            'sub ' . $self->do_compile($v->[0]) . ' {',
+            'sub ' . $name . ' {',
             'my $self=shift;',
-            (map { 'my ' . $self->do_compile($_->value->[1]) . ' = shift;' } @{$v->[1]->value}),
-            'undef;',
+            $self->do_compile($v->[1]),
+            ';undef;',
             $self->do_compile($v->[2]),
             ';}'
         );
