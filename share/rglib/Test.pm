@@ -1,3 +1,4 @@
+# vim: ft=perl6
 my $failed = 0;
 my $num_of_tests_planned;
 my $num_of_tests_run = 0;
@@ -91,6 +92,10 @@ sub eval_exception($code) {
 
 sub done() {
     say("1..$num_of_tests_run");
+}
+
+sub pass($reason='passed') {
+    proclaim(1, $reason);
 }
 
 END {
