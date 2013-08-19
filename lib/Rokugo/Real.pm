@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use utf8;
 use 5.010_001;
+use POSIX ();
 
 sub perl { $_[0] }
 
@@ -16,6 +17,7 @@ sub WHAT {
 }
 
 sub Int { CORE::int($_[0]) }
+sub floor { POSIX::floor($_[0]) }
 
 1;
 
