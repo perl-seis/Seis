@@ -81,6 +81,12 @@ $/
 
 ===
 --- code
+$*OSVER
+--- expected
+(statements (tw_osver))
+
+===
+--- code
 $*OS
 --- expected
 (statements (tw_os))
