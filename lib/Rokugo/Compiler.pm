@@ -314,7 +314,7 @@ sub do_compile {
             );
         } else {
             sprintf('(%s)',
-                join(',', map { "($_)" } map { $self->do_compile($_) } @$v)
+                join(',', map { "($_)" } map { $self->do_compile($_, G_ARRAY) } @$v)
             );
         }
     } elsif ($type == PVIP_NODE_FOR) {
@@ -360,15 +360,22 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_CLARGS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_CLARGS is not implemented")
     } elsif ($type == PVIP_NODE_HASH) {
-        '{' . join(',', map { $self->do_compile($_) } @$v) . '}';
+        '{' . join(',', map { $self->do_compile($_, G_ARRAY) } @$v) . '}';
     } elsif ($type == PVIP_NODE_PAIR) {
-        my $key = $v->[0]->type == PVIP_NODE_IDENT
-            ? $self->compile_string($v->[0]->value)
-            : $self->do_compile($v->[0]);
-        sprintf('(%s)=>scalar(%s)',
-            $key,
-            $self->do_compile($v->[1]),
-        );
+        if ($gimme == G_SCALAR) {
+            sprintf('Rokugo::Pair->_new(scalar(%s),scalar(%s))',
+                $self->do_compile($v->[0]),
+                $self->do_compile($v->[1]),
+            );
+        } else {
+            my $key = $v->[0]->type == PVIP_NODE_IDENT
+                ? $self->compile_string($v->[0]->value)
+                : $self->do_compile($v->[0]);
+            sprintf('(%s)=>scalar(%s)',
+                $key,
+                $self->do_compile($v->[1]),
+            );
+        }
     } elsif ($type == PVIP_NODE_ATKEY) {
         if ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A%/) {
             my $target = $self->do_compile($v->[0]);
