@@ -699,7 +699,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_UNARY_FLATTEN_OBJECT) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_FLATTEN_OBJECT is not implemented")
     } elsif ($type == PVIP_NODE_COMPLEX) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_COMPLEX is not implemented")
+        sprintf('Rokugo::Complex->_new(%s)', $self->compile_string($v));
     } elsif ($type == PVIP_NODE_ROLE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_ROLE is not implemented")
     } elsif ($type == PVIP_NODE_IS) {
