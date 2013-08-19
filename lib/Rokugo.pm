@@ -35,13 +35,13 @@ unshift @INC, sub {
 1;
 __END__
 
-=for stopwords transpiler rokugo
+=for stopwords transpiler rokugo Perl6ish
 
 =encoding utf-8
 
 =head1 NAME
 
-Rokugo - Perl6 on Perl5
+Rokugo - Perl6ish syntax on Perl5
 
 =head1 SYNOPSIS
 
