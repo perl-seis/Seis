@@ -654,7 +654,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_PERLVER) {
         '6'
     } elsif ($type == PVIP_NODE_TW_OSVER) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_OSVER is not implemented")
+       'do {require Config; $Config::Config{osvers} }';
     } elsif ($type == PVIP_NODE_TW_CWD) {
         '(Cwd::getcwd())'
     } elsif ($type == PVIP_NODE_TW_EXECUTABLE_NAME) {
