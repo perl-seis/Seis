@@ -2,7 +2,7 @@ package Rokugo::Str;
 use strict;
 use warnings;
 use utf8;
-use 5.010_001;
+use 5.012_001;
 use Data::Dumper ();
 use feature 'fc';
 
@@ -29,6 +29,16 @@ sub lines {
     my ($self, $n) = @_;
     my @lines = split /\n/, $self;
     $n ? [@lines[0..$n-1]] : \@lines;
+}
+
+# Generate new IO object.
+# IO.new(ins => 0, chomp => Bool::True, path => "/tmp/")
+sub IO {
+    if (@_==1) {
+        Rokugo::IO->_new($_[0]);
+    } else {
+        ...
+    }
 }
 
 1;

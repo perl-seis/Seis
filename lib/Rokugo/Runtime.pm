@@ -18,6 +18,7 @@ use Rokugo::Undef;
 use Rokugo::Buf;
 use Rokugo::Whatever;
 use Rokugo::Pair;
+use Rokugo::IO;
 use Rokugo::IO::Path;
 
 use Rokugo::BuiltinFunctions;

@@ -98,6 +98,10 @@ sub pass($reason='passed') {
     proclaim(1, $reason);
 }
 
+sub diag($msg) {
+    $*ERR.say("# " ~ $msg);
+}
+
 END {
     exit 1 if $failed > 0;
 }
