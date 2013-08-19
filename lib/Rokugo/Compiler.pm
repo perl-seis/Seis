@@ -695,7 +695,10 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_ENUM) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_ENUM is not implemented")
     } elsif ($type == PVIP_NODE_NUM_CMP) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_NUM_CMP is not implemented")
+        sprintf('(%s)<=>(%s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]),
+        );
     } elsif ($type == PVIP_NODE_UNARY_FLATTEN_OBJECT) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_FLATTEN_OBJECT is not implemented")
     } elsif ($type == PVIP_NODE_COMPLEX) {
