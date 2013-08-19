@@ -40,7 +40,7 @@ sub builtin_eval {
     my $compiled = $compiler->compile($code);
     my $ret = eval $compiled;
     if ($@) {
-        Rokugo::Exception::CompilationFailed->new("$@");
+        Rokugo::Exception::CompilationFailed->throw("$@");
     }
     return $ret;
 }
