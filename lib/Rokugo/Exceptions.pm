@@ -16,5 +16,8 @@ use parent qw(Exception::Tiny);
 package Rokugo::Exception::CompilationFailed;
 use parent qw(Exception::Tiny);
 
+package Rokugo::Exception::ArgumentCount;
+use parent qw(Exception::Tiny);
+
 1;
 

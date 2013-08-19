@@ -331,7 +331,29 @@ sub do_compile {
         $ret;
     } elsif ($type == PVIP_NODE_PARAMS) {
         # (params (param (nop) (variable "$n") (nop)))
-        join(";", map { $self->do_compile($_) } @$v ) . ";undef;"
+        my $ret = '';
+        my $is_vargs = 0;
+        my $min_args = 0;
+        my $max_args = 0;
+        for my $param (@$v) {
+            $ret .= $self->do_compile($param) . ";";
+            if ($param->value->[0]->type == PVIP_NODE_VARGS) {
+                $is_vargs++;
+            } else {
+                if ($param->value->[2] == PVIP_NODE_NOP) {
+                    # no default value.
+                    $min_args++;
+                    $max_args++;
+                } else {
+                    # has default value.
+                    $max_args++;
+                }
+            }
+        }
+        unless ($is_vargs) {
+            $ret .= sprintf('Rokugo::Exception::ArgumentCount->throw("Invalid argument count(Expected %d to %d but " . (0+@_) . ")") unless %d <= @_ && @_<=%d;', $min_args, $max_args, $min_args, $max_args);
+        }
+        $ret .= "undef;";
     } elsif ($type == PVIP_NODE_PARAM) {
         # (params (param (nop) (variable "$n") (nop)))
         # (param (vargs (variable "@a")))
