@@ -187,7 +187,7 @@ use_stmt =
     )?
     eat_terminator
 
-pkg_name = < [a-zA-Z] [a-zA-Z0-9]* ( '::' [a-zA-Z0-9]+ )* > {
+pkg_name = < [a-zA-Z] [a-zA-Z0-9_]* ( '::' [a-zA-Z0-9_]+ )* > {
     $$ = PVIP_node_new_string(PVIP_NODE_IDENT, yytext, yyleng);
 }
 
