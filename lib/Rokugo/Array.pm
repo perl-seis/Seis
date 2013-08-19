@@ -28,9 +28,9 @@ sub WHAT {
 sub map:method {
     my ($self, $code) = @_;
     if (wantarray) {
-        map { $code->() } @$self;
+        map { $code->($_) } @$self;
     } else {
-        [map { $code->() } @$self];
+        [map { $code->($_) } @$self];
     }
 }
 

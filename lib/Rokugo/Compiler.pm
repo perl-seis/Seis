@@ -184,6 +184,8 @@ sub do_compile {
                 'Rokugo::Hash::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'Array') {
                 'Rokugo::Array::'
+            } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'IO::Path') {
+                'Rokugo::IO::Path::'
             } else {
                 $self->do_compile($_)
             }
@@ -287,6 +289,21 @@ sub do_compile {
 
         my $method = $self->do_compile($v->[1]);
         my $params = defined($v->[2]) ? $self->do_compile($v->[2]) : '';
+
+        if ($v->[0]->type == PVIP_NODE_WHATEVER) {
+            if ($method =~ /-/) {
+                return sprintf('(sub { Rokugo::Runtime::call_method(shift, %s, %s) })',
+                    $method,
+                    $params
+                );
+            } else {
+                return sprintf('(sub { shift->%s(%s) })',
+                    $method,
+                    $params
+                );
+            }
+        }
+
         if ($method =~ /-/) {
             # Method name contains hyphen character.
             # It's not perl5 friendly.
@@ -705,7 +722,10 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_FUNCREF) {
         sprintf('\&%s', $v);
     } elsif ($type == PVIP_NODE_PATH) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_PATH is not implemented")
+        use Data::Dumper; warn Dumper($v);
+        sprintf('Rokugo::IO::Path->new(%s)',
+            $self->compile_string($node)
+        );
     } elsif ($type == PVIP_NODE_TW_PACKAGE) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_PACKAGE is not implemented")
     } elsif ($type == PVIP_NODE_TW_CLASS) {
