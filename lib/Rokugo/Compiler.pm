@@ -27,6 +27,7 @@ no if $] >= 5.018, warnings => "experimental::smartmatch";
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use List::Util qw(min max);
 use Rokugo::Runtime;
+use POSIX qw(floor);
 no warnings 'misc', 'void';
 
 ...
@@ -811,8 +812,10 @@ sub compile_regexp {
             next;
         } elsif ($regexp =~ s/\A!//) {
             $ret .= '\!';
-        } elsif ($regexp =~ s/\A(.)//) {
+        } elsif ($regexp =~ s/\A(.)//s) {
             $ret .= $1;
+        } else {
+            die "Should not reache here: " . Data::Dumper::Dumper($regexp);
         }
     }
     sprintf('qr!%s!sxp', $ret);
