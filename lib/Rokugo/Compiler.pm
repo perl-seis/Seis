@@ -760,7 +760,9 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_REGEXP_MATCH) {
         '@Rokugo::Runtime::REGEXP_MATCH'
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_EXCEPTIONS) {
-        '$@';
+        # Perl5's $@ contains "" if there is no errors.
+        # It's incompatible with Perl6.
+        '($@ ? $@ : undef)';
     } elsif ($type == PVIP_NODE_ENUM) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_ENUM is not implemented")
     } elsif ($type == PVIP_NODE_NUM_CMP) {
