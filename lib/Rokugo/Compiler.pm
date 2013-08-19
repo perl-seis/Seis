@@ -22,8 +22,10 @@ use constant {
 our $HEADER = <<'...';
 package main;
 use strict;
-use 5.014_001;
-no if $] >= 5.018, warnings => "experimental::smartmatch";
+use 5.018_000;
+no warnings "experimental::smartmatch";
+no warnings "experimental::lexical_subs";
+use feature "lexical_subs";
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use List::Util qw(min max);
 use Rokugo::Runtime;
@@ -182,7 +184,7 @@ sub do_compile {
                     join(',', map { $self->do_compile($_) } @{$v->[0]->value})
                 );
             } else {
-                die "NYI: " . $node->as_sexp
+                die "NYI: (1)" . $node->as_sexp
             }
         } else {
             my ($type, $vars) = @$v;
@@ -191,6 +193,9 @@ sub do_compile {
                 sprintf('my %s',
                     $vars->value
                 );
+            } elsif ($vars->type == PVIP_NODE_FUNC) {
+                # (my (nop) (func (ident "vtest") (params (param (nop) (variable "$cmp") (nop)) (param (vargs (variable "@v")))) (nop) (block (statements (list_assignment (my (nop) (variable "$x")) (funcall (ident "shift") (args (variable "@v")))) (while (variable "@v") (block (statements (list_assignment (my (nop) (variable "$y")) (funcall (ident "shift") (args (variable "@v")))) (funcall (ident "is") (args (cmp (methodcall (ident "Version") (ident "new") (args (variable "$x"))) (methodcall (ident "Version") (ident "new") (args (variable "$y")))) (variable "$cmp") (string_concat (string_concat (string_concat (string_concat (string_concat (string "") (variable "$x")) (string " cmp ")) (variable "$y")) (string " is ")) (variable "$cmp")))) (list_assignment (variable "$x") (variable "$y")))))))))
+                sprintf('my %s', $self->do_compile($vars));
             } else {
                 die "NYI: " . $node->as_sexp
             }
@@ -679,7 +684,10 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_VALUE_IDENTITY) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_VALUE_IDENTITY is not implemented")
     } elsif ($type == PVIP_NODE_CMP) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_CMP is not implemented")
+        sprintf('(%s)cmp(%s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]),
+        );
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_REGEXP_MATCH) {
         '@Rokugo::Runtime::REGEXP_MATCH'
     } elsif ($type == PVIP_NODE_SPECIAL_VARIABLE_EXCEPTIONS) {

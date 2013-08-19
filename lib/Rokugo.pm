@@ -99,6 +99,16 @@ But it's useful because perl6's syntax is sane.
 c<<end (1,2,3)>> and C<<end(1,2,3)>> is a different thing.
 But PVIP handles these things are same.
 
+=head1 WHY ROKUGO REQUIRES Perl 5.18+?
+
+=over 4
+
+=item Lexical subs
+
+Perl6 supports lexical subs.
+
+=back
+
 =head1 WHY ROKUGO REQUIRES Perl 5.10+?
 
 =over 4
