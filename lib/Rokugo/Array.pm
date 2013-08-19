@@ -42,6 +42,14 @@ sub keys:method {
         [CORE::keys(@$self)];
     }
 }
+sub values:method {
+    my $self = shift;
+    if (wantarray) {
+        CORE::values(@$self);
+    } else {
+        [CORE::values(@$self)];
+    }
+}
 
 sub perl {
     local $Data::Dumper::Terse = 1;

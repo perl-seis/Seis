@@ -165,6 +165,19 @@ sub do_compile {
                 sprintf('+{%s}',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'keys') {
+                # (args (variable "@array"))
+                if (
+                    $v->[1]->type == PVIP_NODE_ARGS && @{$v->[1]->value}==1 && $v->[1]->value->[0]->type == PVIP_NODE_VARIABLE && $v->[1]->value->[0]->value =~ /\A\@/) {
+                    # keys(@a)
+                    sprintf('CORE::keys(%s)',
+                        $self->do_compile($v->[1]->value->[0], G_ARRAY),
+                    );
+                } else {
+                    sprintf('CORE::keys(%s)',
+                        $self->do_compile($v->[1]),
+                    );
+                }
             } else {
                 sprintf('%s(%s)',
                     $self->do_compile($v->[0]),
