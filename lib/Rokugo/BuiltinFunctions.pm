@@ -21,7 +21,7 @@ sub slurp {
 sub open :method {
     my $mode = @_==2 && $_[1]->key eq 'w' ? '>' : '<';
     CORE::open my $fh, $mode, $_[0];
-    return $fh;
+    return Rokugo::IO->_new_with_fh($_[0], $fh);
 }
 
 sub get :method {

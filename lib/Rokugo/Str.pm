@@ -41,5 +41,7 @@ sub IO {
     }
 }
 
+sub defined { 1 }
+
 1;
 

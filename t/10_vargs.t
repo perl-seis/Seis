@@ -13,5 +13,11 @@ my str $s = 'roads';
 slurpy($i, $s);
 ...
 
+is compile(<<'...'), 'a,b,c';
+sub foo(@a) { @a.join(",") }
+my @b=< a b c >;
+foo(@b)
+...
+
 done_testing;
 

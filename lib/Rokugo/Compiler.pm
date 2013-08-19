@@ -173,6 +173,19 @@ sub do_compile {
                 sprintf('+{%s}',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'push') {
+                # (funcall (ident "push") (args (variable "@a") (string "e")))
+                if (
+                    $v->[1]->type == PVIP_NODE_ARGS && @{$v->[1]->value}==2 && $v->[1]->value->[0]->type == PVIP_NODE_VARIABLE && $v->[1]->value->[0]->value =~ /\A\@/) {
+                    sprintf('CORE::push(%s,%s)',
+                        $self->do_compile($v->[1]->value->[0], G_ARRAY),
+                        $self->do_compile($v->[1]->value->[1]),
+                    );
+                } else {
+                    sprintf('CORE::push(%s)',
+                        $self->do_compile($v->[1]),
+                    );
+                }
             } elsif ($v->[0]->value eq 'keys') {
                 # (args (variable "@array"))
                 if (
@@ -369,7 +382,11 @@ sub do_compile {
             sprintf('%s;', $self->do_compile($v->[0]));
         } elsif (@$v==3) {
             # (param (ident "Int") (variable "$x") (nop))
-            sprintf('my %s=shift;', $self->do_compile($v->[1]));
+            if ($v->[1]->value =~ /\A\@/) {
+                sprintf('my %s=@_;', $self->do_compile($v->[1]));
+            } else {
+                sprintf('my %s=shift;', $self->do_compile($v->[1]));
+            }
         } else {
             die "Should not reach here : " . $node->as_sexp;
         }
