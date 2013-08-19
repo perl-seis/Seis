@@ -16,6 +16,7 @@ my $compiler = Rokugo::Compiler->new();
 
 @Rokugo::INC = do {
     my @inc;
+    unshift @inc, '.';
     unshift @inc, 'share/rglib/' if -d 'share/rglib/'; # while building?
     eval {
         unshift @inc, File::Spec->catdir(File::ShareDir::dist_dir('Rokugo'), 'rglib');

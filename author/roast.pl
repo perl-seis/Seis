@@ -10,6 +10,8 @@ use Time::HiRes qw(gettimeofday tv_interval);
 use LWP::UserAgent;
 use HTTP::Date;
 use TAP::Harness;
+use File::Spec;
+use File::pushd;
 
 system("./Build");
 system('cd ~/dev/roast/ && git reset HEAD --hard && git pull origin master');
@@ -17,13 +19,18 @@ my @tests = sort File::Find::Rule->file()
                               ->name( '*.t' )
                               ->in( glob('~/dev/roast/') );
 
-local $ENV{PERL5LIB} = 'lib/';
+local $ENV{PERL5LIB} = File::Spec->rel2abs('lib/');
+local $ENV{PERL_ROKUGO_LIB} = File::Spec->rel2abs('share/rglib/') . ':' . glob("~/dev/roast/packages/");
 my $t0 = [gettimeofday];
+my $rgbin = File::Spec->rel2abs('./blib/script/rg');
 
-my $harness = TAP::Harness->new({
-    exec => ['./blib/script/rg'],
-});
-my $aggregate = $harness->runtests(@tests);
+my $aggregate = do {
+    my $pushd = pushd(glob("~/dev/roast"));
+    my $harness = TAP::Harness->new({
+        exec => [$rgbin],
+    });
+    $harness->runtests(@tests);
+};
 my $passed = $aggregate->passed;
 my $failed = $aggregate->failed + $aggregate->parse_errors;
 
