@@ -29,11 +29,8 @@ my $compiler = Rokugo::Compiler->new();
 
 unshift @INC, sub {
     my ($self, $fname) = @_;
-    (my $rg_fname = $fname) =~ s!\.pm\z!\.rg!
-        or return;
     for my $inc (@Rokugo::INC) {
-        next if ref $inc;
-        my $real = File::Spec->catfile($inc, $rg_fname);
+        my $real = File::Spec->catfile($inc, $fname);
         next unless -f $real;
 
         open my $fh, '<', $real or die $!;
