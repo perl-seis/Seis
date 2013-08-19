@@ -179,6 +179,10 @@ This issue can solve with PP_check hack.
 
 Not yet implemented.
 
+=head2 Method name contains '-'
+
+Perl5 can't handles method name contains '-'.
+
 =head1 LICENSE
 
 Copyright (C) tokuhirom.

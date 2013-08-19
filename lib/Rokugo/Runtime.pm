@@ -20,6 +20,8 @@ use Rokugo::Whatever;
 use Rokugo::Pair;
 
 use Rokugo::BuiltinFunctions;
+use Scalar::Util ();
+use B ();
 
 {
     package # hide from PAUSE
@@ -83,6 +85,28 @@ package # hide frm PAUSE
     }
     sub basename {
         File::Basename::basename(${$_[0]});
+    }
+}
+
+# Normally, Rokugo doesn't call this method for calling methods.
+# It's only needed if the method name contains '-' character.
+sub call_method {
+    my ($invocant, $methodname, @args) = @_;
+    Carp::croak("Invocant is undefined.") unless defined $invocant;
+    if (Scalar::Util::blessed $invocant) {
+        my $code = $invocant->can($methodname);
+        @_ = ($invocant, @args);
+        goto $code;
+    } else {
+        my $flags = B::svref_2object(\$invocant)->FLAGS;
+        if ($flags | B::SVp_IOK) {
+            my $code = Rokugo::Int->can($methodname);
+            Carp::croak("Can't call method: $methodname") unless $code;
+            @_ = ($invocant, @args);
+            goto $code;
+        } else {
+            ...
+        }
     }
 }
 

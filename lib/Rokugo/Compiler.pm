@@ -271,7 +271,7 @@ sub do_compile {
             # Method name contains hyphen character.
             # It's not perl5 friendly.
             # TODO: throw better exception if the method is not exist.
-            sprintf('do { my $__rg_invocant=%s; my $__rg_code = $__rg_invocant->can("%s"); unless ($__rg_code) { ... } $__rg_code->($__rg_invocant, %s) }',
+            sprintf('Rokugo::Runtime::call_method(%s, "%s", %s)',
                 $invocant,
                 $method,
                 $params,
