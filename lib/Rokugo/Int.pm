@@ -39,14 +39,12 @@ sub chr: method { CORE::chr($_[0]) }
 
 sub rand:method { CORE::rand($_[0]) }
 
-use Sub::Name;
 {
     # Note.
     # I don't think Math::Prime::Util is the best solution to solve the 'is_prime' problem.
     # If you know the best module for this issue, patches welcome.
     # Small memory foot point is great. And if you can write a fast xs code, it's the best.
-    no strict 'refs';
-    *{"is-prime"} = subname 'is-prime', sub {
+    sub isーprime {
         require Math::Prime::Util;
         Math::Prime::Util::is_prime($_[0])
     };

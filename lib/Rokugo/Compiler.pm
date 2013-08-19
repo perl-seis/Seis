@@ -23,6 +23,7 @@ our $HEADER = <<'...';
 package main;
 use strict;
 use 5.018_000;
+use utf8;
 no warnings "experimental::smartmatch";
 no warnings "experimental::lexical_subs";
 use feature "lexical_subs";
@@ -203,6 +204,7 @@ sub do_compile {
             $self->do_compile($v->[1]),
         );
     } elsif ($type == PVIP_NODE_VARIABLE) {
+        $v =~ s!-!ー!g;
         $v;
     } elsif ($type == PVIP_NODE_MY) {
         if (@$v==1) {
@@ -219,7 +221,7 @@ sub do_compile {
             if ($vars->type == PVIP_NODE_VARIABLE) {
                 # (my (nop) (variable "$i"))
                 sprintf('my %s',
-                    $vars->value
+                    $self->do_compile($vars)
                 );
             } elsif ($vars->type == PVIP_NODE_FUNC) {
                 # (my (nop) (func (ident "vtest") (params (param (nop) (variable "$cmp") (nop)) (param (vargs (variable "@v")))) (nop) (block (statements (list_assignment (my (nop) (variable "$x")) (funcall (ident "shift") (args (variable "@v")))) (while (variable "@v") (block (statements (list_assignment (my (nop) (variable "$y")) (funcall (ident "shift") (args (variable "@v")))) (funcall (ident "is") (args (cmp (methodcall (ident "Version") (ident "new") (args (variable "$x"))) (methodcall (ident "Version") (ident "new") (args (variable "$y")))) (variable "$cmp") (string_concat (string_concat (string_concat (string_concat (string_concat (string "") (variable "$x")) (string " cmp ")) (variable "$y")) (string " is ")) (variable "$cmp")))) (list_assignment (variable "$x") (variable "$y")))))))))
@@ -290,36 +292,20 @@ sub do_compile {
         my $method = $self->do_compile($v->[1]);
         my $params = defined($v->[2]) ? $self->do_compile($v->[2]) : '';
 
+        $method =~ s!-!ー!g;
+
         if ($v->[0]->type == PVIP_NODE_WHATEVER) {
-            if ($method =~ /-/) {
-                return sprintf('(sub { Rokugo::Runtime::call_method(shift, %s, %s) })',
-                    $method,
-                    $params
-                );
-            } else {
-                return sprintf('(sub { shift->%s(%s) })',
-                    $method,
-                    $params
-                );
-            }
+            return sprintf('(sub { shift->%s(%s) })',
+                $method,
+                $params
+            );
         }
 
-        if ($method =~ /-/) {
-            # Method name contains hyphen character.
-            # It's not perl5 friendly.
-            # TODO: throw better exception if the method is not exist.
-            sprintf('Rokugo::Runtime::call_method(%s, "%s", %s)',
-                $invocant,
-                $method,
-                $params,
-            );
-        } else {
-            sprintf('%s->%s(%s)',
-                $invocant,
-                $method,
-                $params,
-            );
-        }
+        sprintf('%s->%s(%s)',
+            $invocant,
+            $method,
+            $params,
+        );
     } elsif ($type == PVIP_NODE_FUNC) {
         my $ret = 'sub ';
         $ret .= $self->do_compile($v->[0]);
