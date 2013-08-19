@@ -1,8 +1,19 @@
-my $cnt = 0;
 my $failed = 0;
+my $num_of_tests_planned;
+my $num_of_tests_run = 0;
 
 sub plan($n) is export {
+    $num_of_tests_planned = $n;
     say("1..$n");
+}
+
+sub skip($reason, $count=1) is export {
+    my $i = 1;
+    while $i <= $count { proclaim(1, "# SKIP " ~ $reason); $i = $i + 1; }
+}
+
+sub skip_rest($reason = '<unknown>') is export {
+    skip($reason, $num_of_tests_planned - $num_of_tests_run);
 }
 
 sub proclaim($cond, $desc) {
@@ -10,8 +21,8 @@ sub proclaim($cond, $desc) {
         print "not ";
         $failed++;
     }
-    $cnt++;
-    print "ok $cnt";
+    $num_of_tests_run++;
+    print "ok $num_of_tests_run";
     if defined $desc {
         print " - $desc\n";
     } else {
@@ -76,7 +87,7 @@ sub eval_exception($code) {
 }
 
 sub done() {
-    say("1..$cnt");
+    say("1..$num_of_tests_run");
 }
 
 END {
