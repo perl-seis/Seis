@@ -66,7 +66,7 @@ typedef struct {
 typedef struct {
     int line_number;
     PVIPNode *root;
-    int is_string;
+    int is_string; /* Parsing from string or file pointer. */
     PVIPParserStringState *str;
     FILE *fp;
 } PVIPParserContext;
