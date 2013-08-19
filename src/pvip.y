@@ -834,7 +834,7 @@ eat_terminator =
     (';' -) | end-of-file
 
 dec_number =
-    <[0-9]+ 'e' [0-9]+> {
+    <[0-9]+ ( '.' [0-9]+ )? 'e' [0-9]+> {
     $$ = PVIP_node_new_number(PVIP_NODE_NUMBER, yytext, yyleng);
 }
     | <([.][0-9]+)> {

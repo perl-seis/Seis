@@ -30,6 +30,14 @@ Known bugs
 
 pvip can't parse this thing corectly.
 
+### grammars
+
+pvip does not support grammer yet.
+
+### END => 3
+
+It should generate pair.
+
 Project status of pvip
 ----------------------
 
