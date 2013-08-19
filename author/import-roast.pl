@@ -16,7 +16,7 @@ while (<>) {
 
         my $srcpath = catfile($roast_base, $name);
         my $src = slurp($srcpath);
-        my $dstpath =  "t/roast/$name";
+        my $dstpath =  "t/spec/roast/$name";
         mkpath dirname($dstpath);
         open my $fh, '>', $dstpath;
         print $fh "#! ./blib/script/rg\n";
