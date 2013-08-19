@@ -723,7 +723,6 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_FUNCREF) {
         sprintf('\&%s', $v);
     } elsif ($type == PVIP_NODE_PATH) {
-        use Data::Dumper; warn Dumper($v);
         sprintf('Rokugo::IO::Path->new(%s)',
             $self->compile_string($node)
         );
