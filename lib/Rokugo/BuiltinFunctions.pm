@@ -18,5 +18,20 @@ sub slurp {
     }
 }
 
+sub open :method {
+    my $mode = @_==2 && $_[1]->key eq 'w' ? '>' : '<';
+    CORE::open my $fh, $mode, $_[0];
+    return $fh;
+}
+
+sub get :method {
+    my $stuff = shift;
+    my $line = <$stuff>;
+    if (defined $line) {
+        $line =~ s/\n//;
+    }
+    $line;
+}
+
 1;
 

@@ -13,8 +13,8 @@ sub _new {
     bless [$key, $value], $class;
 }
 
-sub key { $_->[0] }
-sub value { $_->[0] }
+sub key   { $_[0]->[0] }
+sub value { $_[0]->[1] }
 
 sub _match {
     my ($self, $stuff) = @_;

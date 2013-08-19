@@ -148,6 +148,14 @@ sub do_compile {
                         $self->do_compile($v->[1]),
                     );
                 }
+            } elsif ($v->[0]->value eq 'get') {
+                sprintf('Rokugo::BuiltinFunctions::get(%s)',
+                    $self->do_compile($v->[1]),
+                );
+            } elsif ($v->[0]->value eq 'open') {
+                sprintf('Rokugo::BuiltinFunctions::open(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'end') {
                 # TODO support the 'list' style.
                 sprintf('Rokugo::BuiltinFunctions::end(%s)',
