@@ -136,6 +136,10 @@ sub do_compile {
                 sprintf('Rokugo::Str::lines(%s)',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'slurp') {
+                sprintf('Rokugo::BuiltinFunctions::slurp(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'hash') {
                 sprintf('+{%s}',
                     $self->do_compile($v->[1]),

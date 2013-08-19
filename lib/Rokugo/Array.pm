@@ -64,5 +64,13 @@ sub sort:method {
     }
 }
 
+sub pick:method {
+    if (@_==1) {
+        $_[0]->[int rand(@{$_[0]})];
+    } else {
+        ...
+    }
+}
+
 1;
 
