@@ -22,6 +22,7 @@ use Rokugo::Pair;
 use Rokugo::BuiltinFunctions;
 use Scalar::Util ();
 use B ();
+use Cwd(); # for $*CWD
 
 {
     package # hide from PAUSE
