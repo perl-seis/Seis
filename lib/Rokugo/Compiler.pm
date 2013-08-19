@@ -268,6 +268,17 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_PARAMS) {
         # (params (param (nop) (variable "$n") (nop)))
         join(";", map { $self->do_compile($_) } @$v ) . ";undef;"
+    } elsif ($type == PVIP_NODE_PARAM) {
+        # (params (param (nop) (variable "$n") (nop)))
+        # (param (vargs (variable "@a")))
+        if (@$v==1) {
+            sprintf('%s;', $self->do_compile($v->[0]));
+        } elsif (@$v==3) {
+            # (param (ident "Int") (variable "$x") (nop))
+            sprintf('my %s=shift;', $self->do_compile($v->[1]));
+        } else {
+            die "Should not reach here : " . $node->as_sexp;
+        }
     } elsif ($type == PVIP_NODE_RETURN) {
         'return (' . join(',', map { "($_)" } map {$self->do_compile($_)} @$v) . ')';
     } elsif ($type == PVIP_NODE_ELSE) {
@@ -700,9 +711,6 @@ sub do_compile {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STUB is not implemented")
     } elsif ($type == PVIP_NODE_EXPORT) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_EXPORTABLE is not implemented")
-    } elsif ($type == PVIP_NODE_PARAM) {
-        # (params (param (nop) (variable "$n") (nop)))
-        sprintf('my %s=shift;', $self->do_compile($v->[1]));
     } elsif ($type == PVIP_NODE_BITWISE_OR) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BITWISE_OR is not implemented")
     } elsif ($type == PVIP_NODE_BITWISE_AND) {
@@ -710,7 +718,8 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_BITWISE_XOR) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BITWISE_XOR is not implemented")
     } elsif ($type == PVIP_NODE_VARGS) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_VARGS is not implemented")
+        # (vargs (variable "@a"))
+        sprintf('my %s = @_;', $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_TW_A) {
         '($Rokugo::Runtime::TW_A)';
     } elsif ($type == PVIP_NODE_TW_B) {
