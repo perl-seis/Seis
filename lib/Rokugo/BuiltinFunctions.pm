@@ -33,5 +33,23 @@ sub get :method {
     $line;
 }
 
+sub close:method {
+    my $stuff = shift;
+    if (UNIVERSAL::isa($stuff, 'Rokugo::IO')) {
+        $stuff->close;
+    } else {
+        CORE::close($stuff);
+    }
+}
+
+sub getc:method {
+    my $stuff = shift;
+    if (UNIVERSAL::isa($stuff, 'Rokugo::IO')) {
+        $stuff->getc;
+    } else {
+        CORE::getc($stuff);
+    }
+}
+
 1;
 

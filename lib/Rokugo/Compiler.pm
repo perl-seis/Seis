@@ -44,6 +44,7 @@ sub compile {
     my ($self, $src, $filename) = @_;
     $filename //= '-e';
     local $self->{filename} = $filename;
+    local $self->{newline} = 0;
     my $parser = Perl6::PVIP->new();
     my $node = $parser->parse_string($src)
         or Rokugo::Exception::ParsingError->throw("Can't parse $filename:\n"  . $parser->errstr);
@@ -199,6 +200,14 @@ sub do_compile {
                         $self->do_compile($v->[1]),
                     );
                 }
+            } elsif ($v->[0]->value eq 'getc') {
+                sprintf('Rokugo::BuiltinFunctions::getc(%s)',
+                    $self->do_compile($v->[1]),
+                );
+            } elsif ($v->[0]->value eq 'close') {
+                sprintf('Rokugo::BuiltinFunctions::close(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } else {
                 sprintf('%s(%s)',
                     $self->do_compile($v->[0]),

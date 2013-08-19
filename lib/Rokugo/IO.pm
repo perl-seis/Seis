@@ -32,5 +32,20 @@ sub get:method {
     <$fh>;
 }
 
+sub print:method {
+    my $self = shift;
+    print {$self->{fh}} shift;
+}
+
+sub close:method {
+    my $self = shift;
+    close $self->{fh};
+}
+
+sub getc:method {
+    my $self = shift;
+    getc $self->{fh};
+}
+
 1;
 
