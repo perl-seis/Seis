@@ -1,6 +1,7 @@
 %{
 
 #include "pvip.h"
+#include "pvip_private.h"
 #include <assert.h>
 
 #define YYSTYPE PVIPNode*
