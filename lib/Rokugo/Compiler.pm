@@ -124,9 +124,29 @@ sub do_compile {
                     $self->do_compile($v->[1]),
                 );
             } elsif ($v->[0]->value eq 'eval') {
-                sprintf('Rokugo::Runtime::builtin_eval(%s)',
-                    $self->do_compile($v->[1]),
-                );
+                my $is_perl5 = do {
+                    my @args = @{$v->[1]->value};
+                    if (@args==2) {
+                        my $pair = $args[1];
+                        if (
+                            $pair->value->[0]->value eq 'lang'
+                            && $pair->value->[1]->value eq 'perl5'
+                        ) {
+                            1;
+                        }
+                    } else {
+                        0;
+                    }
+                };
+                if ($is_perl5) {
+                    sprintf('CORE::eval(%s)',
+                        $self->do_compile($v->[1]->value->[0]),
+                    );
+                } else {
+                    sprintf('Rokugo::Runtime::builtin_eval(%s)',
+                        $self->do_compile($v->[1]),
+                    );
+                }
             } elsif ($v->[0]->value eq 'end') {
                 # TODO support the 'list' style.
                 sprintf('Rokugo::BuiltinFunctions::end(%s)',
@@ -633,7 +653,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TRY) {
         "eval " . $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_REF) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_REF is not implemented")
+        sprintf(q{\(%s)}, $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_MULTI) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_MULTI is not implemented")
     } elsif ($type == PVIP_NODE_UNARY_BOOLEAN) {
