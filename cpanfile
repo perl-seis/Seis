@@ -7,6 +7,7 @@ requires 'Caroline';
 requires 'Class::XSAccessor', 1.16;
 requires 'boolean';
 requires 'Math::BaseCnv';
+requires 'Sub::Name';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';

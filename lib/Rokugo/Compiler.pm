@@ -267,11 +267,22 @@ sub do_compile {
 
         my $method = $self->do_compile($v->[1]);
         my $params = defined($v->[2]) ? $self->do_compile($v->[2]) : '';
-        sprintf('%s->%s(%s)',
-            $invocant,
-            $method,
-            $params,
-        );
+        if ($method =~ /-/) {
+            # Method name contains hyphen character.
+            # It's not perl5 friendly.
+            # TODO: throw better exception if the method is not exist.
+            sprintf('do { my $__rg_invocant=%s; my $__rg_code = $__rg_invocant->can("%s"); unless ($__rg_code) { ... } $__rg_code->($__rg_invocant, %s) }',
+                $invocant,
+                $method,
+                $params,
+            );
+        } else {
+            sprintf('%s->%s(%s)',
+                $invocant,
+                $method,
+                $params,
+            );
+        }
     } elsif ($type == PVIP_NODE_FUNC) {
         my $ret = 'sub ';
         $ret .= $self->do_compile($v->[0]);
