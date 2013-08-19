@@ -268,19 +268,21 @@ sub do_compile {
             join(',', map { "($_)" } map { $self->do_compile($_, G_ARRAY) } @$v)
         );
     } elsif ($type == PVIP_NODE_ATPOS) {
+        my $invocant = $self->do_compile($v->[0]);
+        my $pos = $self->do_compile($v->[1]);
         if (
             ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A@/)
         ) {
             # @a[0]
             sprintf('(%s)[(%s)]',
-                $self->do_compile($v->[0]),
-                $self->do_compile($v->[1]),
+                $invocant,
+                $pos,
             );
         } else {
             # $a[0]
             sprintf('(%s)->[(%s)]',
-                $self->do_compile($v->[0]),
-                $self->do_compile($v->[1]),
+                $invocant,
+                $pos,
             );
         }
     } elsif ($type == PVIP_NODE_METHODCALL) {

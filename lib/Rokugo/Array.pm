@@ -67,6 +67,8 @@ sub sort:method {
 sub pick:method {
     if (@_==1) {
         $_[0]->[int rand(@{$_[0]})];
+    } elsif (@_==2 && UNIVERSAL::isa($_[1], 'Rokugo::Whatever')) {
+        wantarray ? @{$_[0]} : $_[0];
     } else {
         ...
     }
