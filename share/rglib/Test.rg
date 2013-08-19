@@ -40,7 +40,10 @@ sub nok($cond, $desc=undef) is export {
 }
 
 sub is($x,$y, $desc=undef) is export {
-    proclaim($x eq $y, $desc);
+    if (!proclaim($x eq $y, $desc)) {
+        print "  GOT:      $x\n";
+        print "  EXPECTED: $y\n";
+    }
 }
 
 sub isa_ok($x, $y, $desc=undef) is export {

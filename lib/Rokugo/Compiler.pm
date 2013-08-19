@@ -103,6 +103,8 @@ sub do_compile {
             'Rokugo::Class->new(name => "Hash")'
         } elsif ($v eq 'Buf') {
             'Rokugo::Buf::'
+        } elsif ($v eq 'IO::Path::Cygwin') {
+            'IO::Path::Cygwin::'
         } else {
             $v;
         }
@@ -255,9 +257,13 @@ sub do_compile {
         }
     } elsif ($type == PVIP_NODE_METHODCALL) {
         my $invocant = $self->do_compile($v->[0]);
+        if ($v->[0]->type != PVIP_NODE_IDENT) {
+            $invocant = "($invocant)";
+        }
+
         my $method = $self->do_compile($v->[1]);
         my $params = defined($v->[2]) ? $self->do_compile($v->[2]) : '';
-        sprintf('(%s)->%s(%s)',
+        sprintf('%s->%s(%s)',
             $invocant,
             $method,
             $params,

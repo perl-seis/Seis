@@ -64,5 +64,27 @@ sub builtin_elems { 0+@_ }
 our @REGEXP_MATCH;
 tie @REGEXP_MATCH, 'Rokugo::Match';
 
+package # hide frm PAUSE
+    IO::Path::Cygwin {
+    use File::Basename ();
+    use File::Spec::Win32;
+
+    sub new {
+        my ($class, $path) = @_;
+        bless \$path, $class;
+    }
+    sub volume {
+        [File::Spec::Win32->splitpath(${$_[0]})]->[0];
+    }
+    sub directory {
+        my $dir = [File::Spec::Win32->splitpath(${$_[0]})]->[1];
+        $dir .= "/" unless $dir =~ /\/\z/;
+        $dir;
+    }
+    sub basename {
+        File::Basename::basename(${$_[0]});
+    }
+}
+
 1;
 
