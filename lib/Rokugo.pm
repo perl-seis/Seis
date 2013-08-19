@@ -10,14 +10,27 @@ use Rokugo::Exceptions;
 use Rokugo::Compiler;
 use Rokugo::Array;
 use File::Spec;
+use File::ShareDir ();
 
 my $compiler = Rokugo::Compiler->new();
+
+@Rokugo::INC = do {
+    my @inc;
+    unshift @inc, 'share/rglib/' if -d 'share/rglib/'; # while building?
+    eval {
+        unshift @inc, File::Spec->catdir(File::ShareDir::dist_dir('Rokugo'), 'rglib');
+    };
+    if (my $env = $ENV{PERL_ROKUGO_LIB}) {
+        unshift @inc, split /:/, $ENV{PERL_ROKUGO_LIB};
+    }
+    @inc;
+};
 
 unshift @INC, sub {
     my ($self, $fname) = @_;
     (my $rg_fname = $fname) =~ s!\.pm\z!\.rg!
         or return;
-    for my $inc (@INC) {
+    for my $inc (@Rokugo::INC) {
         next if ref $inc;
         my $real = File::Spec->catfile($inc, $rg_fname);
         next unless -f $real;
