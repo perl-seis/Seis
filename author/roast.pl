@@ -20,7 +20,7 @@ my @tests = sort File::Find::Rule->file()
                               ->in( glob('~/dev/roast/') );
 
 local $ENV{PERL5LIB} = File::Spec->rel2abs('lib/');
-local $ENV{PERL_ROKUGO_LIB} = File::Spec->rel2abs('share/rglib/') . ':' . glob("~/dev/roast/packages/");
+local $ENV{PERL_ROKUGO_LIB} = File::Spec->rel2abs('share/rglib/') . ':' . glob("~/dev/roast/packages/") . ":" . File::Spec->rel2abs('.');
 my $t0 = [gettimeofday];
 my $rgbin = File::Spec->rel2abs('./blib/script/rg');
 
