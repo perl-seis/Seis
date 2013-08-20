@@ -44,7 +44,7 @@ sub compile {
     my ($self, $src, $filename) = @_;
     $filename //= '-e';
     local $self->{filename} = $filename;
-    local $self->{newline} = 0;
+    local $self->{line_number} = 0;
     my $parser = Perl6::PVIP->new();
     my $node = $parser->parse_string($src)
         or Rokugo::Exception::ParsingError->throw("Can't parse $filename:\n"  . $parser->errstr);
@@ -64,12 +64,23 @@ sub do_compile {
     my $type = $node->type;
 
     if ($type == PVIP_NODE_STATEMENTS) {
-        my @ret;
+        my $ret;
         for (my $i=0; $i<@$v; $i++) {
             next if $v->[$i]->type == PVIP_NODE_NOP;
-            push @ret, $self->do_compile($v->[$i], $i==@$v-1 ? G_SCALAR : G_VOID);
+            # $ret .= sprintf("# NODE:%d SELF:%d\n", $v->[$i]->line_number, $self->{line_number});
+            while ($self->{line_number} < $v->[$i]->line_number) {
+                $ret .= "\n";
+                $self->{line_number}++;
+            }
+            my $stmt = $self->do_compile($v->[$i], $i==@$v-1 ? G_SCALAR : G_VOID);
+            if ($stmt =~ /\n\z/) {
+                $ret .= $stmt;
+            } else {
+                $ret .= "$stmt;\n";
+                $self->{line_number}++;
+            }
         }
-        return join(";\n", @ret);
+        $ret;
     } elsif ($type == PVIP_NODE_UNDEF) {
         undef;
     } elsif ($type == PVIP_NODE_RANGE) {
@@ -526,11 +537,14 @@ sub do_compile {
             $self->do_compile($v->[1]),
         );
     } elsif ($type == PVIP_NODE_BLOCK) {
+        my $ret = '';
+        # $ret .= sprintf("# %d %d\n", $node->line_number, $self->{line_number});
         if (@$v) {
-            '{' . $self->do_compile($v->[0]) . '}';
+            $ret .= '{' . $self->do_compile($v->[0]) . '}';
         } else {
-            '{ }';
+            $ret .= '{ }';
         }
+        $ret;
     } elsif ($type == PVIP_NODE_LAMBDA) {
         # (lambda (params (param (nop) (variable "$n") (nop))) (statements (mul (variable "$n") (int 2))))
         # (lambda (block (statements (logical_or (chain (mod (variable "$_") (int 3)) (eq (int 0))) (chain (mod (variable "$_") (int 5)) (eq (int 0)))))))
@@ -547,7 +561,8 @@ sub do_compile {
         }
     } elsif ($type == PVIP_NODE_USE) {
         if ($v->[0]->value eq 'v6') {
-            "# use v6\n";
+            $self->{line_number}++;
+            "# use v6;\n";
         } else {
             'use ' . $self->do_compile($v->[0]);
         }

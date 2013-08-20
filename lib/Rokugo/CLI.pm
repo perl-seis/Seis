@@ -14,6 +14,7 @@ use Class::XSAccessor
     accessors => {
         map { $_ => $_ } qw(
             dump_ast
+            dump_ast_json
             dump_compiled
             compile_only
         )
@@ -35,6 +36,7 @@ sub run {
         'e=s'       => \my $eval,
         'debug'     => \$self->{dump_compiled},
         'ast'       => \$self->{dump_ast},
+        'ast-json'       => \$self->{dump_ast_json},
         'c'         => \$self->{compile_only},
     );
 
@@ -86,6 +88,13 @@ sub compile {
     if ($self->dump_ast) {
         print "*** AST ***\n";
         print Perl6::PVIP->new->parse_string($code)->as_sexp;
+        print "\n*** /AST ***\n";
+        print "\n\n";
+    }
+    if ($self->dump_ast_json) {
+        require JSON::PP;
+        print "*** AST ***\n";
+        print JSON::PP->new->pretty(1)->encode(Perl6::PVIP->new->parse_string($code)->perl);
         print "\n*** /AST ***\n";
         print "\n\n";
     }

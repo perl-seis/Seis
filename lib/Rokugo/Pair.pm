@@ -5,6 +5,7 @@ use utf8;
 use 5.010_001;
 use overload (
     '~~' => '_match',
+    fallback => 1,
 );
 
 # Do not call this directly.
