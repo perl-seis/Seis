@@ -120,6 +120,8 @@ sub do_compile {
             'Rokugo::Real::'
         } elsif ($v eq 'Duration') {
             'Rokugo::Duration::'
+        } elsif ($v eq 'Pair') {
+            'Rokugo::Pair::'
         } elsif ($v eq 'Instant') {
             'Rokugo::Instant::'
         } elsif ($v eq 'IO::Path::Cygwin') {

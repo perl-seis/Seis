@@ -3,8 +3,14 @@ use strict;
 use warnings;
 use utf8;
 use 5.010_001;
+use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use overload (
     '~~' => '_match',
+    'eq' => sub {
+        my ($x, $y, $r) = @_;
+        # optimizable
+        $x->perl eq $y->perl
+    },
     fallback => 1,
 );
 
@@ -32,6 +38,22 @@ sub fmt {
     my ($self, $pattern) = @_;
     $pattern //= "%s\t%s";
     sprintf($pattern, $self->key, $self->value);
+}
+
+# "foo" => 3
+our $_PERL_KEY;
+sub perl {
+    my $self = shift;
+    my $key = do {
+        local $_PERL_KEY = 1;
+        $self->key->perl;
+    };
+    my $value = $self->value->perl;
+    if ($_PERL_KEY) {
+        "($key => $value)";
+    } else {
+        "$key => $value";
+    }
 }
 
 1;
