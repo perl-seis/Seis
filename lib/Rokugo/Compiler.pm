@@ -73,7 +73,7 @@ sub do_compile {
                 $self->{line_number}++;
             }
             my $stmt = $self->do_compile($v->[$i], $i==@$v-1 ? G_SCALAR : G_VOID);
-            if ($stmt =~ /\n\z/) {
+            if ($stmt =~ /\n\z/ && $i!=@$v-1) {
                 $ret .= $stmt;
             } else {
                 $ret .= "$stmt;\n";
@@ -304,8 +304,8 @@ sub do_compile {
         );
     } elsif ($type == PVIP_NODE_STRING_CONCAT) {
         sprintf('(%s).(%s)',
-            $self->do_compile($v->[0]),
-            $self->do_compile($v->[1]),
+            $v->[0]->type == PVIP_NODE_STATEMENTS ? $self->do_compile($v->[0]->value->[0]) : $self->do_compile($v->[0]),
+            $v->[1]->type == PVIP_NODE_STATEMENTS ? $self->do_compile($v->[1]->value->[0]) : $self->do_compile($v->[1]),
         );
     } elsif ($type == PVIP_NODE_IF) {
         # (if (int 1) (statements (int 5)) (else (int 4)))
