@@ -32,7 +32,11 @@ use List::Util qw(min max);
 use Rokugo::Runtime;
 use POSIX qw(floor);
 no warnings 'misc', 'void';
-*gcd = *Rokugo::BuiltinFunctions::gcd;
+BEGIN {
+    *gcd = *Rokugo::BuiltinFunctions::gcd;
+    *Int = *Rokugo::Runtime::Int;
+    *Mu = *Rokugo::Runtime::Mu;
+}
 
 ...
 
@@ -113,8 +117,6 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_IDENT) {
         if ($v eq '::Array') {
             'Rokugo::Class->new(name => "Array")'
-        } elsif ($v eq 'Int') {
-            'Rokugo::Class->new(name => "Int")'
         } elsif ($v eq '::Hash') {
             'Rokugo::Class->new(name => "Hash")'
         } elsif ($v eq 'Buf') {

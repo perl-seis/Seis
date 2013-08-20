@@ -115,5 +115,12 @@ sub call_method {
     }
 }
 
+{
+    my $Int = Rokugo::Class->new(name => 'Int');
+    sub Int() { $Int }
+    my $Mu = Rokugo::Class->new(name => 'Mu');
+    sub Mu() { $Mu }
+}
+
 1;
 

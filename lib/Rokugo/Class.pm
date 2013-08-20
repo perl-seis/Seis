@@ -19,6 +19,7 @@ use overload (
     q{""} => sub {
         $_[0]->{name} . '()'
     },
+    fallback => 1,
 );
 
 
