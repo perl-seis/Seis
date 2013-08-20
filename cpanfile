@@ -10,6 +10,7 @@ requires 'Math::BaseCnv';
 requires 'Sub::Name';
 requires 'Math::Prime::Util';
 requires 'Time::HiRes';
+requires 'Math::BigInt';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
