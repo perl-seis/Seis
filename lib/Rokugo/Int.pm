@@ -39,6 +39,12 @@ sub chr: method { CORE::chr($_[0]) }
 
 sub rand:method { CORE::rand($_[0]) }
 
+sub fmt {
+    my ($self, $pattern) = @_;
+    $pattern //= "%d";
+    sprintf($pattern, $self);
+}
+
 {
     # Note.
     # I don't think Math::Prime::Util is the best solution to solve the 'is_prime' problem.

@@ -19,5 +19,10 @@ sub WHAT {
 sub Int { CORE::int($_[0]) }
 sub floor { POSIX::floor($_[0]) }
 
+sub fmt {
+    my ($self, $pattern) = @_;
+    sprintf($pattern, $self);
+}
+
 1;
 

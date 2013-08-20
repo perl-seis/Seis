@@ -28,5 +28,11 @@ sub _match {
     }
 }
 
+sub fmt {
+    my ($self, $pattern) = @_;
+    $pattern //= "%s\t%s";
+    sprintf($pattern, $self->key, $self->value);
+}
+
 1;
 

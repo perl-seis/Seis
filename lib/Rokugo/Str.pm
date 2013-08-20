@@ -43,5 +43,10 @@ sub IO {
 
 sub defined { 1 }
 
+sub fmt {
+    my ($self, $pattern) = @_;
+    sprintf($pattern, $self);
+}
+
 1;
 

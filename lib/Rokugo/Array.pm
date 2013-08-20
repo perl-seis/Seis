@@ -82,5 +82,12 @@ sub pick:method {
     }
 }
 
+sub fmt {
+    my $self    = shift;
+    my $pattern = @_ > 0 ? shift @_ : '%s';
+    my $joiner  = @_ > 0 ? shift @_ : ' ';
+    CORE::join($joiner, CORE::map { sprintf($pattern, $_) } @$self);
+}
+
 1;
 

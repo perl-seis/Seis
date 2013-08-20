@@ -98,6 +98,10 @@ sub pass($reason='passed') {
     proclaim(1, $reason);
 }
 
+sub flunk($reason) {
+    proclaim(1, "flunk $reason");
+}
+
 sub diag($msg) {
     $*ERR.say("# " ~ $msg);
 }

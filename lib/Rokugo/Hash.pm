@@ -23,5 +23,11 @@ sub pairs:method {
     return wantarray ? @ret : \@ret;
 }
 
+sub fmt {
+    my ($self, $pattern, $joiner) = @_;
+    $pattern //= "%s\t%s";
+    join($joiner, map { sprintf($pattern, $_, $self->{$_}) } keys %$self);
+}
+
 1;
 
