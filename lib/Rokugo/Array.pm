@@ -89,5 +89,10 @@ sub fmt {
     CORE::join($joiner, CORE::map { sprintf($pattern, $_) } @$self);
 }
 
+sub min:method {
+    my $self = shift;
+    scalar List::Util::minstr(grep { defined $_ } @$self);
+}
+
 1;
 

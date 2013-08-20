@@ -328,7 +328,7 @@ sub do_compile {
             ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A@/)
         ) {
             # @a[0]
-            sprintf('(%s)[(%s)]',
+            sprintf('%s[(%s)]',
                 $invocant,
                 $pos,
             );
