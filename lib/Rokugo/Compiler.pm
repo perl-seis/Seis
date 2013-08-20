@@ -470,6 +470,7 @@ sub do_compile {
         my $iteratee = $self->do_compile($v->[0], G_ARRAY);
         if ($v->[1]->type == PVIP_NODE_LAMBDA) {
             # (for (list (int 1) (int 2) (int 3)) (lambda (params (param (nop) (variable "$x") (nop))) (statements (inplace_add (variable "$i") (variable "$x")))))
+            # (for (variable "@list") (lambda (params) (block (statements (funcall (ident "isnt") (args (variable "$_") (string "a") (string "$_ does not get set implicitly if a pointy is given")))))))
             my $varname = $v->[1]->value->[0]->value->[0]->value->[1]->value;
             sprintf('for my %s (%s) %s',
                 $varname,
@@ -531,6 +532,11 @@ sub do_compile {
             $target =~ s/\A%/\$/;
             sprintf('%s{(%s)}',
                 $target,
+                $self->do_compile($v->[1]),
+            );
+        } elsif ($v->[0]->type == PVIP_NODE_TW_ENV) {
+            sprintf('(%s)->{(%s)}',
+                $self->do_compile($v->[0]),
                 $self->do_compile($v->[1]),
             );
         } else {
