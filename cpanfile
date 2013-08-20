@@ -9,6 +9,7 @@ requires 'boolean';
 requires 'Math::BaseCnv';
 requires 'Sub::Name';
 requires 'Math::Prime::Util';
+requires 'Time::HiRes';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';

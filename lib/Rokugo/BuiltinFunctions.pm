@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use utf8;
 use 5.010_001;
+use Time::HiRes ();
 
 sub end { @{$_[0]}-1 }
 sub end_list { @_-1 }
@@ -49,6 +50,10 @@ sub getc:method {
     } else {
         CORE::getc($stuff);
     }
+}
+
+sub now:method {
+    Rokugo::Instant->_new(Time::HiRes::time())
 }
 
 1;

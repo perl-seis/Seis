@@ -116,6 +116,12 @@ sub do_compile {
             'Rokugo::Class->new(name => "Hash")'
         } elsif ($v eq 'Buf') {
             'Rokugo::Buf::'
+        } elsif ($v eq 'Real') {
+            'Rokugo::Real::'
+        } elsif ($v eq 'Duration') {
+            'Rokugo::Duration::'
+        } elsif ($v eq 'Instant') {
+            'Rokugo::Instant::'
         } elsif ($v eq 'IO::Path::Cygwin') {
             'IO::Path::Cygwin::'
         } else {
@@ -160,6 +166,8 @@ sub do_compile {
                         $self->do_compile($v->[1]),
                     );
                 }
+            } elsif ($v->[0]->value eq 'now') {
+                'Rokugo::BuiltinFunctions::now()';
             } elsif ($v->[0]->value eq 'get') {
                 sprintf('Rokugo::BuiltinFunctions::get(%s)',
                     $self->do_compile($v->[1]),
@@ -422,6 +430,8 @@ sub do_compile {
         sprintf('die (%s)', $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_ELSIF) {
         sprintf('elsif (%s) { %s }', $self->do_compile($v->[0]), $self->do_compile($v->[1]));
+    } elsif ($type == PVIP_NODE_NOW) {
+        'Rokugo::BuiltinFunctions::now()'
     } elsif ($type == PVIP_NODE_RAND) {
         'rand()'
     } elsif ($type == PVIP_NODE_LIST) {

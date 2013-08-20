@@ -20,6 +20,8 @@ use Rokugo::Whatever;
 use Rokugo::Pair;
 use Rokugo::IO;
 use Rokugo::IO::Path;
+use Rokugo::Instant;
+use Rokugo::Duration;
 
 use Rokugo::BuiltinFunctions;
 use Scalar::Util ();
