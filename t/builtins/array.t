@@ -23,6 +23,7 @@ ok !compile(q!<a b c d>.exists(4)!);
 ok !compile(q!<a b c d>.exists(5)!);
 is_deeply compile(q![<d a c b>].sort!), [qw(a b c d)];
 is compile(q!my @a=<a b c d>; push @a, 'e'; @a.join(" ")!), 'a b c d e';
+is compile(q!my @a=<a b c d>; ~@a!), 'a b c d';
 
 done_testing;
 

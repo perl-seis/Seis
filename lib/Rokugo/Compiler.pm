@@ -723,7 +723,11 @@ sub do_compile {
         '(' . $self->do_compile($v->[0]) . ')x=(' . $self->do_compile($v->[1]) . ')';
     } elsif ($type == PVIP_NODE_UNARY_TILDE) {
         # stringification
-        sprintf(q{''.(%s)}, $self->do_compile($v->[0]));
+        if ($self->is_array_variable($v->[0])) {
+            sprintf(q{join(' ', (%s))}, $self->do_compile($v->[0]));
+        } else {
+            sprintf(q{''.(%s)}, $self->do_compile($v->[0]));
+        }
     } elsif ($type == PVIP_NODE_TRY) {
         "eval " . $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_REF) {
@@ -966,6 +970,11 @@ sub compile_regexp {
         }
     }
     sprintf('qr!%s!sxp', $ret);
+}
+
+sub is_array_variable {
+    my ($self, $node) = @_;
+    return $node->type == PVIP_NODE_VARIABLE && $node->value =~ /\A\@/;
 }
 
 1;
