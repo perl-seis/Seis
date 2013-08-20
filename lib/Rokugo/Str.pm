@@ -5,6 +5,7 @@ use utf8;
 use 5.012_001;
 use Data::Dumper ();
 use feature 'fc';
+use Encode ();
 
 sub uc:method { CORE::uc($_[0]) }
 sub lc:method { CORE::lc($_[0]) }
@@ -51,6 +52,13 @@ sub fmt {
 sub WHAT {
     my $self = shift;
     Rokugo::Class->new(name => 'Str');
+}
+
+sub Int { int shift; }
+
+sub encode {
+    my ($self, $encoding) = @_;
+    Encode::encode($encoding, $self);
 }
 
 1;

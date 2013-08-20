@@ -131,6 +131,8 @@ sub do_compile {
             'Rokugo::Pair::'
         } elsif ($v eq 'Instant') {
             'Rokugo::Instant::'
+        } elsif ($v eq 'IO::Handle') {
+            'IO::Handle::'
         } elsif ($v eq 'IO::Path::Cygwin') {
             'IO::Path::Cygwin::'
         } else {

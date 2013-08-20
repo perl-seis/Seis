@@ -29,7 +29,10 @@ sub eof:method {
 sub get:method {
     my $self = shift;
     my $fh = $self->{fh};
-    <$fh>;
+    $self->{ins}++;
+    my $line = scalar(<$fh>);
+    chop($line);
+    $line;
 }
 
 sub print:method {
@@ -45,6 +48,27 @@ sub close:method {
 sub getc:method {
     my $self = shift;
     getc $self->{fh};
+}
+
+sub ins {
+    my $self = shift;
+    $self->{ins};
+}
+
+sub say:method {
+    my $self = shift;
+    CORE::say {$self->{fh}} @_;
+}
+
+sub write:method {
+    my $self = shift;
+    CORE::print {$self->{fh}} @_;
+}
+
+sub read:method {
+    my ($self, $len) = @_;
+    CORE::read $self->{fh}, my $buf, $len;
+    return $buf;
 }
 
 1;

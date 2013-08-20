@@ -27,6 +27,7 @@ sub open :method {
 
 sub get :method {
     my $stuff = shift;
+    return $stuff->get() if Scalar::Util::blessed($stuff);
     my $line = <$stuff>;
     if (defined $line) {
         $line =~ s/\n//;
