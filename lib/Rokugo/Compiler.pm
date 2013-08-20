@@ -439,6 +439,10 @@ sub do_compile {
         sprintf("while (%s) %s",
             $self->do_compile($v->[0]),
             $self->maybe_block($v->[1]));
+    } elsif ($type == PVIP_NODE_UNTIL) {
+        sprintf("until (%s) %s",
+            $self->do_compile($v->[0]),
+            $self->maybe_block($v->[1]));
     } elsif ($type == PVIP_NODE_DIE) {
         sprintf('die (%s)', $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_ELSIF) {
