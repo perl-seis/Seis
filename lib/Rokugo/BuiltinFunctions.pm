@@ -60,5 +60,9 @@ sub gcd:method {
     int(Math::BigInt::bgcd(@_) - 0)
 }
 
+sub any:method {
+    Rokugo::Any->_new(@_);
+}
+
 1;
 
