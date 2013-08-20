@@ -311,6 +311,7 @@ lvalue =
     my
     | v:variable { $$=v; } (
         '[' - e:expr - ']' { $$=PVIP_node_new_children2(&(G->data), PVIP_NODE_ATPOS, v, e); }
+        | '<' - k:atkey_key - '>' {  $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ATKEY, v, k); }
     )?
 
 comma_operator_expr = a:loose_unary_expr { $$=a; } ( - ',' - b:loose_unary_expr {
@@ -445,7 +446,7 @@ additive_expr =
             $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_BIN_XOR, l, r);
             l = $$;
         }
-        | - '+' ![<>=] - r1:multiplicative_expr {
+        | - '+' ![|<>=] - r1:multiplicative_expr {
             $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ADD, l, r1);
             l = $$;
           }
