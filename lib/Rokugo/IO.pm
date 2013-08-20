@@ -67,7 +67,7 @@ sub write:method {
 
 sub read:method {
     my ($self, $len) = @_;
-    CORE::read $self->{fh}, my $buf, $len;
+    CORE::read($self->{fh}, my $buf, $len);
     return $buf;
 }
 
