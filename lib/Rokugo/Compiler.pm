@@ -422,6 +422,8 @@ sub do_compile {
         sprintf('die (%s)', $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_ELSIF) {
         sprintf('elsif (%s) { %s }', $self->do_compile($v->[0]), $self->do_compile($v->[1]));
+    } elsif ($type == PVIP_NODE_RAND) {
+        'rand()'
     } elsif ($type == PVIP_NODE_LIST) {
         if ($gimme == G_SCALAR) {
             # In scalar context, create arrayref automatically.
@@ -602,7 +604,11 @@ sub do_compile {
             ';}'
         );
     } elsif ($type == PVIP_NODE_UNARY_PLUS) {
-        sprintf('+(%s)', $self->do_compile($v->[0]));
+        if ($v->[0]->type == PVIP_NODE_LIST) {
+            sprintf('0+@{[%s]}', $self->do_compile($v->[0], G_ARRAY));
+        } else {
+            sprintf('+(%s)', $self->do_compile($v->[0]));
+        }
     } elsif ($type == PVIP_NODE_UNARY_MINUS) {
         sprintf('-(%s)', $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_IT_METHODCALL) {
@@ -737,9 +743,9 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_INPLACE_REPEAT_S) {
         '(' . $self->do_compile($v->[0]) . ')x=(' . $self->do_compile($v->[1]) . ')';
     } elsif ($type == PVIP_NODE_UNARY_TILDE) {
-        # stringification
-        if ($self->is_array_variable($v->[0])) {
-            sprintf(q{join(' ', (%s))}, $self->do_compile($v->[0]));
+        # STRINGIFY, stringification
+        if ($self->is_array_variable($v->[0]) || $v->[0]->type == PVIP_NODE_LIST) {
+            sprintf(q{join(' ', (%s))}, $self->do_compile($v->[0], G_ARRAY));
         } else {
             sprintf(q{''.(%s)}, $self->do_compile($v->[0]));
         }
