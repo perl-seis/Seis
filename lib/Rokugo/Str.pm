@@ -61,5 +61,7 @@ sub encode {
     Encode::encode($encoding, $self);
 }
 
+sub Str { $_[0] }
+
 1;
 

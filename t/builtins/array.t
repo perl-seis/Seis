@@ -26,6 +26,8 @@ is compile(q!my @a=<a b c d>; push @a, 'e'; @a.join(" ")!), 'a b c d e';
 is compile(q!my @a=<a b c d>; ~@a!), 'a b c d';
 is compile(q!~<a b c d>;!), 'a b c d';
 is compile(q!+<a b c d>;!), 4;
+is compile(q!my $a=[<a b c d>]; ~$a!), 'a b c d';
+is compile(q!my $a=[<a b c d>]; +$a!), 4;
 
 done_testing;
 

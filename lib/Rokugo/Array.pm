@@ -15,10 +15,10 @@ sub grep {
     grep { $code->() } @$self;
 }
 
-sub join {
+sub join:method {
     my ($self, $stuff) = @_;
 
-    join $stuff, @$self;
+    CORE::join $stuff, @$self;
 }
 
 sub WHAT {
@@ -93,6 +93,9 @@ sub min:method {
     my $self = shift;
     scalar List::Util::minstr(grep { defined $_ } @$self);
 }
+
+sub Int { 0+@{$_[0]} }
+sub Str { CORE::join(' ', @{$_[0]}) }
 
 1;
 

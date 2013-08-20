@@ -123,5 +123,11 @@ sub call_method {
     sub Mu() { $Mu }
 }
 
+sub stringify {
+    my $stuff = shift;
+    return join(' ', @$stuff) if ref $stuff eq 'ARRAY';
+    return ''.$stuff;
+}
+
 1;
 
