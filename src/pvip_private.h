@@ -13,6 +13,8 @@ typedef struct {
 
 typedef struct {
     int line_number;
+    int *line_number_stack;
+    size_t line_number_stack_size;
     PVIPNode *root;
     int is_string; /* Parsing from string or file pointer. */
     PVIPParserStringState *str;

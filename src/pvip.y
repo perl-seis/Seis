@@ -11,6 +11,15 @@
 #define MAYBE(n) (n) ? (n) : NOP()
 #define PARSER (&(G->data))
 #define NEWLINE G->data.line_number++
+#define ENTER do { \
+        G->data.line_number_stack_size++; \
+        G->data.line_number_stack = realloc(G->data.line_number_stack, G->data.line_number_stack_size); \
+        if (!G->data.line_number_stack) { \
+            abort(); \
+        } \
+        G->data.line_number_stack[G->data.line_number_stack_size-1] = G->data.line_number; \
+    } while (0)
+#define LEAVE do { assert(G->data.line_number_stack_size> 0); G->data.line_number_stack_size--; } while (0)
 
 /*
 
@@ -777,7 +786,7 @@ param_defaults =
     '=' - e:expr { $$=e; }
 
 block =
-    {s=NULL; } ('{' - s:statementlist? - '}' !'.') {
+    { ENTER; s=NULL; } ('{' - s:statementlist? - '}' !'.') {
         if (!s) {
             /* empty block */
             $$=PVIP_node_new_children(&(G->data), PVIP_NODE_BLOCK);
@@ -790,6 +799,7 @@ block =
         } else {
             $$=PVIP_node_new_children1(&(G->data), PVIP_NODE_BLOCK, s);
         }
+        LEAVE;
     }
 
 # XXX optimizable
@@ -1016,6 +1026,8 @@ PVIPNode * PVIP_parse_string(const char *string, int len, int debug, PVIPString 
 #endif
 
     g.data.line_number = 1;
+    g.data.line_number_stack_size = 0;
+    g.data.line_number_stack = NULL;
     g.data.is_string   = 1;
     g.data.str = malloc(sizeof(PVIPParserStringState));
     g.data.str->buf     = string;
@@ -1093,6 +1105,8 @@ PVIPNode * PVIP_parse_fp(FILE *fp, int debug, PVIPString **error) {
 #endif
 
     g.data.line_number = 1;
+    g.data.line_number_stack_size = 0;
+    g.data.line_number_stack = NULL;
     g.data.is_string   = 0;
     g.data.fp = fp;
 

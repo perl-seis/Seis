@@ -137,7 +137,11 @@ PVIPNode* PVIP_node_new_children(PVIPParserContext *parser, PVIP_node_type_t typ
     node->type = type;
     node->children.size  = 0;
     node->children.nodes = NULL;
-    node->line_number = parser->line_number;
+    if (parser->line_number_stack_size > 0) {
+        node->line_number = parser->line_number_stack[parser->line_number_stack_size-1];
+    } else {
+        node->line_number = parser->line_number;
+    }
     return node;
 }
 PVIPNode* PVIP_node_new_children1(PVIPParserContext* parser, PVIP_node_type_t type, PVIPNode* n1) {
