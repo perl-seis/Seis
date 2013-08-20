@@ -48,5 +48,10 @@ sub fmt {
     sprintf($pattern, $self);
 }
 
+sub WHAT {
+    my $self = shift;
+    Rokugo::Class->new(name => 'Str');
+}
+
 1;
 

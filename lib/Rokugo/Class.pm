@@ -7,6 +7,21 @@ use Rokugo::MetaClass;
 
 our %INSTANCES;
 
+use overload (
+    q{~~} => sub {
+        my ($x, $y, $r) = @_;
+        if ($r) {
+            UNIVERSAL::isa($y, $x->{name});
+        } else {
+            ...
+        }
+    },
+    q{""} => sub {
+        $_[0]->{name} . '()'
+    },
+);
+
+
 # DO NOT CALL THIS METHOD DIRECTLY.
 sub new {
     my $class = shift;
