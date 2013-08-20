@@ -56,5 +56,9 @@ sub now:method {
     Rokugo::Instant->_new(Time::HiRes::time())
 }
 
+sub gcd:method {
+    int(Math::BigInt::bgcd(@_) - 0)
+}
+
 1;
 

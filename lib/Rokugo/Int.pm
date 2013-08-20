@@ -13,7 +13,6 @@ sub say { CORE::say($_[0]) }
 
 sub isa {
     my ($self, $stuff) = @_;
-    use Devel::Peek; Dump($self);
     # Yes, it's boolean.
     return 1 if boolean::isBoolean($self) && $stuff eq 'Rokugo::Bool';
     return 1 if $stuff eq 'Int';

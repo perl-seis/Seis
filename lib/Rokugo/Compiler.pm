@@ -32,6 +32,7 @@ use List::Util qw(min max);
 use Rokugo::Runtime;
 use POSIX qw(floor);
 no warnings 'misc', 'void';
+*gcd = *Rokugo::BuiltinFunctions::gcd;
 
 ...
 
@@ -112,6 +113,8 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_IDENT) {
         if ($v eq '::Array') {
             'Rokugo::Class->new(name => "Array")'
+        } elsif ($v eq 'Int') {
+            'Rokugo::Class->new(name => "Int")'
         } elsif ($v eq '::Hash') {
             'Rokugo::Class->new(name => "Hash")'
         } elsif ($v eq 'Buf') {
@@ -172,6 +175,10 @@ sub do_compile {
                 }
             } elsif ($v->[0]->value eq 'now') {
                 'Rokugo::BuiltinFunctions::now()';
+            } elsif ($v->[0]->value eq 'gcd') {
+                sprintf('Rokugo::BuiltinFunctions::gcd(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'get') {
                 sprintf('Rokugo::BuiltinFunctions::get(%s)',
                     $self->do_compile($v->[1]),
@@ -910,6 +917,11 @@ sub do_compile {
         '(Rokugo::Whatever->new())';
     } elsif ($type == PVIP_NODE_END) {
         "END " . $self->do_compile($v->[0]);
+    } elsif ($type == PVIP_NODE_GCD) {
+        sprintf('Rokugo::BuiltinFunctions::gcd(%s, %s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]),
+        );
     } elsif ($type == PVIP_NODE_BEGIN) {
         "BEGIN " . $self->do_compile($v->[0]);
     } else {
