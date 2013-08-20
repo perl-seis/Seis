@@ -889,7 +889,10 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_BITWISE_OR) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BITWISE_OR is not implemented")
     } elsif ($type == PVIP_NODE_BITWISE_AND) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BITWISE_AND is not implemented")
+        sprintf('(%s)&(%s)',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1]),
+        );
     } elsif ($type == PVIP_NODE_BITWISE_XOR) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_BITWISE_XOR is not implemented")
     } elsif ($type == PVIP_NODE_VARGS) {
