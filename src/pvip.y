@@ -10,6 +10,7 @@
 #define NOP() PVIP_node_new_children(&(G->data), PVIP_NODE_NOP)
 #define MAYBE(n) (n) ? (n) : NOP()
 #define PARSER (&(G->data))
+#define NEWLINE G->data.line_number++
 
 /*
 
@@ -989,7 +990,7 @@ comment =
 
 # white space
 ws = 
-    '\n=begin ' [a-z]+ '\n' ( !'=end ' [^\n]* '\n')* '=end ' [a-z]+ '\n'
+    '\n=begin ' [a-z]+ '\n' { NEWLINE; } ( !'=end ' [^\n]* '\n' { NEWLINE; } )* '=end ' [a-z]+ '\n' { NEWLINE; }
     | '\n=begin END\n' .* | ' ' | '\f' | '\v' | '\t' | '\205' | '\240'
     | '\n=END\n' .*
     | end-of-line
