@@ -24,6 +24,7 @@ use Rokugo::Instant;
 use Rokugo::Duration;
 use Rokugo::Any;
 use Rokugo::Socket;
+use Rokugo::Any;
 
 use Rokugo::BuiltinFunctions;
 use Scalar::Util ();

@@ -14,6 +14,11 @@ sub new {
     $self;
 }
 
+sub name {
+    my $self = shift;
+    $self->{name};
+}
+
 sub methods {
     my $self = shift;
     no strict 'refs';

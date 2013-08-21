@@ -10,5 +10,14 @@ sub _new {
     bless [@_], $class;
 }
 
+package # hide from pause
+    Any;
+
+sub Str { '' }
+sub Stringy { '' }
+sub gist { '(Any)' }
+sub perl { 'Any' }
+sub meta { Rokugo::MetaClass->new(name => 'Any') }
+
 1;
 
