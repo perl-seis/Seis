@@ -98,5 +98,10 @@ sub min:method {
 sub Int { 0+@{$_[0]} }
 sub Str { CORE::join(' ', @{$_[0]}) }
 
+sub kv:method {
+    my $self = shift;
+    map { $_ => $self->[$_] } keys $self;
+}
+
 1;
 

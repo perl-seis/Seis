@@ -180,6 +180,10 @@ sub do_compile {
                 }
             } elsif ($v->[0]->value eq 'now') {
                 'Rokugo::BuiltinFunctions::now()';
+            } elsif ($v->[0]->value eq 'kv') {
+                sprintf('(%s)->kv',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'gcd') {
                 sprintf('Rokugo::BuiltinFunctions::gcd(%s)',
                     $self->do_compile($v->[1]),
@@ -575,7 +579,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_PAIR) {
         if ($gimme == G_SCALAR) {
             sprintf('Rokugo::Pair->_new(scalar(%s),scalar(%s))',
-                $self->do_compile($v->[0]),
+                $v->[0]->type == PVIP_NODE_IDENT ? $self->compile_string($v->[0]) : $self->do_compile($v->[0]),
                 $self->do_compile($v->[1]),
             );
         } else {

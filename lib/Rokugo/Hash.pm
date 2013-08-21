@@ -29,5 +29,10 @@ sub fmt {
     join($joiner, map { sprintf($pattern, $_, $self->{$_}) } keys %$self);
 }
 
+sub kv {
+    my $self = shift;
+     map { $_ => $self->{$_} } keys %$self;
+}
+
 1;
 

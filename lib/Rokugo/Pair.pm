@@ -56,5 +56,10 @@ sub perl {
     }
 }
 
+sub kv {
+    my $self = shift;
+    [$self->key, $self->value];
+}
+
 1;
 

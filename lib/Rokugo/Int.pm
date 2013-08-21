@@ -64,5 +64,9 @@ sub ords {
 
 sub rindex:method { goto &Rokugo::Str::rindex }
 
+sub kv {
+    [0, $_[0]]
+}
+
 1;
 
