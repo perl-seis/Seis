@@ -140,11 +140,7 @@ sub do_compile {
         } elsif ($v eq 'IO::Path::Cygwin') {
             'IO::Path::Cygwin::'
         } else {
-            if ($v =~ /::/) {
-                $v . "::";
-            } else {
-                $v;
-            }
+            $v;
         }
     } elsif ($type == PVIP_NODE_FUNCALL) {
         if ($v->[0]->type == PVIP_NODE_IDENT) {
