@@ -589,10 +589,19 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_LAMBDA) {
         # (lambda (params (param (nop) (variable "$n") (nop))) (statements (mul (variable "$n") (int 2))))
         # (lambda (block (statements (logical_or (chain (mod (variable "$_") (int 3)) (eq (int 0))) (chain (mod (variable "$_") (int 5)) (eq (int 0)))))))
-        if (@$v==1 && $v->[0]->type == PVIP_NODE_BLOCK) {
-            my $ret = 'sub ';
-            $ret .= $self->do_compile($v->[0]);
-            $ret;
+        if (@$v==1) {
+            if ($v->[0]->type == PVIP_NODE_BLOCK) {
+                my $ret = 'sub ';
+                $ret .= $self->do_compile($v->[0]);
+                $ret;
+            } elsif ($v->[0]->type == PVIP_NODE_HASH) {
+                # (lambda (hash (pair (ident "out") (string "(IO)\n"))))
+                my $ret = 'sub ';
+                $ret .= $self->do_compile($v->[0]);
+                $ret;
+            } else {
+                ...
+            }
         } else {
             my $ret = 'sub {';
             $ret .= $self->do_compile($v->[0]);
