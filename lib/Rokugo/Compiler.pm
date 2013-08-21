@@ -507,6 +507,8 @@ sub do_compile {
         'Rokugo::BuiltinFunctions::now()'
     } elsif ($type == PVIP_NODE_RAND) {
         'rand()'
+    } elsif ($type == PVIP_NODE_TIME) {
+        'time()'
     } elsif ($type == PVIP_NODE_LIST) {
         if ($gimme == G_SCALAR) {
             # In scalar context, create arrayref automatically.
