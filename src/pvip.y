@@ -632,6 +632,10 @@ term =
         PVIP_node_change_type(key, PVIP_NODE_STRING);
         $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
     }
+    | ':' < key:ident > '[' - value:expr - ']' {
+        PVIP_node_change_type(key, PVIP_NODE_STRING);
+        $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
+    }
     | ':' < [a-z]+ > { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(&(G->data), PVIP_NODE_TRUE)); }
     | ':' v:variable {
         $$ = PVIP_node_new_children2(&(G->data), 
