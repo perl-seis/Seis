@@ -919,7 +919,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_UNICODE_CHAR) {
         sprintf(q!"\N{%s}"!, $v);
     } elsif ($type == PVIP_NODE_STUB) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_STUB is not implemented")
+        '...';
     } elsif ($type == PVIP_NODE_EXPORT) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_EXPORTABLE is not implemented")
     } elsif ($type == PVIP_NODE_BITWISE_OR) {

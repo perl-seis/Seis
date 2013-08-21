@@ -83,6 +83,10 @@ sub eval_lives_ok($code, $reason=undef) is export {
     }
 }
 
+sub force_todo(*@ary) {
+    ...
+}
+
 sub eval_exception($code) {
     try {
         eval $code;
@@ -99,7 +103,7 @@ sub pass($reason='passed') {
 }
 
 sub flunk($reason) {
-    proclaim(1, "flunk $reason");
+    proclaim(0, "flunk $reason");
 }
 
 sub diag($msg) {
