@@ -122,6 +122,8 @@ sub call_method {
     sub Int() { $Int }
     my $Mu = Rokugo::Class->new(name => 'Mu');
     sub Mu() { $Mu }
+    my $Array = Rokugo::Class->new(name => 'Array');
+    sub Array() { $Array }
 }
 
 sub stringify {

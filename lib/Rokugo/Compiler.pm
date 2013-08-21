@@ -36,6 +36,7 @@ BEGIN {
     *gcd = *Rokugo::BuiltinFunctions::gcd;
     *Int = *Rokugo::Runtime::Int;
     *Mu = *Rokugo::Runtime::Mu;
+    *Array = *Rokugo::Runtime::Array;
 }
 
 ...
@@ -237,14 +238,39 @@ sub do_compile {
                         $self->do_compile($v->[1]),
                     );
                 }
+            } elsif ($v->[0]->value eq 'values') {
+                # (args (variable "@array"))
+                if (
+                    $v->[1]->type == PVIP_NODE_ARGS && @{$v->[1]->value}==1 && $v->[1]->value->[0]->type == PVIP_NODE_VARIABLE && $v->[1]->value->[0]->value =~ /\A\@/) {
+                    # values(@a)
+                    if ($gimme == G_ARRAY) {
+                        sprintf('CORE::values(%s)',
+                            $self->do_compile($v->[1]->value->[0], G_ARRAY),
+                        );
+                    } else {
+                        sprintf('[CORE::values(%s)]',
+                            $self->do_compile($v->[1]->value->[0], G_ARRAY),
+                        );
+                    }
+                } else {
+                    sprintf('CORE::values(%s)',
+                        $self->do_compile($v->[1]),
+                    );
+                }
             } elsif ($v->[0]->value eq 'keys') {
                 # (args (variable "@array"))
                 if (
                     $v->[1]->type == PVIP_NODE_ARGS && @{$v->[1]->value}==1 && $v->[1]->value->[0]->type == PVIP_NODE_VARIABLE && $v->[1]->value->[0]->value =~ /\A\@/) {
                     # keys(@a)
-                    sprintf('CORE::keys(%s)',
-                        $self->do_compile($v->[1]->value->[0], G_ARRAY),
-                    );
+                    if ($gimme == G_ARRAY) {
+                        sprintf('CORE::keys(%s)',
+                            $self->do_compile($v->[1]->value->[0], G_ARRAY),
+                        );
+                    } else {
+                        sprintf('[CORE::keys(%s)]',
+                            $self->do_compile($v->[1]->value->[0], G_ARRAY),
+                        );
+                    }
                 } else {
                     sprintf('CORE::keys(%s)',
                         $self->do_compile($v->[1]),
