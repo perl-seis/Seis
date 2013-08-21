@@ -132,5 +132,17 @@ sub stringify {
     return ''.$stuff;
 }
 
+sub boolean {
+    my $stuff = shift;
+    return boolean::boolean(0+@$stuff) if ref $stuff eq 'ARRAY';
+    return boolean::boolean($stuff);
+}
+
+sub _not {
+    my $stuff = shift;
+    return boolean::boolean(!0+@$stuff) if ref $stuff eq 'ARRAY';
+    return boolean::boolean(!$stuff);
+}
+
 1;
 

@@ -306,6 +306,10 @@ sub do_compile {
                 'Rokugo::Array::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'IO::Path') {
                 'Rokugo::IO::Path::'
+            } elsif ($_->type == PVIP_NODE_VARIABLE && $_->value =~ /\A\@/) {
+                my $v = $_->value;
+                $v =~ s/−/ー/g;
+                "\\$v";
             } else {
                 $self->do_compile($_)
             }
@@ -531,9 +535,16 @@ sub do_compile {
         }
         $ret;
     } elsif ($type == PVIP_NODE_NOT) {
-        sprintf('!(%s)',
-            $self->do_compile($v->[0])
-        );
+        if ($self->is_array_variable($v->[0])) {
+            sprintf('!(0+%s)',
+                $self->do_compile($v->[0]->value)
+            );
+        } else {
+            # I want to do this with PL_check hack.
+            sprintf('Rokugo::Runtime::_not(%s)',
+                $self->do_compile($v->[0])
+            );
+        }
     } elsif ($type == PVIP_NODE_CONDITIONAL) {
         sprintf('(%s)?(%s):(%s)',
             $self->do_compile($v->[0]),
@@ -842,7 +853,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_MULTI) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_MULTI is not implemented")
     } elsif ($type == PVIP_NODE_UNARY_BOOLEAN) {
-        sprintf 'boolean::boolean(%s)', $self->do_compile($v->[0]);
+        sprintf 'Rokugo::Runtime::boolean(%s)', $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_UNARY_UPTO) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_UNARY_UPTO is not implemented")
     } elsif ($type == PVIP_NODE_ARRAY_DEREF) {

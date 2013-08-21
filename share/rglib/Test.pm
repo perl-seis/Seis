@@ -18,7 +18,7 @@ sub skip_rest($reason = '<unknown>') is export {
 }
 
 sub proclaim($cond, $desc) {
-    unless $cond {
+    unless ?$cond {
         print "not ";
         $failed++;
     }
@@ -33,7 +33,7 @@ sub proclaim($cond, $desc) {
 }
 
 sub ok($cond, $desc) is export {
-    proclaim($cond, $desc);
+    proclaim(?$cond, $desc);
 }
 
 sub nok($cond, $desc=undef) is export {
