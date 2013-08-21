@@ -688,7 +688,7 @@ twvars =
     | '$^b' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TW_B); }
     | '$^c' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TW_C); }
 
-reserved = ( 'my' | 'our' | 'until' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'time' | 'now' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' | 'andthen' | 'and' ) ![-A-Za-z0-9]
+reserved = ( 'my' | 'our' | 'until' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'time' | 'now' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' | 'andthen' | 'and' | 'or' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ROLE, i, b); }
