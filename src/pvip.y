@@ -890,7 +890,8 @@ dec_number =
     $$ = PVIP_node_new_intf(PVIP_NODE_INT, yytext, yyleng, 10);
 }
 
-complex = < [0-9]+ > 'i' { $$ = PVIP_node_new_intf(PVIP_NODE_COMPLEX, yytext, yyleng, 10); }
+complex =
+    < [0-9]+ ('.' [0-9]+)? > 'i' { $$ = PVIP_node_new_number(PVIP_NODE_COMPLEX, yytext, yyleng); }
 
 integer =
     '0b' <[01_]+> {

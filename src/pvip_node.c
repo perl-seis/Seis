@@ -122,7 +122,7 @@ void PVIP_node_change_type(PVIPNode *node, PVIP_node_type_t type) {
 
 PVIPNode* PVIP_node_new_number(PVIP_node_type_t type, const char *str, size_t len) {
     PVIPNode *node = malloc(sizeof(PVIPNode));
-    assert(type == PVIP_NODE_NUMBER);
+    assert(PVIP_node_category(type) == PVIP_CATEGORY_NUMBER);
     node->type = type;
     node->nv = strtod(str, NULL);
     node->line_number = 0;
@@ -210,9 +210,9 @@ PVIP_category_t PVIP_node_category(PVIP_node_type_t type) {
     case PVIP_NODE_UNICODE_CHAR:
         return PVIP_CATEGORY_STRING;
     case PVIP_NODE_INT:
-    case PVIP_NODE_COMPLEX:
         return PVIP_CATEGORY_INT;
     case PVIP_NODE_NUMBER:
+    case PVIP_NODE_COMPLEX:
         return PVIP_CATEGORY_NUMBER;
     default:
         return PVIP_CATEGORY_CHILDREN;
