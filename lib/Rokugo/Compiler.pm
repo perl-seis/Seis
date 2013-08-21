@@ -37,6 +37,7 @@ BEGIN {
     *Int = *Rokugo::Runtime::Int;
     *Mu = *Rokugo::Runtime::Mu;
     *Array = *Rokugo::Runtime::Array;
+    *False = *boolean::false;
 }
 
 ...
@@ -134,10 +135,16 @@ sub do_compile {
             'Rokugo::Instant::'
         } elsif ($v eq 'IO::Handle') {
             'IO::Handle::'
+        } elsif ($v eq 'Bool::False') {
+            'boolean::false'
         } elsif ($v eq 'IO::Path::Cygwin') {
             'IO::Path::Cygwin::'
         } else {
-            $v;
+            if ($v =~ /::/) {
+                $v . "::";
+            } else {
+                $v;
+            }
         }
     } elsif ($type == PVIP_NODE_FUNCALL) {
         if ($v->[0]->type == PVIP_NODE_IDENT) {
