@@ -12,3 +12,9 @@ __END__
 ( now * Inf )
 --- expected
 (statements (mul (now) (ident "Inf")))
+
+===
+--- code
+( time * Inf )
+--- expected
+(statements (mul (time) (ident "Inf")))
