@@ -695,6 +695,10 @@ role =
 
 # TODO optimizable
 class =
+    'augment' ws+ c:class_declare { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_AUGMENT, c); }
+    | class_declare
+
+class_declare =
     { i=NULL; is=NULL; } 'class'  (
         ws+ i:ident
     )? - is:is_does_list? - b:block {
