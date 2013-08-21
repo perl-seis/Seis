@@ -172,7 +172,7 @@ multi_method_stmt =
     | method_stmt
 
 method_stmt =
-    { p=NULL; } 'method' ws - i:ident - '(' - p:params? - ')' - b:block { $$ = PVIP_node_new_children3(&(G->data), PVIP_NODE_METHOD, i, MAYBE(p), b); }
+    { p=NULL; } 'method' ws - i:ident ( - '(' - p:params? - ')' )? - b:block { $$ = PVIP_node_new_children3(&(G->data), PVIP_NODE_METHOD, i, MAYBE(p), b); }
     | { p=NULL; } 'submethod' ws - i:ident - '(' - p:params? - ')' - b:block { $$ = PVIP_node_new_children3(&(G->data), PVIP_NODE_SUBMETHOD, i, MAYBE(p), b); }
 
 normal_stmt = return_stmt | last_stmt | next_stmt | expr
