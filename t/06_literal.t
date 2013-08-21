@@ -54,7 +54,7 @@ q|a'|
 --- code
 { 'baz' => 3, }
 --- expected
-(statements (hash (pair (string "baz") (int 3))))
+(statements (hash (list (pair (string "baz") (int 3)))))
 
 ===
 --- code

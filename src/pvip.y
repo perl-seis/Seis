@@ -329,7 +329,14 @@ comma_operator_expr = a:loose_unary_expr { $$=a; } ( - ',' - b:loose_unary_expr 
             $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_LIST, a, b);
             a=$$;
         }
-    } )*
+    } )* ( - ',' {
+        if (a->type==PVIP_NODE_LIST) {
+            $$=a;
+        } else {
+            $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_LIST, a);
+            a=$$;
+        }
+    } )?
 
 # L
 loose_unary_expr =
