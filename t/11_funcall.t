@@ -31,3 +31,9 @@ map { $_ }, @a
 --- expected
 (statements (funcall (ident "map") (args (lambda (block (statements (variable "$_")))) (variable "@a"))))
 
+
+===
+--- code
+$is-true.()
+--- expected
+(statements (funcall (variable "$is-true") (args)))
