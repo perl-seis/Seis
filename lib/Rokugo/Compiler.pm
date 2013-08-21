@@ -426,11 +426,19 @@ sub do_compile {
             );
         }
 
-        sprintf('%s->%s(%s)',
-            $invocant,
-            $method,
-            $params,
-        );
+        if ($v->[1]->type == PVIP_NODE_STRING || $v->[1]->type == PVIP_NODE_STRING_CONCAT) {
+            sprintf('%s->${\(%s)}(%s)',
+                $invocant,
+                $method,
+                $params,
+            );
+        } else {
+            sprintf('%s->%s(%s)',
+                $invocant,
+                $method,
+                $params,
+            );
+        }
     } elsif ($type == PVIP_NODE_FUNC) {
         my $ret = 'sub ';
         $ret .= $self->do_compile($v->[0]);
