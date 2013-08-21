@@ -177,8 +177,17 @@ sub do_compile {
                         $self->do_compile($v->[1]->value->[0]),
                     );
                 } else {
-                    sprintf('Rokugo::Runtime::builtin_eval(%s)',
+                    join('',
+                        'do {',
+                        'my $__rg_compiler = Rokugo::Compiler->new();',
+                        'my $__rg_compiled = $__rg_compiler->compile(',
                         $self->do_compile($v->[1]),
+                        ');',
+                        'my $__rg_ret = eval $__rg_compiled;',
+                        'if ($@) {',
+                            'Rokugo::Exception::CompilationFailed->throw("$@");',
+                        '}',
+                        '$__rg_ret;}',
                     );
                 }
             } elsif ($v->[0]->value eq 'now') {
