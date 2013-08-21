@@ -12,3 +12,9 @@ __END__
 3.14e0
 --- expected
 (statements (number 3.14))
+
+===
+--- code
+1e-1
+--- expected
+(statements (number 0.1))
