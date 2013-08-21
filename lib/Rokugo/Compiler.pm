@@ -119,6 +119,8 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_IDENT) {
         if ($v eq '::Array') {
             'Rokugo::Class->new(name => "Array")'
+        } elsif ($v eq 'self') {
+            '$self'
         } elsif ($v eq '::Hash') {
             'Rokugo::Class->new(name => "Hash")'
         } elsif ($v eq 'Buf') {
