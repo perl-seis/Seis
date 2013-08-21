@@ -65,5 +65,10 @@ sub any:method {
     Rokugo::Any->_new(@_);
 }
 
+sub is_prime {
+    require Math::Prime::Util;
+    Math::Prime::Util::is_prime($_[0])
+}
+
 1;
 
