@@ -62,5 +62,7 @@ sub ords {
     wantarray ? @ret : \@ret;
 }
 
+sub rindex:method { goto &Rokugo::Str::rindex }
+
 1;
 

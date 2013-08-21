@@ -68,5 +68,14 @@ sub ords {
     wantarray ? @ret : \@ret;
 }
 
+sub rindex:method {
+    my ($self, $str) = @_;
+    CORE::rindex($self, $str);
+}
+
+sub tc:method {
+    ucfirst($_[0]);
+}
+
 1;
 
