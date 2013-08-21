@@ -70,5 +70,10 @@ sub is_prime {
     Math::Prime::Util::is_prime($_[0])
 }
 
+sub ords {
+    my @ret = map { ord($_) } split //, $_[0];
+    wantarray ? @ret : \@ret;
+}
+
 1;
 

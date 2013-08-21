@@ -191,6 +191,10 @@ sub do_compile {
                 sprintf('Rokugo::BuiltinFunctions::get(%s)',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'ords') {
+                sprintf('Rokugo::BuiltinFunctions::ords(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'is-prime') {
                 sprintf('Rokugo::BuiltinFunctions::is_prime(%s)',
                     $self->do_compile($v->[1]),
