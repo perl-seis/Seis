@@ -802,14 +802,17 @@ param =
     '*' v:array_var {
         $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_PARAM, PVIP_node_new_children1(&(G->data), PVIP_NODE_VARGS, v));
     }
-    | { i=NULL; d=NULL; }
+    | { i=NULL; d=NULL; is_copy=NULL; }
     (
         ( i:ident ws+ )?
         v:term
         ( - d:param_defaults )?
+        ( - is_copy:is_copy )?
     ) {
-        $$ = PVIP_node_new_children3(&(G->data), PVIP_NODE_PARAM, MAYBE(i), v, MAYBE(d));
+        $$ = PVIP_node_new_children4(&(G->data), PVIP_NODE_PARAM, MAYBE(i), v, MAYBE(d), MAYBE(is_copy));
     }
+
+is_copy = 'is' ws+ 'copy' ![-a-zA-Z0-9_] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_IS_COPY); }
 
 param_defaults =
     '=' - e:expr { $$=e; }

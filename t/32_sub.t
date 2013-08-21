@@ -5,4 +5,4 @@ __END__
 --- code
 sub ($n) { }
 --- expected
-(statements (func (nop) (params (param (nop) (variable "$n") (nop))) (nop) (block)))
+(statements (func (nop) (params (param (nop) (variable "$n") (nop) (nop))) (nop) (block)))

@@ -29,22 +29,28 @@ sub foo() is export { }
 --- code
 sub foo($n) { }
 --- expected
-(statements (func (ident "foo") (params (param (nop) (variable "$n") (nop))) (nop) (block)))
+(statements (func (ident "foo") (params (param (nop) (variable "$n") (nop) (nop))) (nop) (block)))
 
 ===
 --- code
 sub foo(Int $n) { }
 --- expected
-(statements (func (ident "foo") (params (param (ident "Int") (variable "$n") (nop))) (nop) (block)))
+(statements (func (ident "foo") (params (param (ident "Int") (variable "$n") (nop) (nop))) (nop) (block)))
 
 ===
 --- code
 sub foo(Str $n="Ah") { }
 --- expected
-(statements (func (ident "foo") (params (param (ident "Str") (variable "$n") (string "Ah"))) (nop) (block)))
+(statements (func (ident "foo") (params (param (ident "Str") (variable "$n") (string "Ah") (nop))) (nop) (block)))
 
 ===
 --- code
 (-> $n { say($n) })(5)
 --- expected
-(statements (funcall (lambda (params (param (nop) (variable "$n") (nop))) (block (statements (funcall (ident "say") (args (variable "$n")))))) (args (int 5))))
+(statements (funcall (lambda (params (param (nop) (variable "$n") (nop) (nop))) (block (statements (funcall (ident "say") (args (variable "$n")))))) (args (int 5))))
+
+===
+--- code
+sub foo($n is copy) { }
+--- expected
+(statements (func (ident "foo") (params (param (nop) (variable "$n") (nop) (is_copy))) (nop) (block)))

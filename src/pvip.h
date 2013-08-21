@@ -191,6 +191,7 @@ typedef enum {
     PVIP_NODE_UNTIL, /* until */
     PVIP_NODE_TIME, /* time */
     PVIP_NODE_AUGMENT, /* augment */
+    PVIP_NODE_IS_COPY, /* is copy */
 } PVIP_node_type_t;
 
 typedef enum {
