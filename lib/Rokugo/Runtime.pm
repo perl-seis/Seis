@@ -23,6 +23,7 @@ use Rokugo::IO::Path;
 use Rokugo::Instant;
 use Rokugo::Duration;
 use Rokugo::Any;
+use Rokugo::Socket;
 
 use Rokugo::BuiltinFunctions;
 use Scalar::Util ();

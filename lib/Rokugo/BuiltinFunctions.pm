@@ -4,6 +4,7 @@ use warnings;
 use utf8;
 use 5.010_001;
 use Time::HiRes ();
+use Socket;
 
 sub end { @{$_[0]}-1 }
 sub end_list { @_-1 }
@@ -73,6 +74,18 @@ sub is_prime {
 sub ords {
     my @ret = map { ord($_) } split //, $_[0];
     wantarray ? @ret : \@ret;
+}
+
+sub connect:method {
+    my ($host, $port) = @_;
+
+    my $sock;
+    socket($sock, PF_INET, SOCK_STREAM, getprotobyname('tcp'))
+      or die "Cannot create socket: $!";
+    my $address = sockaddr_in($port, inet_aton($host));
+    CORE::connect($sock, $address)
+        or die "Cannot connect $host:$port: $!";
+    return bless $sock, 'Rokugo::Socket';
 }
 
 1;

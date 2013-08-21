@@ -183,6 +183,10 @@ sub do_compile {
                 sprintf('Rokugo::BuiltinFunctions::gcd(%s)',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'connect') {
+                sprintf('Rokugo::BuiltinFunctions::connect(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'any') {
                 sprintf('Rokugo::BuiltinFunctions::any(%s)',
                     $self->do_compile($v->[1]),
