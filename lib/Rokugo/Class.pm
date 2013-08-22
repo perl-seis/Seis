@@ -44,5 +44,10 @@ sub gist {
     '(' . $self->{name} . ')';
 }
 
+sub perl {
+    my $self = shift;
+    '(' . ($self->{name} || '-') . ')';
+}
+
 1;
 

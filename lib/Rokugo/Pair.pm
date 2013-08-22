@@ -71,5 +71,9 @@ sub isa {
     return UNIVERSAL::isa($self, $stuff);
 }
 
+sub WHAT {
+    Rokugo::Class->new(nam => 'Pair');
+}
+
 1;
 
