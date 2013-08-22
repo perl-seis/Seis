@@ -11,7 +11,7 @@ sub keys:method {
 
 sub WHAT {
     my $self = shift;
-    Rokugo::Class->new(name => 'Hash');
+    Rokugo::Class->_new(name => 'Hash');
 }
 
 sub pairs:method {

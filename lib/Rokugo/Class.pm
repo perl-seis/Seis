@@ -24,7 +24,7 @@ use overload (
 
 
 # DO NOT CALL THIS METHOD DIRECTLY.
-sub new {
+sub _new {
     my $class = shift;
     my %args = @_==1 ? %{$_[0]} : @_;
     if ($args{name}) {
@@ -32,6 +32,14 @@ sub new {
     } else {
         bless { %args }, $class;
     }
+}
+
+sub DESTROY { }
+
+our $AUTOLOAD;
+sub AUTOLOAD {
+    $AUTOLOAD =~ s/.*:://;
+    shift->{name}->$AUTOLOAD(@_);
 }
 
 sub meta {

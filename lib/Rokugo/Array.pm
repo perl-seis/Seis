@@ -23,7 +23,7 @@ sub join:method {
 }
 
 sub WHAT {
-    Rokugo::Class->new(name => 'Array');
+    Rokugo::Class->_new(name => 'Array');
 }
 
 sub map:method {

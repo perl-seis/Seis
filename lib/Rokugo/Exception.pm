@@ -7,7 +7,7 @@ use parent qw(Exception::Tiny);
 
 sub WHAT {
     my $self = shift;
-    Rokugo::Class->new(name => 'Exception');
+    Rokugo::Class->_new(name => 'Exception');
 }
 
 1;

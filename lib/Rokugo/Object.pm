@@ -22,10 +22,19 @@ sub meta {
 
 sub WHAT {
     my $self = shift;
-    Rokugo::Class->new(name => Scalar::Util::blessed($self));
+    Rokugo::Class->_new(name => Scalar::Util::blessed($self));
 }
 
 sub DESTROY { }
+
+sub isa {
+    my ($self, $stuff) = @_;
+    if (UNIVERSAL::isa($stuff, 'Rokugo::Class')) {
+        UNIVERSAL::isa($self, $stuff->{name});
+    } else {
+        UNIVERSAL::isa($self, $stuff);
+    }
+}
 
 1;
 

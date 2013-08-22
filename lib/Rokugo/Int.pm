@@ -22,7 +22,7 @@ sub Bool { Bool::boolean($_[0]) }
 
 sub WHAT {
     my $self = shift;
-    Rokugo::Class->new(name => 'Int');
+    Rokugo::Class->_new(name => 'Int');
 }
 
 use Math::BaseCnv;

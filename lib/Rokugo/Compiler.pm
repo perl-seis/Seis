@@ -118,15 +118,15 @@ sub do_compile {
         '(' . $self->do_compile($v->[0]) . ')-(' . $self->do_compile($v->[1]) . ')';
     } elsif ($type == PVIP_NODE_IDENT) {
         if ($v eq '::Array') {
-            'Rokugo::Class->new(name => "Array")'
+            'Rokugo::Class->_new(name => "Array")'
         } elsif ($v eq 'self') {
             '$self'
         } elsif ($v eq '::Hash') {
-            'Rokugo::Class->new(name => "Hash")'
+            'Rokugo::Class->_new(name => "Hash")'
         } elsif ($v eq 'Buf') {
             'Rokugo::Buf::'
         } elsif ($v eq 'Exception') {
-            'Rokugo::Class->new(name => "Exception")'
+            'Rokugo::Class->_new(name => "Exception")'
         } elsif ($v eq 'Real') {
             'Rokugo::Real::'
         } elsif ($v eq 'Duration') {
@@ -331,7 +331,7 @@ sub do_compile {
             } elsif ($_->type == PVIP_NODE_IDENT) {
                 my $v = $_->value;
                 $v =~ s/\A:://;
-                sprintf('Rokugo::Class->new(name => %s)', $self->compile_string($v));
+                sprintf('Rokugo::Class->_new(name => %s)', $self->compile_string($v));
             } elsif ($_->type == PVIP_NODE_VARIABLE && $_->value =~ /\A\@/) {
                 my $v = $_->value;
                 $v =~ s/−/ー/g;
@@ -708,7 +708,7 @@ sub do_compile {
         # (class (ident "Foo8") (list (is (ident "Foo7"))) (statements))
         state $ANON_CLASS = 0;
         my $pkg = $v->[0]->type == PVIP_NODE_NOP ? "Rokugo::_AnonClass" . $ANON_CLASS++ : $self->do_compile($v->[0]);
-        my $retval = $gimme == G_VOID ? '' : "Rokugo::Class->new(name => '$pkg')";
+        my $retval = $gimme == G_VOID ? '' : "Rokugo::Class->_new(name => '$pkg')";
         my $body = $self->do_compile($v->[2]);
         if ($body eq '{ }') {
             $body = '';

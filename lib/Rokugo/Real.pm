@@ -13,7 +13,7 @@ sub clone { 0+$_[0] }
 
 sub WHAT {
     my $self = shift;
-    Rokugo::Class->new(name => 'Rat');
+    Rokugo::Class->_new(name => 'Rat');
 }
 
 sub Int { CORE::int($_[0]) }

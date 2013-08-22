@@ -72,7 +72,7 @@ sub isa {
 }
 
 sub WHAT {
-    Rokugo::Class->new(nam => 'Pair');
+    Rokugo::Class->_new(nam => 'Pair');
 }
 
 1;

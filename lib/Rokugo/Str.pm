@@ -54,7 +54,7 @@ sub fmt {
 
 sub WHAT {
     my $self = shift;
-    Rokugo::Class->new(name => 'Str');
+    Rokugo::Class->_new(name => 'Str');
 }
 
 sub Int { int shift; }
