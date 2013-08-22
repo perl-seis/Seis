@@ -34,5 +34,12 @@ sub kv {
     map { $_ => $self->{$_} } keys %$self;
 }
 
+sub invert {
+    my $self = shift;
+    # map -> $k, $v { $v X=> $k }, %hash.kv;
+    my @ret = map { $self->{$_} => $_ } keys %$self;
+    wantarray ? @ret : \@ret;
+}
+
 1;
 
