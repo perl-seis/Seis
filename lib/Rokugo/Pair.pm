@@ -67,8 +67,8 @@ sub kv {
 
 sub isa {
     my ($self, $stuff) = @_;
-    return $stuff->{name} eq 'Pair' if UNIVERSAL::isa($stuff, 'Rokugo::Class');
-    return $self->isa($stuff);
+    return UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Rokugo::Class');
+    return UNIVERSAL::isa($self, $stuff);
 }
 
 1;
