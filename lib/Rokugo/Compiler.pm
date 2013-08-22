@@ -26,7 +26,7 @@ use utf8;
 no warnings "experimental::smartmatch";
 no warnings "experimental::lexical_subs";
 use feature "lexical_subs";
-use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
+use Rokugo::Autobox;
 use List::Util qw(min max);
 use Rokugo::Runtime;
 use POSIX qw(floor);
@@ -327,7 +327,7 @@ sub do_compile {
             if ($_->type == PVIP_NODE_IDENT && $_->value eq 'Hash') {
                 'Rokugo::Hash::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'Array') {
-                'Rokugo::Array::'
+                'Array::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'IO::Path') {
                 'Rokugo::IO::Path::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'True') {
