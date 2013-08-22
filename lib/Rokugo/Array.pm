@@ -4,6 +4,14 @@ use warnings;
 use utf8;
 use 5.010_001;
 
+package # Hide from PAUSE
+    Array;
+
+sub new {
+    my ($class, @ary) = @_;
+    bless \@ary, 'Array';
+}
+
 sub pop:method { CORE::pop $_[0] }
 sub shift:method { CORE::shift $_[0] }
 sub push:method { CORE::push $_[0], $_[1] }

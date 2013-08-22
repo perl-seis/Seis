@@ -202,6 +202,10 @@ sub do_compile {
                 sprintf('(%s)->kv',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'list') {
+                sprintf('List->new(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'gcd') {
                 sprintf('Rokugo::BuiltinFunctions::gcd(%s)',
                     $self->do_compile($v->[1]),
