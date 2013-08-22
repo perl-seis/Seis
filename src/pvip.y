@@ -196,6 +196,7 @@ use_stmt =
         } '>'
     )?
     eat_terminator
+    | 'need' ws+ pkg:pkg_name eat_terminator { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_NEED, pkg); }
 
 pkg_name = < [a-zA-Z] [a-zA-Z0-9_]* ( '::' [a-zA-Z0-9_]+ )* > {
     $$ = PVIP_node_new_string(PVIP_NODE_IDENT, yytext, yyleng);

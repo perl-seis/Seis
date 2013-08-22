@@ -193,6 +193,7 @@ typedef enum {
     PVIP_NODE_AUGMENT, /* augment */
     PVIP_NODE_IS_COPY, /* is copy */
     PVIP_NODE_LEG, /* leg operator */
+    PVIP_NODE_NEED, /* need */
 } PVIP_node_type_t;
 
 typedef enum {
