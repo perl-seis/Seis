@@ -12,5 +12,16 @@ sub new {
     bless \@ary, $class;
 }
 
+sub Int {
+    my $self = shift;
+    0+@$self;
+}
+
+sub isa {
+    my ($self, $stuff) = @_;
+    return UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Rokugo::Class');
+    return UNIVERSAL::isa($self, $stuff);
+}
+
 1;
 
