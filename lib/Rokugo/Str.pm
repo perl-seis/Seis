@@ -3,6 +3,9 @@ use strict;
 use warnings;
 use utf8;
 use 5.012_001;
+
+package # Hide from CPAN
+    Str;
 use Data::Dumper ();
 use feature 'fc';
 use Encode ();

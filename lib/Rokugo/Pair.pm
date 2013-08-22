@@ -7,7 +7,7 @@ use 5.010_001;
 package # hide from pause
     Pair;
 
-use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
+use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use overload (
     '~~' => '_match',
     'eq' => sub {
@@ -30,7 +30,7 @@ sub value { $_[0]->[1] }
 sub _match {
     my ($self, $stuff) = @_;
     if (UNIVERSAL::isa($stuff, 'Rokugo::IO')) {
-        my $ret = eval "-$self->[0] " . Rokugo::Str::perl($stuff->{path});
+        my $ret = eval "-$self->[0] " . Str::perl($stuff->{path});
         die $@ if $@;
         $ret;
     } else {

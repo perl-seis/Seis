@@ -27,7 +27,7 @@ use utf8;
 no warnings "experimental::smartmatch";
 no warnings "experimental::lexical_subs";
 use feature "lexical_subs";
-use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
+use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use List::Util qw(min max);
 use Rokugo::Runtime;
 use POSIX qw(floor);
@@ -232,7 +232,7 @@ sub do_compile {
                     $self->do_compile($v->[1]),
                 );
             } elsif ($v->[0]->value eq 'lines') {
-                sprintf('Rokugo::Str::lines(%s)',
+                sprintf('Str::lines(%s)',
                     $self->do_compile($v->[1]),
                 );
             } elsif ($v->[0]->value eq 'slurp') {

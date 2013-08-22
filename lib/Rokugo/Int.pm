@@ -62,7 +62,7 @@ sub ords {
     wantarray ? @ret : \@ret;
 }
 
-sub rindex:method { goto &Rokugo::Str::rindex }
+sub rindex:method { goto &Str::rindex }
 
 sub kv {
     [0, $_[0]]
