@@ -20,5 +20,10 @@ sub meta {
     $meta;
 }
 
+sub WHAT {
+    my $self = shift;
+    Rokugo::Class->new(name => Scalar::Util::blessed($self));
+}
+
 1;
 
