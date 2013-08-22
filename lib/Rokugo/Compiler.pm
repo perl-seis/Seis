@@ -499,7 +499,7 @@ sub do_compile {
         # (param (vargs (variable "@a")))
         if (@$v==1) {
             sprintf('%s;', $self->do_compile($v->[0]));
-        } elsif (@$v==3) {
+        } elsif (@$v==4) {
             # (param (ident "Int") (variable "$x") (nop))
             if ($v->[1]->value =~ /\A\@/) {
                 sprintf('my %s=@_;', $self->do_compile($v->[1]));
