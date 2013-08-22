@@ -1027,6 +1027,8 @@ sub do_compile {
         '($Rokugo::Runtime::TW_C)';
     } elsif ($type == PVIP_NODE_WHATEVER) {
         '(Rokugo::Whatever->new())';
+    } elsif ($type == PVIP_NODE_NEED) {
+        sprintf("BEGIN { require %s }", $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_END) {
         "END " . $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_GCD) {
