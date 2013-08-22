@@ -529,6 +529,10 @@ multiplicative_expr =
             $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_GCD, l, r);
             l = $$;
         }
+        | - 'div' ![=a-zA-Z0-9] - r:symbolic_unary {
+            $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_INTEGER_DIVISION, l, r);
+            l = $$;
+        }
     )* {
         $$ = l;
     }
