@@ -132,7 +132,7 @@ sub do_compile {
         } elsif ($v eq 'Duration') {
             'Rokugo::Duration::'
         } elsif ($v eq 'Pair') {
-            'Rokugo::Pair::'
+            'Pair::'
         } elsif ($v eq 'Instant') {
             'Rokugo::Instant::'
         } elsif ($v eq 'IO::Handle') {
@@ -596,7 +596,7 @@ sub do_compile {
         '{' . join(',', map { $self->do_compile($_, G_ARRAY) } @$v) . '}';
     } elsif ($type == PVIP_NODE_PAIR) {
         if ($gimme == G_SCALAR) {
-            sprintf('Rokugo::Pair->_new(scalar(%s),scalar(%s))',
+            sprintf('Pair->_new(scalar(%s),scalar(%s))',
                 $v->[0]->type == PVIP_NODE_IDENT ? $self->compile_string($v->[0]) : $self->do_compile($v->[0]),
                 $self->do_compile($v->[1]),
             );

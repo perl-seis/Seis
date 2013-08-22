@@ -18,7 +18,7 @@ sub pairs:method {
     my $self = shift;
     my @ret;
     while (my ($k, $v) = each %$self) {
-        push @ret, bless [$k, $v], Rokugo::Pair::;
+        push @ret, bless [$k, $v], Pair::;
     }
     return wantarray ? @ret : \@ret;
 }
@@ -31,7 +31,7 @@ sub fmt {
 
 sub kv {
     my $self = shift;
-     map { $_ => $self->{$_} } keys %$self;
+    map { $_ => $self->{$_} } keys %$self;
 }
 
 1;

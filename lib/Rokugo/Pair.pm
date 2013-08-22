@@ -3,6 +3,10 @@ use strict;
 use warnings;
 use utf8;
 use 5.010_001;
+
+package # hide from pause
+    Pair;
+
 use autobox 2.79 ARRAY => 'Rokugo::Array', INTEGER => 'Rokugo::Int', 'FLOAT' => 'Rokugo::Real', 'STRING' => 'Rokugo::Str', HASH => 'Rokugo::Hash', UNDEF => 'Rokugo::Undef';
 use overload (
     '~~' => '_match',
