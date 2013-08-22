@@ -37,6 +37,7 @@ BEGIN {
     *Mu = *Rokugo::Runtime::Mu;
     *Array = *Rokugo::Runtime::Array;
     *False = *Bool::False;
+    *True = *Bool::True;
 }
 
 ...
@@ -138,6 +139,10 @@ sub do_compile {
             'IO::Handle::'
         } elsif ($v eq 'Bool::False') {
             'Bool::False()'
+        } elsif ($v eq 'Bool::True') {
+            'Bool::True()'
+        } elsif ($v eq 'True') {
+            'Bool::True()'
         } elsif ($v eq 'IO::Path::Cygwin') {
             'IO::Path::Cygwin::'
         } else {
@@ -321,6 +326,8 @@ sub do_compile {
                 'Rokugo::Array::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'IO::Path') {
                 'Rokugo::IO::Path::'
+            } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'True') {
+                'Bool::True()'
             } elsif ($_->type == PVIP_NODE_IDENT) {
                 my $v = $_->value;
                 $v =~ s/\A:://;
