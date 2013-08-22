@@ -97,3 +97,9 @@ IO::Path
 2.18503986326152i
 --- expected
 (statements (complex 2.18504))
+
+===
+--- code
+.5i
+--- expected
+(statements (complex 0.5))
