@@ -25,5 +25,7 @@ sub WHAT {
     Rokugo::Class->new(name => Scalar::Util::blessed($self));
 }
 
+sub DESTROY { }
+
 1;
 
