@@ -124,7 +124,7 @@ sub do_compile {
         } elsif ($v eq '::Hash') {
             'Rokugo::Class->_new(name => "Hash")'
         } elsif ($v eq 'Buf') {
-            'Rokugo::Buf::'
+            'Buf::'
         } elsif ($v eq 'Exception') {
             'Rokugo::Class->_new(name => "Exception")'
         } elsif ($v eq 'Real') {
