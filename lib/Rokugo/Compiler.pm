@@ -325,7 +325,9 @@ sub do_compile {
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'IO::Path') {
                 'Rokugo::IO::Path::'
             } elsif ($_->type == PVIP_NODE_IDENT) {
-                sprintf('Rokugo::Class->new(name => %s)', $self->compile_string($_->value));
+                my $v = $_->value;
+                $v =~ s/\A:://;
+                sprintf('Rokugo::Class->new(name => %s)', $self->compile_string($v));
             } elsif ($_->type == PVIP_NODE_VARIABLE && $_->value =~ /\A\@/) {
                 my $v = $_->value;
                 $v =~ s/−/ー/g;

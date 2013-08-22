@@ -61,5 +61,11 @@ sub kv {
     [$self->key, $self->value];
 }
 
+sub isa {
+    my ($self, $stuff) = @_;
+    return $stuff->{name} eq 'Pair' if UNIVERSAL::isa($stuff, 'Rokugo::Class');
+    return $self->isa($stuff);
+}
+
 1;
 
