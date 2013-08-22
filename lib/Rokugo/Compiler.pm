@@ -8,7 +8,6 @@ use Perl6::PVIP 0.01;
 use Carp ();
 use Data::Dumper ();
 use Encode ();
-use boolean ();
 use Rokugo::Runtime;
 
 use constant {
@@ -37,7 +36,7 @@ BEGIN {
     *Int = *Rokugo::Runtime::Int;
     *Mu = *Rokugo::Runtime::Mu;
     *Array = *Rokugo::Runtime::Array;
-    *False = *boolean::false;
+    *False = *Bool::False;
 }
 
 ...
@@ -138,7 +137,7 @@ sub do_compile {
         } elsif ($v eq 'IO::Handle') {
             'IO::Handle::'
         } elsif ($v eq 'Bool::False') {
-            'boolean::false'
+            'Bool::False()'
         } elsif ($v eq 'IO::Path::Cygwin') {
             'IO::Path::Cygwin::'
         } else {
@@ -316,9 +315,7 @@ sub do_compile {
         }
     } elsif ($type == PVIP_NODE_ARGS) {
         my @args = map {
-            if ($_->type == PVIP_NODE_IDENT && $_->value eq 'Bool') {
-                'boolean::'
-            } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'Hash') {
+            if ($_->type == PVIP_NODE_IDENT && $_->value eq 'Hash') {
                 'Rokugo::Hash::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'Array') {
                 'Rokugo::Array::'
@@ -916,7 +913,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_PERL5_REGEXP) {
         sprintf('qr!%s!', $v);
     } elsif ($type == PVIP_NODE_TRUE) {
-        '(boolean::true())'
+        '(Bool::true())'
     } elsif ($type == PVIP_NODE_TW_VM) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_VM is not implemented")
     } elsif ($type == PVIP_NODE_HAS) {

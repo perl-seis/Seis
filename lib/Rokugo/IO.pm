@@ -23,6 +23,7 @@ sub lines {
 }
 
 sub eof:method {
+    warn CORE::eof($_[0]->{fh});
     CORE::eof($_[0]->{fh});
 }
 

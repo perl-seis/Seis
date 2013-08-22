@@ -3,7 +3,7 @@ use warnings;
 use utf8;
 use Test::More;
 use Rokugo;
-use boolean ();
+use Rokugo::Bool;
 
 sub true()  { !!1 }
 sub false() { !!0 }
@@ -103,12 +103,12 @@ my @result = (
     '3+<2' => 12,
     '256+>1' => 128,
     'my $n="a"; $n~="b";$n' => 'ab',
-    '?1' => boolean::true,
-    '?0' => boolean::false,
+    '?1' => Bool::True,
+    '?0' => Bool::False,
     '[(class { }).^methods]' => [],
     '[(class { method foo() { } }).^methods]' => ['foo'],
     'my $i=0; for 1..10 { $i+=$_; last if $_==5}; $i' => 15,
-    '!1' => boolean::false,
+    '!1' => Bool::False,
     'sub add($x, $y) { $x+$y } add(4,3)' => 7,
     'class Foo6 { method bar() { $?CLASS } }; Foo6.bar' => Rokugo::MetaClass->new(name => 'Foo6'),
     'class Foo7 { method bar() { 5963 } };  class Foo8 is Foo7 { } Foo8.bar' => 5963,

@@ -9,6 +9,7 @@ our $VERSION = "0.01";
 use Rokugo::Exceptions;
 use Rokugo::Compiler;
 use Rokugo::Array;
+use Rokugo::Bool;
 use File::Spec;
 use File::ShareDir ();
 

@@ -27,7 +27,7 @@ sub perl {
 
 sub clone { "$_[0]" }
 
-sub Bool { boolean::boolean($_[0]) }
+sub Bool { Bool::boolean($_[0]) }
 
 sub lines {
     my ($self, $n) = @_;
