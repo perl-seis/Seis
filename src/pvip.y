@@ -20,6 +20,7 @@
         G->data.line_number_stack[G->data.line_number_stack_size-1] = G->data.line_number; \
     } while (0)
 #define LEAVE do { assert(G->data.line_number_stack_size> 0); G->data.line_number_stack_size--; } while (0)
+#define CHILDREN2(t,a,b) PVIP_node_new_children2(&(G->data),t,a,b)
 
 /*
 
@@ -121,6 +122,7 @@ statement =
             | module_stmt
             | multi_method_stmt
             | die_stmt
+            | package_stmt
             | has_stmt
             | '...' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_STUB); }
             | funcdef - ';'*
@@ -143,6 +145,11 @@ normal_or_postfix_stmt =
         | ( ' '+ 'while' - cond_for:expr - eat_terminator ) { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_WHILE, cond_for, n); }
         | ( - eat_terminator ) { $$=n; }
     )
+
+package_stmt =
+    'package' ws+ pkg:pkg_name - blk:block {
+        $$ = CHILDREN2(PVIP_NODE_PACKAGE, pkg, blk);
+    }
 
 enum_stmt =
     'my' ws+ 'enum' ws+ i:ident - e:expr { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_MY, PVIP_node_new_children2(&(G->data), PVIP_NODE_ENUM, i, e)); }
