@@ -329,7 +329,7 @@ sub do_compile {
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'Array') {
                 'Array::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'IO::Path') {
-                'Rokugo::IO::Path::'
+                'IO::Path::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'True') {
                 'Bool::True()'
             } elsif ($_->type == PVIP_NODE_IDENT) {
@@ -941,7 +941,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_FUNCREF) {
         sprintf('\&%s', $v);
     } elsif ($type == PVIP_NODE_PATH) {
-        sprintf('Rokugo::IO::Path->new(%s)',
+        sprintf('IO::Path->new(%s)',
             $self->compile_string($node)
         );
     } elsif ($type == PVIP_NODE_TW_PACKAGE) {
@@ -959,7 +959,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_OSVER) {
        'do {require Config; $Config::Config{osvers} }';
     } elsif ($type == PVIP_NODE_TW_CWD) {
-        '(Cwd::getcwd())'
+        '(IO::Path->new(Cwd::getcwd()))'
     } elsif ($type == PVIP_NODE_TW_EXECUTABLE_NAME) {
         '($0)'
     } elsif ($type == PVIP_NODE_TW_ROUTINE) {

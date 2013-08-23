@@ -24,6 +24,7 @@ sub perl {
     local $Data::Dumper::Indent = 0;
     Data::Dumper::Dumper($_[0]);
 }
+sub gist { Str::perl(@_) }
 
 sub clone { "$_[0]" }
 
