@@ -54,3 +54,10 @@ __END__
 "\c10"
 --- expected
 (statements (string "\n"))
+
+===
+--- code
+"%a<x>"
+--- expected
+(statements (string_concat (string "") (atkey (variable "%a") (string "x"))))
+
