@@ -316,6 +316,11 @@ list_infix_expr =
             $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_MINMAX, a, b);
             a=$$;
         }
+        # the sequence operator
+        | - '...' ![-._a-zA-Z0-9] - b:comma_operator_expr {
+            $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_SEQUENCE, a, b);
+            a=$$;
+        }
     )*
 
 reduce_operator =
