@@ -20,6 +20,8 @@
         G->data.line_number_stack[G->data.line_number_stack_size-1] = G->data.line_number; \
     } while (0)
 #define LEAVE do { assert(G->data.line_number_stack_size> 0); G->data.line_number_stack_size--; } while (0)
+
+#define CHILDREN1(t,a)   PVIP_node_new_children1(&(G->data),t,a)
 #define CHILDREN2(t,a,b) PVIP_node_new_children2(&(G->data),t,a,b)
 
 /*
@@ -678,6 +680,9 @@ term =
     | 'rand' ![-a-zA-Z0-9] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_RAND); }
     | 'now' ![-a-zA-Z0-9] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_NOW); }
     | 'time' ![-a-zA-Z0-9] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TIME); }
+    | { e=NULL; } '$(' - ( e:expr - )? ')' { $$ = CHILDREN1(PVIP_NODE_CONTEXTUALIZER_SCALAR, MAYBE(e)); }
+    | { e=NULL; } '@(' - ( e:expr - )? ')' { $$ = CHILDREN1(PVIP_NODE_CONTEXTUALIZER_ARRAY,  MAYBE(e)); }
+    | { e=NULL; } '%(' - ( e:expr - )? ')' { $$ = CHILDREN1(PVIP_NODE_CONTEXTUALIZER_HASH,   MAYBE(e)); }
 
 enum =
     'enum' ws+ q:qw { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ENUM, PVIP_node_new_children(&(G->data), PVIP_NODE_NOP), q); }

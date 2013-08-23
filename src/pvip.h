@@ -199,6 +199,9 @@ typedef enum {
     PVIP_NODE_PACKAGE, /* package */
     PVIP_NODE_MINMAX, /* minmax */
     PVIP_NODE_SEQUENCE, /* ... */
+    PVIP_NODE_CONTEXTUALIZER_SCALAR, /* $() */
+    PVIP_NODE_CONTEXTUALIZER_ARRAY, /* @() */
+    PVIP_NODE_CONTEXTUALIZER_HASH, /* %() */
 } PVIP_node_type_t;
 
 typedef enum {
