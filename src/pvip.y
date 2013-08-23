@@ -339,6 +339,15 @@ lvalue =
         '[' - e:expr - ']' { $$=PVIP_node_new_children2(&(G->data), PVIP_NODE_ATPOS, v, e); }
         | '<' - k:atkey_key - '>' {  $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ATKEY, v, k); }
     )?
+    | '(' - a:lvalue - ( ',' - b:lvalue {
+        if (a->type == PVIP_NODE_LIST) {
+            PVIP_node_push_child(a, b);
+            $$=a;
+        } else {
+            a = CHILDREN2(PVIP_NODE_LIST, a, b);
+            $$=a;
+        }
+    } )* - ')'
 
 comma_operator_expr = a:loose_unary_expr { $$=a; } ( - ',' - b:loose_unary_expr {
         if (a->type==PVIP_NODE_LIST) {
