@@ -79,3 +79,9 @@ __END__
 "$hash{do_a}"
 --- expected
 (statements (string_concat (string "") (atkey (variable "$hash") (ident "do_a"))))
+
+===
+--- code
+"%02x"
+--- expected
+(statements (string "%02x"))
