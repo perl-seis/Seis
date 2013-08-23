@@ -308,8 +308,12 @@ list_prefix_expr =
 
 list_infix_expr =
     a:comma_operator_expr {$$=a;} (
-        - 'Z' - b:comma_operator_expr {
+        - 'Z' ![-_a-zA-Z0-9] - b:comma_operator_expr {
             $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_Z, a, b);
+            a=$$;
+        }
+        | - 'minmax' ![-_a-zA-Z0-9] - b:comma_operator_expr {
+            $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_MINMAX, a, b);
             a=$$;
         }
     )*

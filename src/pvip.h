@@ -197,6 +197,7 @@ typedef enum {
     PVIP_NODE_INTEGER_DIVISION, /* div */
     PVIP_NODE_LCM, /* lcm */
     PVIP_NODE_PACKAGE, /* package */
+    PVIP_NODE_MINMAX, /* minmax */
 } PVIP_node_type_t;
 
 typedef enum {
