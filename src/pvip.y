@@ -971,6 +971,8 @@ dq_string = s:dq_string_start { s = PVIP_node_new_string(PVIP_NODE_STRING, "", 0
         | "{" - "}" { s=PVIP_node_append_string(&(G->data), s, "", 0); }
         | < [^"{\\\n$%]+ > { s=PVIP_node_append_string(&(G->data), s, yytext, yyleng); }
         | h:hash_var '<' - k:atkey_key - '>' {  s=PVIP_node_append_string_node(&(G->data), s, CHILDREN2(PVIP_NODE_ATKEY, h, k)); }
+        # %hash{do_a}
+        | h:hash_var '{' - k:expr - '}' {  s=PVIP_node_append_string_node(&(G->data), s, CHILDREN2(PVIP_NODE_ATKEY, h, k)); }
         | v:variable { s=PVIP_node_append_string_node(PARSER, s, v); }
         | esc 'a' { s=PVIP_node_append_string(&(G->data), s, "\a", 1); }
         | esc 'b' { s=PVIP_node_append_string(&(G->data), s, "\b", 1); }

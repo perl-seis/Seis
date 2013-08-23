@@ -61,3 +61,10 @@ __END__
 --- expected
 (statements (string_concat (string "") (atkey (variable "%a") (string "x"))))
 
+===
+--- code
+"%hash{do_a}"
+--- expected
+(statements (string_concat (string "") (atkey (variable "%hash") (ident "do_a"))))
+
+
