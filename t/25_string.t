@@ -85,3 +85,16 @@ __END__
 "%02x"
 --- expected
 (statements (string "%02x"))
+
+===
+--- code
+"%h{}"
+--- expected
+(statements (string_concat (string "") (stringify (variable "%h"))))
+
+===
+--- code
+~3
+--- expected
+(statements (stringify (int 3)))
+
