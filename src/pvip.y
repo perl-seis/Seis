@@ -929,7 +929,7 @@ integer =
     | '0d' <[0-9]+> {
     $$ = PVIP_node_new_intf(PVIP_NODE_INT, yytext, yyleng, 10);
 }
-    | '0x' <[0-9a-f_]+> {
+    | '0x' <[0-9a-fA-F_]+> {
     $$ = PVIP_node_new_intf(PVIP_NODE_INT, yytext, yyleng, 16);
 }
     | '0o' <[0-7]+> {

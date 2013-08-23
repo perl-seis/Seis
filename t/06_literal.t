@@ -103,3 +103,9 @@ IO::Path
 .5i
 --- expected
 (statements (complex 0.5))
+
+===
+--- code
+0xC0
+--- expected
+(statements (int 192))
