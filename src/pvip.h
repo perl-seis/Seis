@@ -202,6 +202,7 @@ typedef enum {
     PVIP_NODE_CONTEXTUALIZER_SCALAR, /* $() */
     PVIP_NODE_CONTEXTUALIZER_ARRAY, /* @() */
     PVIP_NODE_CONTEXTUALIZER_HASH, /* %() */
+    PVIP_NODE_TW_TMPDIR, /* $*TMPDIR */
 } PVIP_node_type_t;
 
 typedef enum {
