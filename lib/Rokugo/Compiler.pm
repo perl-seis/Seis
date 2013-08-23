@@ -19,7 +19,7 @@ use constant {
 # `no warnings 'misc'` suppress `"our" variable $x redeclared` message
 # in `our $x; { my $x; { our $x}}`
 our $HEADER = <<'...';
-package main;
+package Main;
 use strict;
 use 5.018_000;
 use utf8;
@@ -963,7 +963,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_EXECUTABLE_NAME) {
         '($0)'
     } elsif ($type == PVIP_NODE_TW_ROUTINE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_TW_ROUTINE is not implemented")
+        'Sub->_new(__SUB__)';
     } elsif ($type == PVIP_NODE_SLANGS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_SLANGS is not implemented")
     } elsif ($type == PVIP_NODE_LOGICAL_ANDTHEN) {
@@ -1042,6 +1042,11 @@ sub do_compile {
         );
     } elsif ($type == PVIP_NODE_BEGIN) {
         "BEGIN " . $self->do_compile($v->[0]);
+    } elsif ($type == PVIP_NODE_PACKAGE) {
+        sprintf('package %s %s',
+            $self->do_compile($v->[0]),
+            $self->do_compile($v->[1])
+        );
     } else {
         Rokugo::Exception::UnknownNode->throw(
              ("Unknown node: PVIP_NODE_" . uc($node->name))

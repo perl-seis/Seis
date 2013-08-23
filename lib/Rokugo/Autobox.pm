@@ -12,6 +12,7 @@ sub import {
         INTEGER => 'Rokugo::Int',
         FLOAT   => 'Rokugo::Real',
         STRING  => 'Str',
+        CODE    => 'Sub',
         HASH    => 'Rokugo::Hash',
         UNDEF   => 'Rokugo::Undef',
     );
