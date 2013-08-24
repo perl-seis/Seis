@@ -41,5 +41,10 @@ sub invert {
     wantarray ? @ret : \@ret;
 }
 
+sub Str {
+    my $self = shift;
+    join("\n", map { sprintf("%s\t%s", $_, $self->{$_}) } keys %$self);
+}
+
 1;
 

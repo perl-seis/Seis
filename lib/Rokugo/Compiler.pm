@@ -601,7 +601,11 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_CLARGS) {
         Rokugo::Exception::NotImplemented->throw("PVIP_NODE_CLARGS is not implemented")
     } elsif ($type == PVIP_NODE_HASH) {
-        '{' . join(',', map { $self->do_compile($_, G_ARRAY) } @$v) . '}';
+        if ($gimme == G_ARRAY) {
+            '(' .  join(',', map { $self->do_compile($_, G_ARRAY) } @$v) . ')';
+        } else {
+            '{' . join(',', map { $self->do_compile($_, G_ARRAY) } @$v) . '}';
+        }
     } elsif ($type == PVIP_NODE_PAIR) {
         if ($gimme == G_SCALAR) {
             sprintf('Pair->_new(scalar(%s),scalar(%s))',
@@ -625,7 +629,12 @@ sub do_compile {
                 $target,
                 $self->do_compile($v->[1]),
             );
-        } elsif ($v->[0]->type == PVIP_NODE_TW_ENV) {
+        } elsif ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A\$/) {
+            sprintf('(%s)->{(%s)}',
+                $self->do_compile($v->[0]),
+                $self->do_compile($v->[1]),
+            );
+        } elsif ($v->[0]->type == PVIP_NODE_TW_ENV || ($v->[0]->type == PVIP_NODE_VARIABLE && $v->[0]->value =~ /\A$/)) {
             sprintf('(%s)->{(%s)}',
                 $self->do_compile($v->[0]),
                 $self->do_compile($v->[1]),
@@ -879,7 +888,7 @@ sub do_compile {
         '(' . $self->do_compile($v->[0]) . ')x(' . $self->do_compile($v->[1]) . ')';
     } elsif ($type == PVIP_NODE_INPLACE_REPEAT_S) {
         '(' . $self->do_compile($v->[0]) . ')x=(' . $self->do_compile($v->[1]) . ')';
-    } elsif ($type == PVIP_NODE_UNARY_TILDE) {
+    } elsif ($type == PVIP_NODE_STRINGIFY) {
         # STRINGIFY, stringification
         if ($self->is_array_variable($v->[0]) || $v->[0]->type == PVIP_NODE_LIST) {
             sprintf(q{join(' ', (%s))}, $self->do_compile($v->[0], G_ARRAY));
