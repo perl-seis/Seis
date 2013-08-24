@@ -111,5 +111,9 @@ sub kv:method {
     map { $_ => $self->[$_] } keys $self;
 }
 
+sub reverse:method {
+    CORE::reverse(@{$_[0]})
+}
+
 1;
 
