@@ -916,6 +916,8 @@ sub do_compile {
         '${' . $self->do_compile($v->[0]) . '}';
     } elsif ($type == PVIP_NODE_TW_ENV) {
         '(\%ENV)'
+    } elsif ($type == PVIP_NODE_TW_TMPDIR) {
+        'IO::Path->new(File::Spec->tmpdir())'
     } elsif ($type == PVIP_NODE_TW_INC) {
         '@Rokugo::INC';
     } elsif ($type == PVIP_NODE_META_METHOD_CALL) {
