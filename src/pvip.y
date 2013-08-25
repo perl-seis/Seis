@@ -995,7 +995,7 @@ dq_string = s:dq_string_start { s = PVIP_node_new_string(PVIP_NODE_STRING, "", 0
         ) {
             s=PVIP_node_append_string_from_hex(PARSER, s, yytext, yyleng);
         }
-        | esc 'o' < '0'? [0-7] [0-7] > {
+        | esc 'o' < ( [0-7] [0-7] | '0' [0-7] [0-7] ) > {
             s=PVIP_node_append_string_from_oct(PARSER, s, yytext, yyleng);
         }
         | esc 'o['

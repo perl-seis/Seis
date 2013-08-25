@@ -104,3 +104,9 @@ __END__
 --- expected
 (statements (stringify (int 3)))
 
+===
+--- code
+"\o00"
+--- expected
+(statements (string "\0"))
+
