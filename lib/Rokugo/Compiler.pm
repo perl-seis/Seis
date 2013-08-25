@@ -169,7 +169,8 @@ sub do_compile {
                     if (@args==2) {
                         my $pair = $args[1];
                         if (
-                            $pair->value->[0]->value eq 'lang'
+                            $pair->type == PVIP_NODE_PAIR
+                            && $pair->value->[0]->value eq 'lang'
                             && $pair->value->[1]->value eq 'perl5'
                         ) {
                             1;
