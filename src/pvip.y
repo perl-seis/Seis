@@ -145,6 +145,7 @@ normal_or_postfix_stmt =
         | ( ' '+ 'unless' - cond_unless:expr - eat_terminator ) { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_UNLESS, cond_unless, n); }
         | ( ' '+ 'for' - cond_for:expr - eat_terminator ) { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_FOR, cond_for, n); }
         | ( ' '+ 'while' - cond_for:expr - eat_terminator ) { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_WHILE, cond_for, n); }
+        | ( ' '+ 'until' - cond_for:expr - eat_terminator ) { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_UNTIL, cond_for, n); }
         | ( - eat_terminator ) { $$=n; }
     )
 
