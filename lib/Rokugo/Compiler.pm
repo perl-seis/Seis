@@ -384,6 +384,9 @@ sub do_compile {
             } elsif ($vars->type == PVIP_NODE_FUNC) {
                 # (my (nop) (func (ident "vtest") (params (param (nop) (variable "$cmp") (nop)) (param (vargs (variable "@v")))) (nop) (block (statements (list_assignment (my (nop) (variable "$x")) (funcall (ident "shift") (args (variable "@v")))) (while (variable "@v") (block (statements (list_assignment (my (nop) (variable "$y")) (funcall (ident "shift") (args (variable "@v")))) (funcall (ident "is") (args (cmp (methodcall (ident "Version") (ident "new") (args (variable "$x"))) (methodcall (ident "Version") (ident "new") (args (variable "$y")))) (variable "$cmp") (string_concat (string_concat (string_concat (string_concat (string_concat (string "") (variable "$x")) (string " cmp ")) (variable "$y")) (string " is ")) (variable "$cmp")))) (list_assignment (variable "$x") (variable "$y")))))))))
                 sprintf('my %s', $self->do_compile($vars));
+            } elsif ($vars->type == PVIP_NODE_LIST) {
+                # my ($a, $b);
+                sprintf('my %s', $self->do_compile($vars, G_ARRAY));
             } else {
                 die "NYI: " . $node->as_sexp
             }
