@@ -88,5 +88,16 @@ sub connect:method {
     return bless $sock, 'Rokugo::Socket';
 }
 
+sub reduce:method {
+    my $code = shift;
+    return shift unless @_ > 1;
+
+    my $a = shift;
+    for (@_) {
+        $a = &{$code}($a, $_);
+    }
+    $a;
+}
+
 1;
 

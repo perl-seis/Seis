@@ -206,6 +206,10 @@ sub do_compile {
                 sprintf('List->new(%s)',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'reduce') {
+                sprintf('Rokugo::BuiltinFunctions::reduce(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'gcd') {
                 sprintf('Rokugo::BuiltinFunctions::gcd(%s)',
                     $self->do_compile($v->[1]),
