@@ -966,7 +966,7 @@ sub do_compile {
         # (public_attribute "x")
         sprintf('$self->{%s}', $self->compile_string($v));
     } elsif ($type == PVIP_NODE_FUNCREF) {
-        sprintf('\&%s', $v);
+        sprintf('\&%s', $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_PATH) {
         sprintf('IO::Path->new(%s)',
             $self->compile_string($node)

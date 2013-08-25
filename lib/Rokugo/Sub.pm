@@ -22,6 +22,11 @@ sub name {
     '&'.join('::', $b->GV->STASH->NAME, $b->GV->NAME);
 }
 
+sub nextwith {
+    my $code = shift;
+    goto $code;
+}
+
 1;
 __END__
 
