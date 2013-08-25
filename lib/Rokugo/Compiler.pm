@@ -395,12 +395,12 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_BIND) {
         # TODO: This may not compatible with Perl6.
         sprintf('%s=(%s)',
-            $self->do_compile($v->[0]),
+            $self->do_compile($v->[0], G_ARRAY),
             $self->do_compile($v->[1], G_ARRAY),
         );
     } elsif ($type == PVIP_NODE_LIST_ASSIGNMENT) {
         sprintf('%s=(%s)',
-            $self->do_compile($v->[0]),
+            $self->do_compile($v->[0], G_ARRAY),
             $self->do_compile($v->[1],
                 $self->is_list_lvalue($v->[0]) ? G_ARRAY : G_SCALAR
             ),
@@ -929,7 +929,11 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_TW_TMPDIR) {
         'IO::Path->new(File::Spec->tmpdir())'
     } elsif ($type == PVIP_NODE_TW_INC) {
-        '@Rokugo::INC';
+        if ($gimme == G_SCALAR) {
+            '\\@Rokugo::INC';
+        } else {
+            '@Rokugo::INC';
+        }
     } elsif ($type == PVIP_NODE_META_METHOD_CALL) {
         # (meta_method_call (class (nop) (nop) (statements)) (ident "methods") (nop))
         sprintf('(%s)->meta()->%s(%s)',
@@ -1122,6 +1126,8 @@ sub is_list_lvalue {
             } elsif ($c->type == PVIP_NODE_LIST) {
                 # my ($x, $y) = ...
                 1
+            } elsif ($c->type == PVIP_NODE_TW_INC) {
+                1; # @*INC
             } else {
                 # my $x = ...
                 0
@@ -1130,6 +1136,8 @@ sub is_list_lvalue {
             my $c = $node->value->[0];
             if ($c->type == PVIP_NODE_LIST) {
                 1
+            } elsif ($c->type == PVIP_NODE_TW_INC) {
+                1; # @*INC
             } else {
                 0;
             }
@@ -1141,6 +1149,8 @@ sub is_list_lvalue {
         if ($is_list_var->($node)) {
             # my @x = ...
             1
+        } elsif ($node->type == PVIP_NODE_TW_INC) {
+            1; # @*INC
         } else {
             # my $x = ...
             0
