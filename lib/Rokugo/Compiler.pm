@@ -470,12 +470,18 @@ sub do_compile {
             );
         }
     } elsif ($type == PVIP_NODE_FUNC) {
-        my $ret = 'sub ';
-        $ret .= $self->do_compile($v->[0]);
-        $ret .= " {\n";
+        my $name = $self->do_compile($v->[0]);
+        my $exportable = $v->[2]->type == PVIP_NODE_EXPORT;
+
+        my $ret = '';
+        $ret .= "sub $name {";
+        $ret .= "\n"; $self->{line_number}++;
         $ret .= $self->do_compile($v->[1]);
         $ret .= $self->do_compile($v->[3]);
-        $ret .= "}\n";
+        $ret .= "}\n"; $self->{line_number}++;
+        if ($exportable) {
+            $ret .= sprintf("push \@__RG_EXPORT, %s;", $self->compile_string($name));
+        }
         $ret;
     } elsif ($type == PVIP_NODE_PARAMS) {
         # (params (param (nop) (variable "$n") (nop)))
@@ -715,7 +721,7 @@ sub do_compile {
             'use ' . $self->do_compile($v->[0]);
         }
     } elsif ($type == PVIP_NODE_MODULE) {
-        Rokugo::Exception::NotImplemented->throw("PVIP_NODE_MODULE is not implemented")
+        sprintf('package %s; our @__RG_EXPORT; use parent qw(Rokugo::Exporter);', $v->[0]->value);
     } elsif ($type == PVIP_NODE_CLASS) {
         # (class (ident "Foo7") (nop) (statements (method (ident "bar") (nop) (statements (int 5963)))))
         # (class (ident "Foo8") (list (is (ident "Foo7"))) (statements))

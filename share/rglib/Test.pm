@@ -1,4 +1,5 @@
 # vim: ft=perl6
+module Test;
 my $failed = 0;
 my $num_of_tests_planned;
 my $num_of_tests_run = 0;
@@ -94,19 +95,19 @@ sub eval_exception($code) {
     $!;
 }
 
-sub done() {
+sub done() is export {
     say("1..$num_of_tests_run");
 }
 
-sub pass($reason='passed') {
+sub pass($reason='passed') is export {
     proclaim(1, $reason);
 }
 
-sub flunk($reason) {
+sub flunk($reason) is export {
     proclaim(0, "flunk $reason");
 }
 
-sub diag($msg) {
+sub diag($msg) is export {
     $*ERR.say("# " ~ $msg);
 }
 
