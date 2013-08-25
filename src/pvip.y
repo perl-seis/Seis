@@ -658,6 +658,7 @@ term =
     | 'm:P5/./' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_NOP); }
     | regexp
     | !reserved ident
+    | < 'class' > { $$ = PVIP_node_new_string(PVIP_NODE_IDENT, yytext, yyleng); }
     | '\\' t:term { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_REF, t); }
     | '(' - ')' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_LIST); }
     | ':' < key:ident > '<' value:ident '>' {
