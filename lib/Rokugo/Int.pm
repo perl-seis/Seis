@@ -4,6 +4,9 @@ use warnings;
 use utf8;
 use 5.010_001;
 
+package # Hide from PAUSE
+    Int;
+
 sub perl { $_[0] }
 
 sub clone { 0+$_[0] }
@@ -12,8 +15,8 @@ sub say { CORE::say($_[0]) }
 
 sub isa {
     my ($self, $stuff) = @_;
+    return $stuff->{name} eq 'Int' if UNIVERSAL::isa($stuff, 'Rokugo::Class');
     # Yes, it's boolean.
-    return UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Rokugo::Class');
     return 1 if Bool::_isBoolean($self) && $stuff eq 'Rokugo::Bool';
     return 1 if $stuff eq 'Int';
     return 0;

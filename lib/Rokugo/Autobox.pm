@@ -9,8 +9,8 @@ sub import {
     my $class = shift;
     $class->SUPER::import(
         ARRAY   => 'Array',
-        INTEGER => 'Rokugo::Int',
-        FLOAT   => 'Rokugo::Real',
+        INTEGER => 'Int',
+        FLOAT   => 'Real',
         STRING  => 'Str',
         CODE    => 'Sub',
         HASH    => 'Rokugo::Hash',

@@ -3,6 +3,10 @@ use strict;
 use warnings;
 use utf8;
 use 5.010_001;
+
+package # Hide from PAUSE
+    Real;
+
 use POSIX ();
 
 sub perl { $_[0] }
