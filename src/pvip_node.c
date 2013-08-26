@@ -188,6 +188,22 @@ PVIPNode* PVIP_node_new_children4(PVIPParserContext* parser, PVIP_node_type_t ty
     return node;
 }
 
+PVIPNode* PVIP_node_new_children5(PVIPParserContext* parser, PVIP_node_type_t type, PVIPNode* n1, PVIPNode *n2, PVIPNode *n3, PVIPNode *n4, PVIPNode *n5) {
+    assert(n1);
+    assert(n2);
+    assert(n3);
+    assert(n4);
+    assert(n5);
+
+    PVIPNode* node = PVIP_node_new_children(parser, type);
+    PVIP_node_push_child(node, n1);
+    PVIP_node_push_child(node, n2);
+    PVIP_node_push_child(node, n3);
+    PVIP_node_push_child(node, n4);
+    PVIP_node_push_child(node, n5);
+    return node;
+}
+
 void PVIP_node_push_child(PVIPNode* node, PVIPNode* child) {
     assert(child);
 

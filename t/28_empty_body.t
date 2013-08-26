@@ -18,7 +18,7 @@ for 1 { }
 --- code
 while @a.pop -> $n { }
 --- expected
-(statements (while (methodcall (variable "@a") (ident "pop")) (lambda (params (param (nop) (variable "$n") (nop) (nop))) (block))))
+(statements (while (methodcall (variable "@a") (ident "pop")) (lambda (params (param (nop) (variable "$n") (nop) (int 0))) (block))))
 
 ===
 --- code

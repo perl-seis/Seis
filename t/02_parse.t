@@ -184,7 +184,7 @@ sub foo() { return 5963 }; say(foo());
 --- code
 sub foo ($n) {  }
 --- expected
-(statements (func (ident "foo") (params (param (nop) (variable "$n") (nop) (nop))) (nop) (block)))
+(statements (func (ident "foo") (params (param (nop) (variable "$n") (nop) (int 0))) (nop) (block)))
 
 ===
 --- code: if 1 {4} else {5}

@@ -23,6 +23,9 @@
 
 #define CHILDREN1(t,a)   PVIP_node_new_children1(&(G->data),t,a)
 #define CHILDREN2(t,a,b) PVIP_node_new_children2(&(G->data),t,a,b)
+#define CHILDREN3(t,a,b,c) PVIP_node_new_children3(&(G->data),t,a,b,c)
+#define CHILDREN4(t,a,b,c,d) PVIP_node_new_children4(&(G->data),t,a,b,c,d)
+#define CHILDREN5(t,a,b,c,d,e) PVIP_node_new_children5(&(G->data),t,a,b,c,d,e)
 
 /*
 
@@ -336,6 +339,7 @@ reduce_operator =
 
 lvalue =
     my
+    | method_postfix_expr
     | v:variable { $$=v; } (
         '[' - e:expr - ']' { $$=PVIP_node_new_children2(&(G->data), PVIP_NODE_ATPOS, v, e); }
         | '<' - k:atkey_key - '>' {  $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ATKEY, v, k); }
@@ -845,17 +849,33 @@ param =
     '*' v:array_var {
         $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_PARAM, PVIP_node_new_children1(&(G->data), PVIP_NODE_VARGS, v));
     }
-    | { i=NULL; d=NULL; is_copy=NULL; }
+    | { i=NULL; d=NULL; is_copy=NULL; is_rw=NULL; is_ref=NULL; }
     (
         ( i:ident ws+ )?
         v:term
-        ( - d:param_defaults )?
-        ( - is_copy:is_copy )?
+        (
+              - d:param_defaults
+            | - is_copy:is_copy
+            | - is_rw:is_rw
+            | - is_ref:is_ref
+        )*
     ) {
-        $$ = PVIP_node_new_children4(&(G->data), PVIP_NODE_PARAM, MAYBE(i), v, MAYBE(d), MAYBE(is_copy));
+        int attr = 0;
+        if (is_copy) {
+            attr |= PVIP_FUNC_ATTR_IS_COPY;
+        }
+        if (is_rw) {
+            attr |= PVIP_FUNC_ATTR_IS_RW;
+        }
+        if (is_ref) {
+            attr |= PVIP_FUNC_ATTR_IS_REF;
+        }
+        $$ = CHILDREN4(PVIP_NODE_PARAM, MAYBE(i), v, MAYBE(d), PVIP_node_new_int(PVIP_NODE_INT, attr));
     }
 
 is_copy = 'is' ws+ 'copy' ![-a-zA-Z0-9_] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_IS_COPY); }
+is_rw = 'is' ws+ 'rw' ![-a-zA-Z0-9_] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_IS_RW); }
+is_ref = 'is' ws+ 'ref' ![-a-zA-Z0-9_] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_IS_REF); }
 
 param_defaults =
     '=' - e:expr { $$=e; }

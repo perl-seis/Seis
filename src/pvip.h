@@ -203,6 +203,8 @@ typedef enum {
     PVIP_NODE_CONTEXTUALIZER_ARRAY, /* @() */
     PVIP_NODE_CONTEXTUALIZER_HASH, /* %() */
     PVIP_NODE_TW_TMPDIR, /* $*TMPDIR */
+    PVIP_NODE_IS_RW, /* is rw */
+    PVIP_NODE_IS_REF, /* is ref */
 } PVIP_node_type_t;
 
 typedef enum {
@@ -212,6 +214,13 @@ typedef enum {
     PVIP_CATEGORY_NUMBER,
     PVIP_CATEGORY_CHILDREN
 } PVIP_category_t;
+
+/* bit flags for `sub ($x is rw) { }` etc. */
+typedef enum {
+    PVIP_FUNC_ATTR_IS_COPY = 1,
+    PVIP_FUNC_ATTR_IS_RW   = 2,
+    PVIP_FUNC_ATTR_IS_REF  = 4,
+} PVIP_func_attr_t;
 
 typedef struct {
     char *buf;
