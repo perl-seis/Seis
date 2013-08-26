@@ -13,6 +13,7 @@ sub say { CORE::say($_[0]) }
 sub isa {
     my ($self, $stuff) = @_;
     # Yes, it's boolean.
+    return UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Rokugo::Class');
     return 1 if Bool::_isBoolean($self) && $stuff eq 'Rokugo::Bool';
     return 1 if $stuff eq 'Int';
     return 0;
@@ -65,6 +66,17 @@ sub rindex:method { goto &Str::rindex }
 
 sub kv {
     [0, $_[0]]
+}
+
+sub sign {
+    my $self = shift;
+    if ($self < 0) {
+        -1;
+    } elsif ($self == 0) {
+        0;
+    } else {
+        1;
+    }
 }
 
 1;

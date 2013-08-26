@@ -24,5 +24,23 @@ sub fmt {
     sprintf($pattern, $self);
 }
 
+sub sign {
+    my $self = shift;
+    if ($self < 0) {
+        -1;
+    } elsif ($self == 0) {
+        0;
+    } else {
+        1;
+    }
+}
+
+sub isa {
+    my ($self, $stuff) = @_;
+    return UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Rokugo::Class');
+    return 1 if $stuff eq 'Real';
+    return 0;
+}
+
 1;
 
