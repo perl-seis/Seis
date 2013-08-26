@@ -846,13 +846,10 @@ params =
 
 # Str $x=""
 param =
-    '*' v:array_var {
-        $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_PARAM, PVIP_node_new_children1(&(G->data), PVIP_NODE_VARGS, v));
-    }
-    | { i=NULL; d=NULL; is_copy=NULL; is_rw=NULL; is_ref=NULL; }
+    { i=NULL; d=NULL; is_copy=NULL; is_rw=NULL; is_ref=NULL; }
     (
-        ( i:ident ws+ )?
-        v:term
+        ( i:ident ws+ )? # type
+        v:param_term
         (
               - d:param_defaults
             | - is_copy:is_copy
@@ -873,6 +870,9 @@ param =
         $$ = CHILDREN4(PVIP_NODE_PARAM, MAYBE(i), v, MAYBE(d), PVIP_node_new_int(PVIP_NODE_INT, attr));
     }
 
+param_term =
+    '*' v:array_var { $$ = CHILDREN1(PVIP_NODE_VARGS, v); }
+    | term
 is_copy = 'is' ws+ 'copy' ![-a-zA-Z0-9_] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_IS_COPY); }
 is_rw = 'is' ws+ 'rw' ![-a-zA-Z0-9_] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_IS_RW); }
 is_ref = 'is' ws+ 'ref' ![-a-zA-Z0-9_] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_IS_REF); }
