@@ -19,7 +19,7 @@ while (<>) {
         my $dstpath =  "t/spec/roast/$name";
         mkpath dirname($dstpath);
         open my $fh, '>', $dstpath;
-        print $fh "#! ./blib/script/rg\n";
+        print $fh "#! ./blib/script/seis\n";
         print $fh $src;
     }
 }

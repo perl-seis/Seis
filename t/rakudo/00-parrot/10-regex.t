@@ -1,4 +1,4 @@
-#!./blib/script/rg
+#!./blib/script/seis
 
 # check basic regex capabilities
 

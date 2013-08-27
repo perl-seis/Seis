@@ -1,4 +1,4 @@
-#!./blib/script/rg
+#!./blib/script/seis
 # L<S02/"Whitespace and Comments"/space before it, but may be written in any>
 # use v6;
 

@@ -1,4 +1,4 @@
-#! ./blib/script/rg
+#! ./blib/script/seis
 use Test;
 
 # L<S16/IO/$*TMPDIR>

@@ -1,4 +1,4 @@
-#! ./blib/script/rg
+#! ./blib/script/seis
 # http://perl6advent.wordpress.com/2009/12/01/day-1-getting-rakudo/
 
 use v6;

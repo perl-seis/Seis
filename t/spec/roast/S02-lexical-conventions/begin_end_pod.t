@@ -1,4 +1,4 @@
-#! ./blib/script/rg
+#! ./blib/script/seis
 use v6;
 
 # Test various forms of comments

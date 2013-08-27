@@ -1,4 +1,4 @@
-#! ./blib/script/rg
+#! ./blib/script/seis
 use v6;
 use Test;
 plan 14;
