@@ -1,6 +1,6 @@
 # NAME
 
-Rokugo - Perl6 on Perl5
+Seis - Perl6 on Perl5
 
 # SYNOPSIS
 
@@ -8,7 +8,7 @@ Rokugo - Perl6 on Perl5
 
 # DESCRIPTION
 
-Rokugo is transpiler for Perl6's syntax to Perl5.
+Seis is transpiler for Perl6's syntax to Perl5.
 
 It's only emulate perl6's syntax. Not semantics.
 
@@ -21,9 +21,9 @@ But it's useful because perl6's syntax is sane.
 
 # KNOWN ISSUES
 
-There is some known issues. Rokugo do in the forcible way.
-And Rokugo placed great importance on performance.
-Then, rokugo giving ups some features on Perl 6.
+There is some known issues. Seis do in the forcible way.
+And Seis placed great importance on performance.
+Then, seis giving ups some features on Perl 6.
 
 If you have any ideas to support these things without performance issue, patches welcome(I guess most of features can fix if you are XS hacker).
 

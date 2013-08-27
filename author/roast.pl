@@ -20,7 +20,7 @@ my @tests = sort File::Find::Rule->file()
                               ->in( glob('~/dev/roast/') );
 
 local $ENV{PERL5LIB} = File::Spec->rel2abs('lib/');
-local $ENV{PERL_ROKUGO_LIB} = File::Spec->rel2abs('share/rglib/') . ':' . glob("~/dev/roast/packages/") . ":" . File::Spec->rel2abs('.');
+local $ENV{PERL_SEIS_LIB} = File::Spec->rel2abs('share/rglib/') . ':' . glob("~/dev/roast/packages/") . ":" . File::Spec->rel2abs('.');
 my $t0 = [gettimeofday];
 my $rgbin = File::Spec->rel2abs('./blib/script/rg');
 
@@ -40,7 +40,7 @@ printf "%s - OK: %s, FAIL: %s ( %.2f%%) in %s sec\n", localtime->strftime('%Y-%m
 
 my $datetime = time2str(time);
 
-my $hf_base = "http://hf.64p.org/api/perl6/rokugo";
+my $hf_base = "http://hf.64p.org/api/perl6/seis";
 
 my $ua = LWP::UserAgent->new();
 my $res = $ua->post("$hf_base/passed", [number => $passed, datetime => $datetime]);

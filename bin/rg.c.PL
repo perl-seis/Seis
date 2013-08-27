@@ -27,7 +27,7 @@ printf $fh <<'END', $0, $perl_path;
 
 /*
  * Meant to mimic the shell command
- *     exec perl -MRokugo::CLI "$@"
+ *     exec perl -MSeis::CLI "$@"
  *
  * This is a C program so it works in a #! line.
  */
@@ -42,9 +42,9 @@ int main (int argc, char* argv[]) {
     }
 
     perl_args[0] = argv[0];
-    perl_args[1] = "-MRokugo::CLI";
+    perl_args[1] = "-MSeis::CLI";
     perl_args[2] = "-e";
-    perl_args[3] = "Rokugo::CLI->new->run";
+    perl_args[3] = "Seis::CLI->new->run";
     perl_args[4] = "--";
 
     for (i=1; i<argc; ++i) {

@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 use 5.010_001;
 use parent qw(Exporter);
-use Rokugo::Compiler;
+use Seis::Compiler;
 use Test::More;
 
 our @EXPORT = qw(compile);
@@ -26,7 +26,7 @@ our @EXPORT = qw(compile);
 sub compile {
     my $code = shift;
 
-    my $compiler = Rokugo::Compiler->new();
+    my $compiler = Seis::Compiler->new();
     my $compiled = $compiler->compile($code);
     note 'code: ' . $code;
     note 'compiled: ' .  $compiled;

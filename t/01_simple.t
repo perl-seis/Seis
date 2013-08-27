@@ -2,8 +2,8 @@ use strict;
 use warnings;
 use utf8;
 use Test::More;
-use Rokugo;
-use Rokugo::Bool;
+use Seis;
+use Seis::Bool;
 
 sub true()  { !!1 }
 sub false() { !!0 }
@@ -110,7 +110,7 @@ my @result = (
     'my $i=0; for 1..10 { $i+=$_; last if $_==5}; $i' => 15,
     '!1' => Bool::False,
     'sub add($x, $y) { $x+$y } add(4,3)' => 7,
-    'class Foo6 { method bar() { $?CLASS } }; Foo6.bar' => Rokugo::MetaClass->new(name => 'Foo6'),
+    'class Foo6 { method bar() { $?CLASS } }; Foo6.bar' => Seis::MetaClass->new(name => 'Foo6'),
     'class Foo7 { method bar() { 5963 } };  class Foo8 is Foo7 { } Foo8.bar' => 5963,
     '(6,7,8).elems' => 3,
     '1 < 2 < 2 or "hoge"' => 'hoge',
@@ -124,7 +124,7 @@ for (my $i=0; $i<@result; $i+=2) {
     my $code     = $result[$i];
     my $expected = $result[$i+1];
 
-    my $compiler = Rokugo::Compiler->new();
+    my $compiler = Seis::Compiler->new();
     my $compiled = $compiler->compile($code);
     note 'code: ' . $code;
     note 'compiled: ' .  $compiled;

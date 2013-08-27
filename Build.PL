@@ -23,8 +23,8 @@ my %args = (
         'Module::Build' => 0.38,
     },
 
-    name            => 'Rokugo',
-    module_name     => 'Rokugo',
+    name            => 'Seis',
+    module_name     => 'Seis',
     allow_pureperl => 0,
 
     script_files => [glob('script/*'), glob('bin/*')],
