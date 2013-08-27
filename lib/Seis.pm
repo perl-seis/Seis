@@ -61,7 +61,7 @@ Seis - Perl6ish syntax on Perl5
 
 =head1 DESCRIPTION
 
-Seis is transpiler for Perl6's syntax to Perl5.
+Seis compiles Perl6 syntax into Perl5.
 
 It's only emulate perl6's syntax. Not semantics.
 
