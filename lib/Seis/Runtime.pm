@@ -28,6 +28,7 @@ use Seis::Any;
 use Seis::Order;
 use Seis::List;
 use Seis::Sub;
+use Seis::Bool;
 
 use Seis::BuiltinFunctions;
 use Scalar::Util ();

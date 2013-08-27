@@ -215,6 +215,15 @@ sub do_compile {
                 sprintf('Seis::BuiltinFunctions::gcd(%s)',
                     $self->do_compile($v->[1]),
                 );
+            } elsif ($v->[0]->value eq 'chdir') {
+                if (@{$v->[1]->value} == 0) {
+                    Seis::Exception::CompilationFailed->throw(
+                        'You need pass 1 argument for chdir function'
+                    );
+                }
+                sprintf('CORE::chdir(%s)',
+                    $self->do_compile($v->[1]),
+                );
             } elsif ($v->[0]->value eq 'connect') {
                 sprintf('Seis::BuiltinFunctions::connect(%s)',
                     $self->do_compile($v->[1]),
@@ -538,7 +547,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_RETURN) {
         'return (' . join(',', map { "($_)" } map {$self->do_compile($_)} @$v) . ')';
     } elsif ($type == PVIP_NODE_ELSE) {
-        'else { ' . $self->do_compile($v->[0]) . '}';
+        'else { ' . join(';', map { $self->do_compile($_) } @$v) . '}';
     } elsif ($type == PVIP_NODE_WHILE) {
         sprintf("while (%s) %s",
             $self->do_compile($v->[0]),
@@ -835,12 +844,16 @@ sub do_compile {
                 PVIP_NODE_STRLE() => 'le',
                 PVIP_NODE_EQV()   => 'eq', # TODO
                 PVIP_NODE_SMART_MATCH()   => '~~',
-                PVIP_NODE_NOT_SMART_MATCH()   => '!~~',
             }->{$type};
-            unless ($op) {
-                Seis::Exception::NotImplemented->throw(sprintf "PVIP_NODE_%s is not implemented in chaning", $type)
+            if ($type == PVIP_NODE_NOT_SMART_MATCH) {
+                # Perl5 does not support `!~~` operator!
+                sprintf("(!((%s)~~(%s)))", $lhs, $rhs);
+            } else {
+                unless ($op) {
+                    Seis::Exception::NotImplemented->throw(sprintf "PVIP_NODE_%s is not implemented in chaning", $type)
+                }
+                sprintf("(%s)%s(%s)", $lhs, $op, $rhs);
             }
-            sprintf("(%s)%s(%s)", $lhs, $op, $rhs);
         };
         if (@$v == 1) {
             return $self->do_compile($v->[0]);
@@ -958,7 +971,7 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_PERL5_REGEXP) {
         sprintf('qr!%s!', $v);
     } elsif ($type == PVIP_NODE_TRUE) {
-        '(Bool::true())'
+        '(Bool::True())'
     } elsif ($type == PVIP_NODE_TW_VM) {
         Seis::Exception::NotImplemented->throw("PVIP_NODE_TW_VM is not implemented")
     } elsif ($type == PVIP_NODE_HAS) {
