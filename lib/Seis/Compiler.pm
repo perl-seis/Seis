@@ -4,7 +4,7 @@ use warnings;
 use utf8;
 use 5.010_001;
 
-use Perl6::PVIP 0.01;
+use Perl6::PVIP 0.07;
 use Carp ();
 use Data::Dumper ();
 use Encode ();
