@@ -48,6 +48,13 @@ sub is($x,$y, $desc=undef) is export {
     }
 }
 
+sub isnt($x,$y, $desc=undef) is export {
+    if (!proclaim($x ne $y, $desc)) {
+        print "  GOT:      $x\n";
+        print "  EXPECTED: $y\n";
+    }
+}
+
 sub isa_ok($x, $y, $desc=undef) is export {
     proclaim($x.isa($y), $desc);
 }
