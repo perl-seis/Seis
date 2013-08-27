@@ -64,8 +64,14 @@
    },
    "release_status" : "unstable",
    "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/tokuhirom/Seis/issues"
+      },
+      "homepage" : "https://github.com/tokuhirom/Seis",
       "repository" : {
-         "url" : "ssh://git@bitbucket.org/tokuhirom/rokugo.git"
+         "type" : "git",
+         "url" : "git://github.com/tokuhirom/Seis.git",
+         "web" : "https://github.com/tokuhirom/Seis"
       }
    },
    "version" : "0.01"

@@ -8,11 +8,17 @@ Seis - Perl6ish syntax on Perl5
 
 # DESCRIPTION
 
-Seis is transpiler for Perl6's syntax to Perl5.
+Seis compiles Perl6 syntax into Perl5.
 
 It's only emulate perl6's syntax. Not semantics.
 
 But it's useful because perl6's syntax is sane.
+
+# PROJECT GOALS
+
+We want to use some Perl6 stuff in Perl 5 environment.
+
+We want to show more perl6 features can feedback to perl5 core.
 
 # PROJECT PLANS
 
