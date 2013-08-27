@@ -13,19 +13,25 @@ use TAP::Harness;
 use File::Spec;
 use File::pushd;
 
-system("./Build");
-system('cd ~/dev/roast/ && git reset HEAD --hard && git pull origin master');
-my @tests = sort File::Find::Rule->file()
+system('perl Build.PL');
+system("./Build test")==0
+    or die "ABORT\n";
+unless (-d 'roast/') {
+    system('git clone git@github.com:perl6/roast.git roast')
+        ==0 or die "ABORT\n";
+}
+system('cd roast/ && git reset HEAD --hard && git pull origin master');
+my @tests = map { File::Spec->rel2abs($_) } sort File::Find::Rule->file()
                               ->name( '*.t' )
-                              ->in( glob('~/dev/roast/') );
+                              ->in( glob('roast/') );
 
 local $ENV{PERL5LIB} = File::Spec->rel2abs('lib/');
-local $ENV{PERL_SEIS_LIB} = File::Spec->rel2abs('share/seislib/') . ':' . glob("~/dev/roast/packages/") . ":" . File::Spec->rel2abs('.');
+local $ENV{PERL_SEIS_LIB} = File::Spec->rel2abs('share/seislib/') . ':' . File::Spec->rel2abs(glob("roast/packages/")) . ":" . File::Spec->rel2abs('.');
 my $t0 = [gettimeofday];
 my $seisbin = File::Spec->rel2abs('./blib/script/seis');
 
 my $aggregate = do {
-    my $pushd = pushd(glob("~/dev/roast"));
+    my $pushd = pushd(glob("roast"));
     my $harness = TAP::Harness->new({
         exec => [$seisbin],
     });
