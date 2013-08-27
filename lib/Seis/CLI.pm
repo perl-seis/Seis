@@ -4,7 +4,6 @@ use warnings;
 use utf8;
 use 5.010_001;
 
-use Caroline;
 use Seis;
 use Getopt::Long;
 use Data::Dumper;
@@ -55,6 +54,8 @@ sub run {
 
 sub run_repl {
     my $self = shift;
+
+    require Caroline;
 
     my $caroline = Caroline->new();
     while (defined(my $line = $caroline->readline('seis> '))) {

@@ -29,9 +29,9 @@ sub WHAT {
     Seis::Class->_new(name => 'Int');
 }
 
-use Math::BaseCnv;
 sub base {
     my ($num, $base) = @_;
+    require Math::BaseCnv;
     Math::BaseCnv::cnv($num, 10, $base);
 }
 
