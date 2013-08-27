@@ -18,9 +18,9 @@ my $compiler = Seis::Compiler->new();
 @Seis::INC = do {
     my @inc;
     unshift @inc, '.';
-    unshift @inc, 'share/rglib/' if -d 'share/rglib/'; # while building?
+    unshift @inc, 'share/seislib/' if -d 'share/seislib/'; # while building?
     eval {
-        unshift @inc, File::Spec->catdir(File::ShareDir::dist_dir('Seis'), 'rglib');
+        unshift @inc, File::Spec->catdir(File::ShareDir::dist_dir('Seis'), 'seislib');
     };
     if (my $env = $ENV{PERL_SEIS_LIB}) {
         unshift @inc, split /:/, $ENV{PERL_SEIS_LIB};

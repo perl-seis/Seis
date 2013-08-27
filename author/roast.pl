@@ -20,14 +20,14 @@ my @tests = sort File::Find::Rule->file()
                               ->in( glob('~/dev/roast/') );
 
 local $ENV{PERL5LIB} = File::Spec->rel2abs('lib/');
-local $ENV{PERL_SEIS_LIB} = File::Spec->rel2abs('share/rglib/') . ':' . glob("~/dev/roast/packages/") . ":" . File::Spec->rel2abs('.');
+local $ENV{PERL_SEIS_LIB} = File::Spec->rel2abs('share/seislib/') . ':' . glob("~/dev/roast/packages/") . ":" . File::Spec->rel2abs('.');
 my $t0 = [gettimeofday];
-my $rgbin = File::Spec->rel2abs('./blib/script/rg');
+my $seisbin = File::Spec->rel2abs('./blib/script/seis');
 
 my $aggregate = do {
     my $pushd = pushd(glob("~/dev/roast"));
     my $harness = TAP::Harness->new({
-        exec => [$rgbin],
+        exec => [$seisbin],
     });
     $harness->runtests(@tests);
 };

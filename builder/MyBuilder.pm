@@ -16,7 +16,7 @@ sub ACTION_code {
         my $b = $self->cbuilder();
 
         my $obj_file = $b->compile(
-            source               => 'bin/rg.c',
+            source               => 'bin/seis.c',
         );
         my $exe_file = $b->link_executable(objects => $obj_file);
 

@@ -1,10 +1,10 @@
 {
-   "abstract" : "Perl6 on Perl5",
+   "abstract" : "Perl6ish syntax on Perl5",
    "author" : [
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.6.0, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Minilla/v0.6.3, CPAN::Meta::Converter version 2.131560",
    "license" : [
       "perl_5"
    ],
@@ -44,10 +44,16 @@
          "requires" : {
             "Caroline" : "0",
             "Class::XSAccessor" : "1.16",
+            "Encode" : "0",
             "Exception::Tiny" : "0",
-            "Perl6::PVIP" : "0.01",
+            "Math::BaseCnv" : "0",
+            "Math::BigInt" : "0",
+            "Math::Prime::Util" : "0",
+            "Perl6::PVIP" : "0.05",
+            "Sub::Name" : "0",
+            "Time::HiRes" : "0",
             "autobox" : "2.79",
-            "perl" : "5.010001"
+            "perl" : "5.018000"
          }
       },
       "test" : {
@@ -57,5 +63,10 @@
       }
    },
    "release_status" : "unstable",
+   "resources" : {
+      "repository" : {
+         "url" : "ssh://git@bitbucket.org/tokuhirom/rokugo.git"
+      }
+   },
    "version" : "0.01"
 }

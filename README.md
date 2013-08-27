@@ -1,6 +1,6 @@
 # NAME
 
-Seis - Perl6 on Perl5
+Seis - Perl6ish syntax on Perl5
 
 # SYNOPSIS
 
@@ -14,10 +14,48 @@ It's only emulate perl6's syntax. Not semantics.
 
 But it's useful because perl6's syntax is sane.
 
+# PROJECT PLANS
+
+## Version 1.0 - Maybe production ready release
+
+- Support basic Perl6 OOP features
+- Support basic Perl6 regexp
+
 # TODO
 
-    Support 'has' and attributes.
     Implement builtin methods
+    multi methods
+    perl6 regexp
+    perl6 rules
+    perl6 junctions
+    perl6 open
+    perl6 slurp
+    pass the 200+ roast cases
+    care the pairs
+    my own virtual machine?
+
+## Issues in PVIP
+
+c<<end (1,2,3)>> and `<end(1,2,3)`\> is a different thing.
+But PVIP handles these things are same.
+
+# WHY SEIS REQUIRES Perl 5.18+?
+
+- Lexical subs
+
+    Perl6 supports lexical subs.
+
+# WHY SEIS REQUIRES Perl 5.10+?
+
+- //p flag
+
+    //p flag was introduced at 5.10. It's needed by regexp operation.
+
+# WHY SEIS REQUIRES Perl 5.16?
+
+- fc()
+
+    Perl6 provides ` String#fc ` method. Perl5 supports fc()  5.16 or later.
 
 # KNOWN ISSUES
 
@@ -26,6 +64,16 @@ And Seis placed great importance on performance.
 Then, seis giving ups some features on Perl 6.
 
 If you have any ideas to support these things without performance issue, patches welcome(I guess most of features can fix if you are XS hacker).
+
+# Compiling regeular expression is slow.
+
+It can be optimizable.
+
+# 1..\* was not supported.
+
+You can implement this by dankogai's hack.
+
+http://blog.livedoor.jp/dankogai/archives/50839189.html
 
 ## Compilation speed is optimizable
 
@@ -58,6 +106,10 @@ This issue can solve with PP\_check hack.
 ## `eqv` operator is not compatible.
 
 Not yet implemented.
+
+## Method name contains '-'
+
+Perl5 can't handles method name contains '-'.
 
 # LICENSE
 

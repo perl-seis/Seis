@@ -23,13 +23,12 @@ cover_db/
 
 MYMETA.*
 
-/Hybrid-*
-/bin/rg
-/bin/rg.c
-/Rokugo-*
+/bin/seis
+/bin/seis.c
 /.build
 /_build_params
 !Build/
 !META.json
 
 /log*
+/Seis-*

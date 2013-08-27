@@ -1,5 +1,5 @@
 [PL_files]
-bin/rg.c.PL="bin/rg.c"
+bin/seis.c.PL="bin/seis.c"
 
 [build]
 build_class = "builder::MyBuilder"
