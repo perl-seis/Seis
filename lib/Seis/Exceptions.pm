@@ -19,5 +19,8 @@ use parent qw(Seis::Exception);
 package Seis::Exception::ArgumentCount;
 use parent qw(Seis::Exception);
 
+package Seis::Exception::IO;
+use parent qw(Seis::Exception);
+
 1;
 

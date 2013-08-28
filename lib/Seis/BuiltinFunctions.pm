@@ -99,5 +99,11 @@ sub reduce:method {
     $a;
 }
 
+sub copy:method {
+    require File::Copy;
+    File::Copy::copy($_[0], $_[1])
+        or die Seis::Exception::IO->throw("$!");
+}
+
 1;
 

@@ -72,5 +72,13 @@ sub read:method {
     return $buf;
 }
 
+sub e { -e $_[0]->{path} }
+sub s { -s $_[0]->{path} }
+sub copy {
+    require File::Copy;
+    File::Copy::copy($_[0]->{path}, $_[1])
+        or Seis::Exception::IO->throw("$!");
+}
+
 1;
 
