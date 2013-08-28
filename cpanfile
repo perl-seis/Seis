@@ -11,6 +11,7 @@ requires 'Math::Prime::Util';
 requires 'Time::HiRes';
 requires 'Math::BigInt';
 requires 'Encode';
+requires 'Sub::Identify';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';

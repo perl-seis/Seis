@@ -14,6 +14,9 @@ It's only emulate perl6's syntax. Not semantics.
 
 But it's useful because perl6's syntax is sane.
 
+So, there is a lot of Perl6::\* stuff, that ports a part of Perl6 stuff.
+But this module's concept is port most Perl6 stuff to Perl5 using XS stuff :P
+
 # PROJECT GOALS
 
 We want to use some Perl6 stuff in Perl 5 environment.
