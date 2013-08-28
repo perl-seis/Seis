@@ -7,10 +7,11 @@ use autodie;
 use File::Spec::Functions;
 use File::Basename;
 use File::Path;
+use File::Spec::Functions qw(rel2abs);
 
-my $roast_base = glob("~/dev/roast/");
+my $roast_base = rel2abs(glob("roast/"));
 while (<>) {
-    if (m!/dev/roast/(\S+) \.*\.\. ok!) {
+    if (m!roast/(\S+) \.*\.\. ok!) {
         my $name = $1;
         next if $name eq 'S02-lexical-conventions/bom.t';
 

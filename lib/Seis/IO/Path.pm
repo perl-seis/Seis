@@ -8,6 +8,13 @@ package # Hide from PAUSE
     IO::Path;
 use File::Basename ();
 
+use overload (
+    q{""} => sub {
+        $_[0]->{fullpath}
+    },
+    fallback => 1,
+);
+
 sub new {
     my $class = shift;
     my $fullpath = shift;
