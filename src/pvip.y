@@ -394,6 +394,7 @@ item_assignment_expr =
             | '+>=' - b:item_assignment_expr { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_INPLACE_BRSHIFT,  a, b); a=$$; }
             | '~='  - b:item_assignment_expr { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_INPLACE_CONCAT_S, a, b); a=$$; }
             | 'x='  - b:item_assignment_expr { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_INPLACE_REPEAT_S, a, b); a=$$; }
+            | '.='  - b:item_assignment_expr { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_INPLACE_REPEAT_S, a, b); a=$$; }
         )
     )* { $$=a; }
 
@@ -680,6 +681,7 @@ term =
         $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
     }
     | ':' < [a-z]+ > { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(&(G->data), PVIP_NODE_TRUE)); }
+    | ':!' < [a-z]+ > { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(&(G->data), PVIP_NODE_FALSE)); }
     | ':' v:variable {
         $$ = PVIP_node_new_children2(&(G->data), 
             PVIP_NODE_PAIR,
