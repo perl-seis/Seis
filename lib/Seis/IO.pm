@@ -74,6 +74,7 @@ sub read:method {
 
 # Note. Following file testing cases are optimizable by XS.
 sub e { -e $_[0]->{path} ? Bool::true() : Bool::false() }
+sub d { -d $_[0]->{path} ? Bool::true() : Bool::false() }
 sub s { -s $_[0]->{path} } # size.
 sub f { -f $_[0]->{path} ? Bool::true() : Bool::false() }
 
