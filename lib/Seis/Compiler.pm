@@ -36,7 +36,6 @@ BEGIN {
     *Int = *Seis::Runtime::Int;
     *Mu = *Seis::Runtime::Mu;
     *Array = *Seis::Runtime::Array;
-    *False = *Bool::False;
     *True = *Bool::True;
 }
 
@@ -143,6 +142,8 @@ sub do_compile {
             'Bool::True()'
         } elsif ($v eq 'True') {
             'Bool::True()'
+        } elsif ($v eq 'False') {
+            'Bool::False()'
         } elsif ($v eq 'IO::Path::Cygwin') {
             'IO::Path::Cygwin::'
         } else {
@@ -354,6 +355,8 @@ sub do_compile {
                 'IO::Path::'
             } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'True') {
                 'Bool::True()'
+            } elsif ($_->type == PVIP_NODE_IDENT && $_->value eq 'False') {
+                'Bool::False()'
             } elsif ($_->type == PVIP_NODE_IDENT) {
                 my $v = $_->value;
                 $v =~ s/\A:://;

@@ -81,5 +81,10 @@ sub tc:method {
     ucfirst($_[0]);
 }
 
+# Create new IO::Path object
+sub path {
+    IO::Path->new($_[0]);
+}
+
 1;
 

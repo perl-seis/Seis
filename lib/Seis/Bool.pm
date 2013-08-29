@@ -9,8 +9,9 @@ package # Hide from PAUSE
 my ($true, $false);
 
 use overload
-    '""' => sub { ${$_[0]} },
+    '""' => sub { ${$_[0]} ? 'True' : 'False' },
     '!' => sub { ${$_[0]} ? $false : $true },
+    'bool' => sub { !! ${$_[0]} },
     fallback => 1;
 
 my ($true_val, $false_val, $bool_vals);

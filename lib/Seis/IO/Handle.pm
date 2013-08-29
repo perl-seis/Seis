@@ -96,5 +96,11 @@ sub copy {
         or Seis::Exception::IO->throw("$!");
 }
 
+sub isa {
+    my ($self, $stuff) = @_;
+    return $stuff->{name} eq 'IO::Handle' || UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Seis::Class');
+    return UNIVERSAL::isa($self, $stuff);
+}
+
 1;
 

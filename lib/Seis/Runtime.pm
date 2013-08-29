@@ -4,6 +4,7 @@ use warnings;
 use utf8;
 use 5.010_001;
 
+use Seis::Bool;
 use Seis::Object;
 use Seis::Array;
 use Seis::Int;
@@ -29,7 +30,6 @@ use Seis::Any;
 use Seis::Order;
 use Seis::List;
 use Seis::Sub;
-use Seis::Bool;
 
 use Seis::BuiltinFunctions;
 use Scalar::Util ();
