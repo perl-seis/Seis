@@ -516,7 +516,7 @@ sub do_compile {
         my $max_args = 0;
         for my $param (@$v) {
             $ret .= $self->do_compile($param) . ";";
-            if ($param->value->[0]->type == PVIP_NODE_VARGS) {
+            if ($param->value->[1]->type == PVIP_NODE_VARGS) {
                 $is_vargs++;
             } else {
                 if ($param->value->[2] == PVIP_NODE_NOP) {
@@ -535,12 +535,12 @@ sub do_compile {
         $ret .= "undef;";
     } elsif ($type == PVIP_NODE_PARAM) {
         # (params (param (nop) (variable "$n") (nop)))
-        # (param (vargs (variable "@a")))
-        if (@$v==1) {
-            sprintf('%s;', $self->do_compile($v->[0]));
-        } elsif (@$v==4) {
-            # (param (ident "Int") (variable "$x") (nop))
-            if ($v->[1]->value =~ /\A\@/) {
+        # (param (nop) (vargs (variable "@a")) (nop) (int 0))
+        if (@$v==4) {
+            if ($v->[1]->type == PVIP_NODE_VARGS) {
+                sprintf('%s;', $self->do_compile($v->[1]));
+            } elsif ($v->[1]->value =~ /\A\@/) {
+                # (param (ident "Int") (variable "$x") (nop))
                 sprintf('my %s=@_;', $self->do_compile($v->[1]));
             } else {
                 sprintf('my %s=shift;', $self->do_compile($v->[1]));
