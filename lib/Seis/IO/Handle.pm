@@ -15,6 +15,18 @@ sub _new_with_fh {
     bless { path => $path, fh => $fh }, $class;
 }
 
+sub open {
+    my ($self, $mode) = @_;
+    if ($mode->key eq 'w') {
+        open my $fh, '>', $self->{path}
+            or Seis::Exception::IO->throw("Cannot open $self->{path} for writing: $!");
+        $self->{fh} = $fh;
+        return $self;
+    } else {
+        ...
+    }
+}
+
 sub lines {
     my $self = shift;
     my $fh = $self->{fh};
