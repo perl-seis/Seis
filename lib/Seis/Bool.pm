@@ -45,7 +45,7 @@ sub TO_JSON { ${$_[0]} ? \1 : \0 }
 
 sub isa {
     my ($self, $stuff) = @_;
-    return $self->isa($stuff->{name}) if UNIVERSAL::isa($stuff, 'Seis::Class');
+    return UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Seis::Class');
     return UNIVERSAL::isa($self, $stuff);
 }
 

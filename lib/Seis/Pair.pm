@@ -31,9 +31,13 @@ sub value { $_[0]->[1] }
 sub _match {
     my ($self, $stuff) = @_;
     if (UNIVERSAL::isa($stuff, 'Seis::IO')) {
-        my $ret = eval "-$self->[0] " . Str::perl($stuff->{path});
-        die $@ if $@;
-        $ret;
+        my ($key, $val) = @$self;
+        my $ret = $stuff->$key();
+        if ($val) {
+            return !!$ret ? Bool::true() : Bool::false();
+        } else {
+            return !$ret ? Bool::True() : Bool::False();
+        }
     } else {
         ...
     }

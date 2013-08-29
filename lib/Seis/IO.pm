@@ -72,8 +72,11 @@ sub read:method {
     return $buf;
 }
 
-sub e { -e $_[0]->{path} }
-sub s { -s $_[0]->{path} }
+# Note. Following file testing cases are optimizable by XS.
+sub e { -e $_[0]->{path} ? Bool::true() : Bool::false() }
+sub s { -s $_[0]->{path} } # size.
+sub f { -f $_[0]->{path} ? Bool::true() : Bool::false() }
+
 sub copy {
     require File::Copy;
     File::Copy::copy($_[0]->{path}, $_[1])

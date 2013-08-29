@@ -974,6 +974,8 @@ sub do_compile {
         Seis::Exception::NotImplemented->throw("PVIP_NODE_NOT_SMART_MATCH is not implemented")
     } elsif ($type == PVIP_NODE_PERL5_REGEXP) {
         sprintf('qr!%s!', $v);
+    } elsif ($type == PVIP_NODE_FALSE) {
+        '(Bool::false())'
     } elsif ($type == PVIP_NODE_TRUE) {
         '(Bool::True())'
     } elsif ($type == PVIP_NODE_TW_VM) {
