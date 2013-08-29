@@ -13,3 +13,8 @@ __END__
 --- expected
 (statements (list_assignment (list (variable "$x") (variable "$y") (variable "$z")) (list (int 1) (int 2) (int 3))))
 
+===
+--- code
+$a = $b = $c
+--- expected
+(statements (list_assignment (variable "$a") (list_assignment (variable "$b") (variable "$c"))))
