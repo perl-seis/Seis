@@ -30,7 +30,7 @@ sub value { $_[0]->[1] }
 
 sub _match {
     my ($self, $stuff) = @_;
-    if (UNIVERSAL::isa($stuff, 'Seis::IO')) {
+    if (UNIVERSAL::isa($stuff, 'Seis::IO::Handle')) {
         my ($key, $val) = @$self;
         my $ret = $stuff->$key();
         if ($val) {

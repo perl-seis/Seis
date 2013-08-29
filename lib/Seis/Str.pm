@@ -40,7 +40,7 @@ sub lines {
 # IO.new(ins => 0, chomp => Bool::True, path => "/tmp/")
 sub IO {
     if (@_==1) {
-        Seis::IO->_new($_[0]);
+        Seis::IO::Handle->_new($_[0]);
     } else {
         ...
     }

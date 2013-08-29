@@ -19,6 +19,7 @@ use Seis::Buf;
 use Seis::Whatever;
 use Seis::Pair;
 use Seis::IO;
+use Seis::IO::Handle;
 use Seis::IO::Path;
 use Seis::Instant;
 use Seis::Duration;
