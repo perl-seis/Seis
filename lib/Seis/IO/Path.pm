@@ -4,10 +4,10 @@ use warnings;
 use utf8;
 use 5.010_001;
 
-package # Hide from PAUSE
-    IO::Path;
+package IO::Path;
 use File::Basename ();
 use File::Path ();
+use File::Spec ();
 
 use overload (
     q{""} => sub {
@@ -15,6 +15,8 @@ use overload (
     },
     fallback => 1,
 );
+
+sub _file_spec { 'File::Spec' }
 
 sub new {
     my $class = shift;
@@ -36,12 +38,12 @@ sub perl {
 sub gist { goto &perl }
 sub volume {
     my $self = shift;
-    (my $volume, ) = File::Spec->splitpath($self->{fullpath});
+    (my $volume, ) = $self->_file_spec->splitpath($self->{fullpath});
     $volume;
 }
 sub directory {
     my $self = shift;
-    (undef, my $volume, ) = File::Spec->splitpath($self->{fullpath});
+    (undef, my $volume, ) = $self->_file_spec->splitpath($self->{fullpath});
     $volume =~ s!/\z!!r;
 }
 sub parent {
@@ -63,7 +65,35 @@ sub IO {
     Seis::IO::Handle->_new($_[0]->{fullpath});
 }
 sub cleanup {
-    File::Spec->canonpath($_[0]->{fullpath});
+    my $self = shift;
+    $self->_file_spec->canonpath($self->{fullpath});
+}
+
+sub isa {
+    my ($self, $stuff) = @_;
+    return UNIVERSAL::isa($self, $stuff->{name}) if UNIVERSAL::isa($stuff, 'Seis::Class');
+    return UNIVERSAL::isa($self, $stuff);
+}
+
+sub Str { $_[0]->{fullpath} }
+
+sub absolute {
+    my $self = shift;
+    (ref $self)->new($self->_file_spec->rel2abs($self->{fullpath}, @_));
+}
+sub relative {
+    my $self = shift;
+    (ref $self)->new($self->_file_spec->rel2abs($self->{fullpath}, @_));
+}
+
+package IO::Path::Unix;
+BEGIN { our @ISA = qw(IO::Path); }
+
+sub _file_spec { 'File::Spec::Unix' }
+
+package IO::Spec::Unix;
+sub canonpath {
+    File::Spec::Unix->canonpath($_[1]);
 }
 
 

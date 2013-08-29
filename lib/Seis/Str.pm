@@ -86,5 +86,9 @@ sub path {
     IO::Path->new($_[0]);
 }
 
+sub eval:method {
+    CORE::eval($_[0]);
+}
+
 1;
 
