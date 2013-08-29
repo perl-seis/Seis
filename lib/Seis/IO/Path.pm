@@ -89,13 +89,48 @@ sub relative {
 package IO::Path::Unix;
 BEGIN { our @ISA = qw(IO::Path); }
 
+use File::Spec::Unix;
 sub _file_spec { 'File::Spec::Unix' }
+
+package IO::Path::Win32;
+BEGIN { our @ISA = qw(IO::Path); }
+
+sub _file_spec {
+    require File::Spec::Win32;
+    'File::Spec::Win32'
+}
+
+sub resolve {
+    ... # NYI
+}
+
+package IO::Path::Cygwin;
+BEGIN { our @ISA = qw(IO::Path); }
+
+sub _file_spec {
+    require File::Spec::Cygwin;
+    'File::Spec::Cygwin'
+}
+sub resolve {
+    ... # NYI
+}
+
+package IO::Spec::Win32;
+sub canonpath {
+    require File::Spec::Win32;
+    File::Spec::Win32->canonpath($_[1]);
+}
+
+package IO::Spec::Cygwin;
+sub canonpath {
+    require File::Spec::Cygwin;
+    File::Spec::Cygwin->canonpath($_[1]);
+}
 
 package IO::Spec::Unix;
 sub canonpath {
     File::Spec::Unix->canonpath($_[1]);
 }
-
 
 1;
 
