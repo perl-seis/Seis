@@ -166,8 +166,8 @@ last_stmt = 'last' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_LAST); }
 next_stmt = 'next' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_NEXT); }
 
 has_stmt =
-    'has' ws+ v:attr_vars eat_terminator {
-        $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_HAS, v);
+    {default=NULL; } 'has' ws+ v:attr_vars ( -  '=' - default:expr )? eat_terminator {
+        $$ = CHILDREN2(PVIP_NODE_HAS, v, MAYBE(default));
     }
 
 # $.var

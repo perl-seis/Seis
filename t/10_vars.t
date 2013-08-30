@@ -155,5 +155,5 @@ our $.x
 --- code
 has $x
 --- expected
-(statements (has (variable "$x")))
+(statements (has (variable "$x") (nop)))
 
