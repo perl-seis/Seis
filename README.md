@@ -141,6 +141,7 @@ You can see the current project status by the [HRForecast](http://hf.64p.org/lis
     2013-08-23 19:10 - OK: 353, FAIL: 536 ( 39.71%) in 30.59785 sec
     2013-08-25 12:00 - OK: 356, FAIL: 533 ( 40.04%) in 27.650996 sec
     2013-08-25 17:00 - OK: 359, FAIL: 530 ( 40.38%) in 28.395332 sec
+    2013-09-01 21:45 - OK: 424, FAIL: 467 ( 47.59%) in 38.840729 sec
 
 Contribution
 ------------
