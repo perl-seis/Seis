@@ -92,10 +92,10 @@ static char PVIP_input(char *buf, YY_XTYPE D) {
 
 %}
 
-comp_init = BOM? e:statementlist - end-of-file {
+comp_init = BOM? pod? e:statementlist - end-of-file {
     $$ = (G->data.root = e);
 }
-    | BOM? end-of-file { $$ = (G->data.root = PVIP_node_new_children(&(G->data), PVIP_NODE_NOP)); }
+    | BOM? pod? ws* end-of-file { $$ = (G->data.root = PVIP_node_new_children(&(G->data), PVIP_NODE_NOP)); }
 
 BOM='\357' '\273' '\277'
 
@@ -1121,11 +1121,18 @@ comment =
 
 # white space
 ws = 
-    '\n=begin ' [a-z]+ '\n' { NEWLINE; } ( !'=end ' [^\n]* '\n' { NEWLINE; } )* '=end ' [a-z]+ '\n' { NEWLINE; }
+    '\n' pod
     | '\n=begin END\n' .* | ' ' | '\f' | '\v' | '\t' | '\205' | '\240'
     | '\n=END\n' .*
     | end-of-line
     | comment
+
+pod =
+  (
+      '=begin ' [a-z]+ ' '* '\n' { NEWLINE; }
+      ( !'=end ' [^\n]* '\n' { NEWLINE; } )*
+      '=end ' [a-z]+ ' '* '\n' { NEWLINE; }
+  )
 
 - = ws*
 

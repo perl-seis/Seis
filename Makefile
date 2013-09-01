@@ -1,7 +1,7 @@
-CFLAGS=-Wall -DYY_DEBUG=1 -g
+CFLAGS=-Wall -fPIC -g
+# CFLAGS=-Wall -DYY_DEBUG=1 -fPIC -g
 # -std=c89
 CC=cc
-CFLAGS=-fPIC
 
 all: pvip
 
