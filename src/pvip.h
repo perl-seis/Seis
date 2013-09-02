@@ -206,6 +206,7 @@ typedef enum {
     PVIP_NODE_TW_TMPDIR, /* $*TMPDIR */
     PVIP_NODE_IS_RW, /* is rw */
     PVIP_NODE_IS_REF, /* is ref */
+    PVIP_NODE_PI,
 } PVIP_node_type_t;
 
 typedef enum {

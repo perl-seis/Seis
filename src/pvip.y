@@ -21,6 +21,7 @@
     } while (0)
 #define LEAVE do { assert(G->data.line_number_stack_size> 0); G->data.line_number_stack_size--; } while (0)
 
+#define CHILDREN(t)   PVIP_node_new_children(&(G->data),t)
 #define CHILDREN1(t,a)   PVIP_node_new_children1(&(G->data),t,a)
 #define CHILDREN2(t,a,b) PVIP_node_new_children2(&(G->data),t,a,b)
 #define CHILDREN3(t,a,b,c) PVIP_node_new_children3(&(G->data),t,a,b,c)
@@ -668,6 +669,7 @@ term =
     | lambda
     | it_method
     | enum
+    | 'pi' ![-a-zA-Z0-9_] { $$ = CHILDREN(PVIP_NODE_PI); }
     | 'try' ws - b:block { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_TRY, b); }
     | 'try' ws+ b:expr { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_TRY, b); }
     | perl5_regexp
@@ -747,7 +749,7 @@ twvars =
     | '$^c' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TW_C); }
     | '$*TMPDIR' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_TW_TMPDIR); }
 
-reserved = ( 'my' | 'our' | 'until' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'time' | 'now' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' | 'andthen' | 'and' | 'or' ) ![-A-Za-z0-9]
+reserved = ( 'pi' | 'my' | 'our' | 'until' | 'while' | 'unless' | 'if' | 'role' | 'class' | 'try' | 'has' | 'sub' | 'cmp' | 'enum' | 'time' | 'now' | 'rand' | 'END' | 'BEGIN' | 'Z' | 'so' | 'not' | 'andthen' | 'and' | 'or' ) ![-A-Za-z0-9]
 
 role =
     'role' ws+ i:ident - b:block { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_ROLE, i, b); }

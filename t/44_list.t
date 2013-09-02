@@ -7,3 +7,9 @@ __END__
 --- expected
 (statements (list (int 1)))
 
+===
+--- code
+pi / 4, "/";
+--- expected
+(statements (list (div (pi) (int 4)) (string "\/")))
+
