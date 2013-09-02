@@ -1008,6 +1008,8 @@ sub do_compile {
         Seis::Exception::NotImplemented->throw("PVIP_NODE_TW_MODULE is not implemented")
     } elsif ($type == PVIP_NODE_TW_OS) {
         '($^O)';
+    } elsif ($type == PVIP_NODE_E) {
+        '(exp(1))';
     } elsif ($type == PVIP_NODE_TW_PID) {
         '($$)';
     } elsif ($type == PVIP_NODE_TW_PERLVER) {
