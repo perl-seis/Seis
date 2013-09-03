@@ -102,7 +102,9 @@ sub do_compile {
         } else {
             $body = sprintf '$seis_reduce_ret %s= $seis_reduce_stuff', $v->[0]->value;
         }
-        sprintf('do { my @seis_reduce_ary = %s; my $seis_reduce_ret = shift @seis_reduce_ary; for my $seis_reduce_stuff (@seis_reduce_ary) { %s } $seis_reduce_ret; }', $self->do_compile($v->[1], G_ARRAY), $body);
+        # XXX I should care the other cases?
+        my $initial = $v->[0]->value eq '*' ? 1 : 0;
+        sprintf('do { my @seis_reduce_ary = %s; my $seis_reduce_ret = @seis_reduce_ary==0 ? %s : shift @seis_reduce_ary; for my $seis_reduce_stuff (@seis_reduce_ary) { %s } $seis_reduce_ret; }', $self->do_compile($v->[1], G_ARRAY), $initial, $body);
     } elsif ($type == PVIP_NODE_INT) {
         $node->value;
     } elsif ($type == PVIP_NODE_NUMBER) {
@@ -513,6 +515,7 @@ sub do_compile {
         $ret;
     } elsif ($type == PVIP_NODE_PARAMS) {
         # (params (param (nop) (variable "$n") (nop)))
+        # (params (param (ident "Int") (variable "$n") (nop) (int 0)))
         my $ret = '';
         my $is_vargs = 0;
         my $min_args = 0;
@@ -529,6 +532,10 @@ sub do_compile {
                 } else {
                     # has default value.
                     $max_args++;
+                }
+                if ($param->value->[0]->type == PVIP_NODE_IDENT) {
+                    my $type = $self->compile_string($param->value->[0]->value);
+                    $ret .= sprintf('Seis::Exception::ArgumentType->throw("invalid argument type(expected %s)") unless %s->isa(%s);', $param->value->[0]->value, $param->value->[1]->value, $type);
                 }
             }
         }
