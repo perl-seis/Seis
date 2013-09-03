@@ -34,3 +34,6 @@ MYMETA.*
 /Seis-*
 /roast/
 /tempfile*
+
+/Perl6-PVIP-*
+/lib/Perl6/PVIP.c
