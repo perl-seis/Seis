@@ -1,7 +1,7 @@
 requires 'perl', '5.018000';
 
 requires 'Exception::Tiny';
-requires 'Perl6::PVIP', 0.07;
+requires 'Perl6::PVIP', 0.09;
 requires 'autobox', 2.79;
 requires 'Caroline';
 requires 'Class::XSAccessor', 1.16;
