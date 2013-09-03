@@ -79,28 +79,6 @@ sub builtin_elems { 0+@_ }
 our @REGEXP_MATCH;
 tie @REGEXP_MATCH, 'Seis::Match';
 
-# Normally, Seis doesn't call this method for calling methods.
-# It's only needed if the method name contains '-' character.
-sub call_method {
-    my ($invocant, $methodname, @args) = @_;
-    Carp::croak("Invocant is undefined.") unless defined $invocant;
-    if (Scalar::Util::blessed $invocant) {
-        my $code = $invocant->can($methodname);
-        @_ = ($invocant, @args);
-        goto $code;
-    } else {
-        my $flags = B::svref_2object(\$invocant)->FLAGS;
-        if ($flags | B::SVp_IOK) {
-            my $code = Seis::Int->can($methodname);
-            Carp::croak("Can't call method: $methodname") unless $code;
-            @_ = ($invocant, @args);
-            goto $code;
-        } else {
-            ...
-        }
-    }
-}
-
 {
     my $Int = Seis::Class->_new(name => 'Int');
     sub Int() { $Int }
