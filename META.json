@@ -49,7 +49,7 @@
             "Math::BaseCnv" : "0",
             "Math::BigInt" : "0",
             "Math::Prime::Util" : "0",
-            "Perl6::PVIP" : "0.07",
+            "Perl6::PVIP" : "0.09",
             "Sub::Identify" : "0",
             "Sub::Name" : "0",
             "Time::HiRes" : "0",
@@ -66,14 +66,24 @@
    "release_status" : "unstable",
    "resources" : {
       "bugtracker" : {
-         "web" : "https://github.com/tokuhirom/Seis/issues"
+         "web" : "https://github.com/perl-seis/Seis/issues"
       },
-      "homepage" : "https://github.com/tokuhirom/Seis",
+      "homepage" : "https://github.com/perl-seis/Seis",
       "repository" : {
          "type" : "git",
-         "url" : "git://github.com/tokuhirom/Seis.git",
-         "web" : "https://github.com/tokuhirom/Seis"
+         "url" : "git://github.com/perl-seis/Seis.git",
+         "web" : "https://github.com/perl-seis/Seis"
       }
    },
-   "version" : "0.01"
+   "version" : "0.09",
+   "x_contributors" : [
+      "_why <why@whytheluckystiff.net>",
+      "nddrylliog <nddrylliog@gmail.com>",
+      "Onne Gorter <onne@onnlucky.com>",
+      "Ali Rantakari <visit-with-web-browser@hasseg.org>",
+      "Steve White <swhite@lekkerste.local>",
+      "Amos Wenger <amos@official.fm>",
+      "Reini Urban <rurban@cpanel.net>",
+      "Amos Wenger <amos@lockfree.ch>"
+   ]
 }
