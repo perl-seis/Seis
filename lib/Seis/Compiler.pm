@@ -19,7 +19,8 @@ use constant {
 # `no warnings 'misc'` suppress `"our" variable $x redeclared` message
 # in `our $x; { my $x; { our $x}}`
 our $HEADER = <<'...';
-package Main;
+package # Hide from PAUSE
+    Main;
 use strict;
 use 5.018_000;
 use utf8;
