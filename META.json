@@ -4,7 +4,7 @@
       "tokuhirom <tokuhirom@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v0.6.3, CPAN::Meta::Converter version 2.131560",
+   "generated_by" : "Minilla/v0.6.5, CPAN::Meta::Converter version 2.131560",
    "license" : [
       "perl_5"
    ],
@@ -35,7 +35,7 @@
       "develop" : {
          "requires" : {
             "Test::CPAN::Meta" : "0",
-            "Test::MinimumVersion" : "0.10108",
+            "Test::MinimumVersion::Fast" : "0.02",
             "Test::Pod" : "1.41",
             "Test::Spellunker" : "v0.2.7"
          }
@@ -49,7 +49,6 @@
             "Math::BaseCnv" : "0",
             "Math::BigInt" : "0",
             "Math::Prime::Util" : "0",
-            "Perl6::PVIP" : "0.09",
             "Sub::Identify" : "0",
             "Sub::Name" : "0",
             "Time::HiRes" : "0",
@@ -75,7 +74,7 @@
          "web" : "https://github.com/perl-seis/Seis"
       }
    },
-   "version" : "0.09",
+   "version" : "0.10",
    "x_contributors" : [
       "_why <why@whytheluckystiff.net>",
       "nddrylliog <nddrylliog@gmail.com>",

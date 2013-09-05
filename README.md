@@ -74,7 +74,7 @@ Then, seis giving ups some features on Perl 6.
 
 If you have any ideas to support these things without performance issue, patches welcome(I guess most of features can fix if you are XS hacker).
 
-# Compiling regeular expression is slow.
+# Compiling regular expression is slow.
 
 It can be optimizable.
 

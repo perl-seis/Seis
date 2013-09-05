@@ -4,7 +4,7 @@ use warnings;
 
 use 5.010001;
 
-our $VERSION = "0.09";
+our $VERSION = "0.10";
 
 use Seis::Exceptions;
 use Seis::Compiler;
@@ -144,7 +144,7 @@ Then, seis giving ups some features on Perl 6.
 
 If you have any ideas to support these things without performance issue, patches welcome(I guess most of features can fix if you are XS hacker).
 
-=head1 Compiling regeular expression is slow.
+=head1 Compiling regular expression is slow.
 
 It can be optimizable.
 
