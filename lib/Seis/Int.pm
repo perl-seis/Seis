@@ -13,6 +13,8 @@ sub clone { 0+$_[0] }
 
 sub say { CORE::say($_[0]) }
 
+sub end { 0 }
+
 sub isa {
     my ($self, $stuff) = @_;
     return $stuff->{name} eq 'Int' if UNIVERSAL::isa($stuff, 'Seis::Class');

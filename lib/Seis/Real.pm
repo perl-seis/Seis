@@ -11,6 +11,8 @@ use POSIX ();
 
 sub perl { $_[0] }
 
+sub end { 0 }
+
 sub say { CORE::say($_[0]) }
 
 sub clone { 0+$_[0] }

@@ -6,5 +6,7 @@ use 5.010_001;
 
 sub defined { Bool::False() }
 
+sub end { -1 }
+
 1;
 
