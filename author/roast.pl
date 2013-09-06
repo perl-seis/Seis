@@ -25,7 +25,7 @@ my @tests = map { File::Spec->rel2abs($_) } sort File::Find::Rule->file()
                               ->name( '*.t' )
                               ->in( glob('roast/') );
 
-local $ENV{PERL5LIB} = File::Spec->rel2abs('lib/');
+local $ENV{PERL5LIB} = File::Spec->rel2abs('blib/arch') . ':' . File::Spec->rel2abs('blib/lib');
 local $ENV{PERL_SEIS_LIB} = File::Spec->rel2abs('share/seislib/') . ':' . File::Spec->rel2abs(glob("roast/packages/")) . ":" . File::Spec->rel2abs('.');
 my $t0 = [gettimeofday];
 my $seisbin = File::Spec->rel2abs('./blib/script/seis');
