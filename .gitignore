@@ -23,6 +23,7 @@ cover_db/
 
 MYMETA.*
 
+!/bin/seis.pod
 /bin/seis
 /bin/seis.c
 /.build

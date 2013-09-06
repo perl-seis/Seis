@@ -4,7 +4,7 @@ use warnings;
 
 use 5.010001;
 
-our $VERSION = "0.11";
+our $VERSION = "0.12";
 
 use Seis::Exceptions;
 use Seis::Compiler;
