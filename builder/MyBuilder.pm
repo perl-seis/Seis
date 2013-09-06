@@ -26,6 +26,9 @@ sub ACTION_code {
         chdir $cwd;
     }
 
+    # Hmm... M::B don't care the module deps.
+    unlink 'lib/Perl6/PVIP.o' if -f 'lib/Perl6/PVIP.o';
+
     $self->process_PL_files;
 
     {
