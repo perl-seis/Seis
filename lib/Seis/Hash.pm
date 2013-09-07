@@ -46,5 +46,10 @@ sub Str {
     join("\n", map { sprintf("%s\t%s", $_, $self->{$_}) } keys %$self);
 }
 
+sub Int {
+    my $self = shift;
+    scalar keys %$self;
+}
+
 1;
 
