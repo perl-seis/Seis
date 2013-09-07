@@ -678,30 +678,9 @@ term =
     | regexp
     | !reserved ident
     | < 'class' > { $$ = PVIP_node_new_string(PVIP_NODE_IDENT, yytext, yyleng); }
+    | pair
     | '\\' t:term { $$ = PVIP_node_new_children1(&(G->data), PVIP_NODE_REF, t); }
     | '(' - ')' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_LIST); }
-    | ':' < key:ident > '<' value:ident '>' {
-        PVIP_node_change_type(key, PVIP_NODE_STRING);
-        PVIP_node_change_type(value, PVIP_NODE_STRING);
-        $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
-    }
-    | ':' < key:ident > '(' value:expr ')' {
-        PVIP_node_change_type(key, PVIP_NODE_STRING);
-        $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
-    }
-    | ':' < key:ident > '[' - value:expr - ']' {
-        PVIP_node_change_type(key, PVIP_NODE_STRING);
-        $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
-    }
-    | ':' < [a-z]+ > { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(&(G->data), PVIP_NODE_TRUE)); }
-    | ':!' < [a-z]+ > { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(&(G->data), PVIP_NODE_FALSE)); }
-    | ':' v:variable {
-        $$ = PVIP_node_new_children2(&(G->data), 
-            PVIP_NODE_PAIR,
-            PVIP_node_new_string(PVIP_NODE_STRING, v->pv->buf, v->pv->len),
-            v
-        );
-    }
     | funcref
     | < '$~' [A-Za-z] [A-Za-z0-9]* > { $$ = PVIP_node_new_string(PVIP_NODE_SLANGS, yytext, yyleng); }
     | '*' ![*=] { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_WHATEVER); }
@@ -802,7 +781,30 @@ hash = '{' -
     ','?
     - '}' { $$=p1; }
 
-pair = k:hash_key - '=>' - v:loose_unary_expr { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, k, v); }
+pair =
+    k:hash_key - '=>' - v:loose_unary_expr { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, k, v); }
+    | ':' < key:ident > '<' value:ident '>' {
+        PVIP_node_change_type(key, PVIP_NODE_STRING);
+        PVIP_node_change_type(value, PVIP_NODE_STRING);
+        $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
+    }
+    | ':' < key:ident > '(' value:expr ')' {
+        PVIP_node_change_type(key, PVIP_NODE_STRING);
+        $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
+    }
+    | ':' < key:ident > '[' - value:expr - ']' {
+        PVIP_node_change_type(key, PVIP_NODE_STRING);
+        $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, key, value);
+    }
+    | ':' < [a-z]+ > { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(&(G->data), PVIP_NODE_TRUE)); }
+    | ':!' < [a-z]+ > { $$ = PVIP_node_new_children2(&(G->data), PVIP_NODE_PAIR, PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng), PVIP_node_new_children(&(G->data), PVIP_NODE_FALSE)); }
+    | ':' v:variable {
+        $$ = PVIP_node_new_children2(&(G->data), 
+            PVIP_NODE_PAIR,
+            PVIP_node_new_string(PVIP_NODE_STRING, v->pv->buf, v->pv->len),
+            v
+        );
+    }
 
 hash_key =
     < [a-zA-Z0-9_]+ > { $$ = PVIP_node_new_string(PVIP_NODE_STRING, yytext, yyleng); }

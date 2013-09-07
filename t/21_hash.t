@@ -37,3 +37,9 @@ $e<ook.>
 --- expected
 (statements (list_assignment (atkey (variable "%hash") (string "key")) (variable "$value")))
 
+===
+--- code
+{:a(1)}
+--- expected
+(statements (hash (pair (string "a") (int 1))))
+
