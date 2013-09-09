@@ -838,6 +838,9 @@ funcdef =
         PVIPNode* pp = PVIP_node_new_children(&(G->data), PVIP_NODE_PARAMS);
         $$ = PVIP_node_new_children4(&(G->data), PVIP_NODE_FUNC, i, pp, NOP(), b);
     }
+    | 'multi' ws+ f:funcdef {
+        $$ = CHILDREN1(PVIP_NODE_MULTI, f);
+    }
 
 is_exportable = 'is' ws+ 'export' { $$ = PVIP_node_new_children(&(G->data), PVIP_NODE_EXPORT); }
 
