@@ -22,5 +22,11 @@ use parent qw(Seis::Exception);
 package Seis::Exception::IO;
 use parent qw(Seis::Exception);
 
+package Seis::Exception::MultiSubUnmatched;
+use parent qw(Seis::Exception);
+
+package Seis::Exception::ArgumentType;
+use parent qw(Seis::Exception);
+
 1;
 

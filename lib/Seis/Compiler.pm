@@ -947,7 +947,53 @@ sub do_compile {
     } elsif ($type == PVIP_NODE_REF) {
         sprintf(q{\(%s)}, $self->do_compile($v->[0]));
     } elsif ($type == PVIP_NODE_MULTI) {
-        Seis::Exception::NotImplemented->throw("PVIP_NODE_MULTI is not implemented")
+        # (multi (func (ident "identify") (params (param (ident "Int") (variable "$x") (nop) (int 0))) (nop) (block (statements (return (string_concat (string "Int:") (variable "$x")))))))
+
+        my $func = $node->value->[0];
+        my $name = $func->value->[0]->value;
+        my $params = $func->value->[1];
+        my $params_code = $self->do_compile($params);
+        my $body = $func->value->[3]->value->[0];
+        my $body_code = $self->do_compile($body);
+
+        my $ret = 'BEGIN {';
+        $ret .= 'our %__SEIS_MULTI;';
+        {
+            $ret .= sprintf q[if (!__PACKAGE__->can('%s')) {], $name;
+            # function body
+            $ret .= sprintf '*%s = sub {', $name;
+            $ret .= sprintf '  for my $__e (@{$__SEIS_MULTI{%s}}) {', $name;
+            $ret .= sprintf '    if ($__e->[0]->(@_)) {', $name;
+            $ret .= sprintf '      return $__e->[1]->(@_)', $name;
+            $ret .= '    }'; # end if
+            $ret .= '  }'; # end for
+            $ret .= sprintf '  Seis::Exception::MultiSubUnmatched->throw("Unmatched function for %s in multi sub", $/)', $name;
+            $ret .= '};'; # end sub
+            $ret .= '}'; # end if.
+        }
+        $ret .= sprintf 'push @{$__SEIS_MULTI{%s}}, [sub {;', $name;
+        # condition
+        # (params (param (ident "Int") (variable "$x") (nop) (int 0)))
+        my $i=0;
+        for my $param (@{$params->value}) {
+            my $type = $param->value->[0];
+            if ($type->type == PVIP_NODE_IDENT) {
+                $ret .= sprintf 'return 0 unless $_[%s]->isa(Seis::Class->_new(name => %s));',
+                    $i,
+                    $self->compile_string($type->value);
+            } else {
+                ...
+            }
+            $i++;
+        }
+        $ret .= 'return 1 if @_==' . $i;
+        $ret .= '}, sub {';
+        # body
+        $ret .= $params_code . ';';
+        $ret .= $body_code . ';';
+        $ret .= '}];'; # end push
+        $ret .= '}'; # end block.
+        $ret;
     } elsif ($type == PVIP_NODE_UNARY_BOOLEAN) {
         sprintf 'Seis::Runtime::boolean(%s)', $self->do_compile($v->[0]);
     } elsif ($type == PVIP_NODE_UNARY_UPTO) {

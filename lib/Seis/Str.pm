@@ -92,7 +92,7 @@ sub eval:method {
 
 sub isa {
     my ($self, $stuff) = @_;
-    return $stuff->{name} eq 'Int' if UNIVERSAL::isa($stuff, 'Seis::Class');
+    return $stuff->{name} eq 'Str' if UNIVERSAL::isa($stuff, 'Seis::Class');
     return 1 if $stuff eq 'Str';
     return 0;
 }
