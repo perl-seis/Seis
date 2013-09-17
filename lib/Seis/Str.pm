@@ -90,5 +90,12 @@ sub eval:method {
     CORE::eval($_[0]);
 }
 
+sub isa {
+    my ($self, $stuff) = @_;
+    return $stuff->{name} eq 'Int' if UNIVERSAL::isa($stuff, 'Seis::Class');
+    return 1 if $stuff eq 'Str';
+    return 0;
+}
+
 1;
 
