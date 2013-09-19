@@ -1,5 +1,5 @@
 #define PConst(c) newCONSTSUB(stash, #c, newSViv(c))
-static void setup_pvip_const() {
+static void setup_pvip_const(pTHX) {
   HV* stash = gv_stashpvn("Perl6::PVIP", strlen("Perl6::PVIP"), TRUE);
     PConst(PVIP_NODE_UNDEF);
     PConst(PVIP_NODE_RANGE);

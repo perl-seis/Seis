@@ -33,7 +33,7 @@ MODULE = Perl6::PVIP    PACKAGE = Perl6::PVIP
 PROTOTYPES: DISABLE
 
 BOOT:
-    setup_pvip_const();
+    setup_pvip_const(aTHX);
 
 void
 _parse_string(code)

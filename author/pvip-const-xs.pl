@@ -33,7 +33,7 @@ sub write_h {
 
     open my $fh, '>', 'lib/Perl6/const.h';
     print $fh "#define PConst(c) newCONSTSUB(stash, #c, newSViv(c))\n";
-    print $fh "static void setup_pvip_const() {\n";
+    print $fh "static void setup_pvip_const(pTHX) {\n";
     print $fh qq!  HV* stash = gv_stashpvn("Perl6::PVIP", strlen("Perl6::PVIP"), TRUE);\n!;
     for (@consts) {
         print $fh "    PConst($_);\n";
