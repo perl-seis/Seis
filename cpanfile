@@ -11,6 +11,8 @@ requires 'Time::HiRes';
 requires 'Math::BigInt';
 requires 'Encode';
 requires 'Sub::Identify';
+requires 'File::ShareDir', '1.00';
+requires 'Path::Tiny', '0.035';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
